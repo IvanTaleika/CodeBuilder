@@ -1,1 +1,1 @@
-CodeBuilder
+Eclipse WYSIWYG plugin progect that generates code from flowchart.
