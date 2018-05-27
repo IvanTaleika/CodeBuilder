@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<operations>
+	<category name="Basic" open="true">
+		<item text="Begin" toolTip="Method start point. Each method can have only one begin" image="" />
+		<item text="End" toolTip="Output values section" image="" />
+	</category>
+	<category name="Input/Output" open="true">
+		<item text="Input" toolTip="Input values section" image="" />
+		<item text="Output" toolTip="Output values section" image="" />
+	</category>
+	<category name="Min/Max" open="close">
+		<item text="minString" toolTip="find minimal string" image="" />
+		<item text="maxString" toolTip="find maximal string" image="" />
+		<item text="minNumber" toolTip="find minimal number" image="" />
+	</category>
+	<category name="Min/Max" open="close">
+		<item text="minString" toolTip="find minimal string" image="" />
+		<item text="maxString" toolTip="find maximal string" image="" />
+		<item text="minNumber" toolTip="find minimal number" image="" />
+	</category>
+	<category name="Min/Max" open="close">
+		<item text="minString" toolTip="find minimal string" image="" />
+		<item text="maxString" toolTip="find maximal string" image="" />
+		<item text="minNumber" toolTip="find minimal number" image="" />
+		<item><![CDATA[text]]></item>
+	</category>
+</operations>
