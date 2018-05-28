@@ -17,12 +17,25 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="cb.core.ui.editors.CodeBuilderMultipage"
+            class="cb.core.editors.CodeBuilderMultipage"
             default="false"
             extensions="java"
             id="cb.core.editor1"
             name="Code Builder">
       </editor>
+      <editor
+            class="WbEditorTry"
+            id="WbEditorTry"
+            name="New EditorPart">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="Wbtry"
+            id="Wbtry"
+            name="New ViewPart">
+      </view>
    </extension>
 
 </plugin>

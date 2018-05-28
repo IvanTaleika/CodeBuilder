@@ -1,4 +1,4 @@
-package cb.core.ui.editors.designPage.operations;
+package cb.core.ui.design.operations;
 
 import org.eclipse.osgi.util.NLS;
 

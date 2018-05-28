@@ -1,4 +1,4 @@
-package cb.core.ui.editors;
+package cb.core.editors;
 
 import org.eclipse.osgi.util.NLS;
 

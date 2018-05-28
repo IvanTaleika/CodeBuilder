@@ -1,17 +1,17 @@
-package cb.core.editors;
+package cb.core.editors.designEditor;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.MultiPageEditor;
+import org.eclipse.ui.part.EditorPart;
+import cb.core.ui.design.DesignModel;
 
-//TODO change superclass
-public class CodeBuilderMultiPageEditor extends MultiPageEditor {
 
-  public CodeBuilderMultiPageEditor() {
-    // TODO Auto-generated constructor stub
-  }
+//This class should use CodeGenerator and write result into the file
+public class DesignEditor extends EditorPart {
+  DesignModel designModel;
 
   @Override
   public void doSave(IProgressMonitor monitor) {
@@ -27,8 +27,7 @@ public class CodeBuilderMultiPageEditor extends MultiPageEditor {
 
   @Override
   public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-    // TODO Auto-generated method stub
-
+    // TODO parse page
   }
 
   @Override
@@ -41,6 +40,15 @@ public class CodeBuilderMultiPageEditor extends MultiPageEditor {
   public boolean isSaveAsAllowed() {
     // TODO Auto-generated method stub
     return false;
+  }
+
+  @Override
+  public void createPartControl(Composite parent) {
+    designModel = new DesignModel(parent);
+    //TODO: wrap in try-catch
+    designModel.buildControl();
+
+
   }
 
   @Override

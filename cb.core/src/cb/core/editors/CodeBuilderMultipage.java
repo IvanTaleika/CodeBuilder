@@ -1,4 +1,4 @@
-package cb.core.ui.editors;
+package cb.core.editors;
 //TODO use properties and resources, not strings like ""
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
@@ -7,10 +7,11 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
-import cb.core.ui.editors.designPage.DesignEditor;
+import cb.core.editors.designEditor.DesignEditor;
+import cb.core.editors.sourceEditor.SourceEditor;
 
 public class CodeBuilderMultipage extends MultiPageEditorPart {
-  private CompilationUnitEditor sourceEditor;
+  private SourceEditor sourceEditor;
   private DesignEditor designEditor;
 
 
@@ -37,7 +38,7 @@ public class CodeBuilderMultipage extends MultiPageEditorPart {
 
   private void createSourcePage() {
     try {
-      sourceEditor = new CompilationUnitEditor();
+      sourceEditor = new SourceEditor();
       // TODO What is getEditorInput(), getTitle()?
       int index = addPage(sourceEditor, getEditorInput());
       // TODO define "Source" in .properties

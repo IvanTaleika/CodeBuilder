@@ -1,6 +1,5 @@
-package cb.core.ui.editors.designPage;
+package cb.core.ui.design;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -22,47 +21,19 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.EditorPart;
+import cb.core.ui.design.widgets.Operation;
 
-public class DesignEditor extends EditorPart {
-
-  @Override
-  public void doSave(IProgressMonitor monitor) {
-    // TODO Auto-generated method stub
-
+public class DesignModel {
+  Composite source;
+  Operation selectedOperation;
+  public DesignModel(Composite source) {
+    this.source = source;
   }
-
-  @Override
-  public void doSaveAs() {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-    // TODO parse page
-  }
-
-  @Override
-  public boolean isDirty() {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean isSaveAsAllowed() {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public void createPartControl(Composite parent) {
-    parent.setLayout(new FillLayout(SWT.HORIZONTAL));
+  
+  public void buildControl() {
+    source.setLayout(new FillLayout(SWT.HORIZONTAL));
     
-    SashForm shellSashForm = new SashForm(parent, SWT.BORDER | SWT.SMOOTH);
+    SashForm shellSashForm = new SashForm(source, SWT.BORDER | SWT.SMOOTH);
     
     Group structureGroup = new Group(shellSashForm, SWT.NONE);
     structureGroup.setText("Structure");
@@ -146,13 +117,6 @@ public class DesignEditor extends EditorPart {
     Canvas canvas = new Canvas(editorViewForm, SWT.NONE);
     editorViewForm.setContent(canvas);
     shellSashForm.setWeights(new int[] {201, 169, 234});
-
-  }
-
-  @Override
-  public void setFocus() {
-    // TODO Auto-generated method stub
-
   }
 
 }
