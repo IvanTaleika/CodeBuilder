@@ -45,8 +45,11 @@ public class DesignEditor extends EditorPart {
   @Override
   public void createPartControl(Composite parent) {
     designModel = new DesignModel(parent);
-    //TODO: wrap in try-catch
-    designModel.buildControl();
+    try {
+      designModel.buildGUI();
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
 
 
   }

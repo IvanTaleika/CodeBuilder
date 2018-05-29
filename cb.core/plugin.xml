@@ -22,20 +22,10 @@
             extensions="java"
             id="cb.core.editor1"
             name="Code Builder">
+         <contentTypeBinding
+               contentTypeId="javaSource">
+         </contentTypeBinding>
       </editor>
-      <editor
-            class="WbEditorTry"
-            id="WbEditorTry"
-            name="New EditorPart">
-      </editor>
-   </extension>
-   <extension
-         point="org.eclipse.ui.views">
-      <view
-            class="Wbtry"
-            id="Wbtry"
-            name="New ViewPart">
-      </view>
    </extension>
 
 </plugin>

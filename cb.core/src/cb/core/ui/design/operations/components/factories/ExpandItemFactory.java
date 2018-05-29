@@ -1,4 +1,4 @@
-package cb.core.ui.design.operations.factories;
+package cb.core.ui.design.operations.components.factories;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.ExpandBar;
@@ -10,9 +10,10 @@ public class ExpandItemFactory {
 
   //TODO add xml Node as an argument
   public static ExpandItem create(ExpandBar parent) {
-    //TODO get style from xml node
     ExpandItem item = new ExpandItem(parent, SWT.NONE);
-    //TODO 
+    //FIXME text from xml
+    item.setText("Basic");
+    item.setExpanded(true);;
     return item;
   }
 

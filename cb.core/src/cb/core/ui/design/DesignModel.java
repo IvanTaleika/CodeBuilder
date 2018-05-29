@@ -1,110 +1,62 @@
 package cb.core.ui.design;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ViewForm;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.ExpandBar;
-import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeItem;
-import cb.core.ui.design.widgets.Operation;
+import cb.core.ui.design.operations.OperationsController;
+import cb.core.ui.design.operations.components.Operation;
+import cb.core.ui.design.operations.components.OperationListener;
+import cb.core.ui.design.structure.ClassSummaryView;
+import cb.core.ui.design.structure.MethodTreeView;
 
-public class DesignModel {
+public class DesignModel implements OperationListener {
+  //TODO do I need to hold source?
   Composite source;
   Operation selectedOperation;
+  //TODO convert to local?
+  OperationsController operationsController;
+  MethodTreeView methodTreeView;
+  ClassSummaryView classSummaryView;
+  
   public DesignModel(Composite source) {
     this.source = source;
   }
   
-  public void buildControl() {
-    source.setLayout(new FillLayout(SWT.HORIZONTAL));
+  public void buildGUI() {
+    //TODO check other layouts
+    source.setLayout(new FillLayout());
     
+    //TODO convert to class-global?
     SashForm shellSashForm = new SashForm(source, SWT.BORDER | SWT.SMOOTH);
     
     Group structureGroup = new Group(shellSashForm, SWT.NONE);
-    structureGroup.setText("Structure");
-    structureGroup.setLayout(new FillLayout(SWT.HORIZONTAL));
+    structureGroup.setText(DesignModelMessages.Structure_title);
+    //TODO check other layouts
+    structureGroup.setLayout(new FillLayout());
     
-    SashForm structureSashForm = new SashForm(structureGroup, SWT.VERTICAL);
+    SashForm structureSashForm = new SashForm(structureGroup, SWT.BORDER | SWT.VERTICAL);
     
-    ViewForm chainViewForm = new ViewForm(structureSashForm, SWT.NONE);
+    methodTreeView = new MethodTreeView(structureSashForm);
+    methodTreeView.buildGUI();
     
-    Tree tree = new Tree(chainViewForm, SWT.BORDER | SWT.MULTI);
-    chainViewForm.setContent(tree);
+    classSummaryView = new ClassSummaryView(structureSashForm);
+    classSummaryView.buildGUI();
     
-    TreeItem trtmNewTreeitem = new TreeItem(tree, SWT.NONE);
-    trtmNewTreeitem.setText("New TreeItem");
     
-    TreeItem trtmNewTreeitem_1 = new TreeItem(trtmNewTreeitem, SWT.NONE);
-    trtmNewTreeitem_1.setText("New TreeItem");
-    trtmNewTreeitem.setExpanded(true);
+    operationsController = new OperationsController(shellSashForm);
+    operationsController.buildGUI();
+    operationsController.listenOperations(this);
     
-    Label lblChain = new Label(chainViewForm, SWT.NONE);
-    chainViewForm.setTopLeft(lblChain);
-    lblChain.setText("Chain");
-    
-    CTabFolder overviewTabFolder = new CTabFolder(structureSashForm, SWT.BORDER);
-    overviewTabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
-    
-    CTabItem methodsCTabItem = new CTabItem(overviewTabFolder, SWT.NONE);
-    methodsCTabItem.setText("Methods");
-    
-    List list = new List(overviewTabFolder, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
-    list.setItems(new String[] {"dasdasd", "dasdasd"});
-    methodsCTabItem.setControl(list);
-    
-    CTabItem valuesTabItem = new CTabItem(overviewTabFolder, SWT.NONE);
-    valuesTabItem.setText("Values");
-    
-    List list_1 = new List(overviewTabFolder, SWT.BORDER);
-    valuesTabItem.setControl(list_1);
-    structureSashForm.setWeights(new int[] {1, 1});
-    
-    Group grpOperations = new Group(shellSashForm, SWT.NONE);
-    grpOperations.setText("Operations");
-    grpOperations.setLayout(new FillLayout(SWT.HORIZONTAL));
-    
-    ExpandBar expandBar = new ExpandBar(grpOperations, SWT.V_SCROLL);
-    
-    ExpandItem xpndtmBasic = new ExpandItem(expandBar, SWT.NONE);
-    xpndtmBasic.setExpanded(true);
-    xpndtmBasic.setText("Basic");
-    
-    Composite composite = new Composite(expandBar, SWT.NONE);
-    xpndtmBasic.setControl(composite);
-    xpndtmBasic.setHeight(xpndtmBasic.getControl().computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
-    composite.setLayout(new GridLayout(2, false));
-    
-    Button btnBegin = new Button(composite, SWT.NONE);
-    btnBegin.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-    btnBegin.setText("Begin");
-    
-    Button btnEnd = new Button(composite, SWT.NONE);
-    btnEnd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-    btnEnd.setText("End");
-    
-    ExpandItem xpndtmInputoutput = new ExpandItem(expandBar, SWT.NONE);
-    xpndtmInputoutput.setText("Input/Output");
-    
-    ExpandItem xpndtmMinmax = new ExpandItem(expandBar, SWT.NONE);
-    xpndtmMinmax.setText("Min/Max");
-    
-    ExpandItem xpndtmSort = new ExpandItem(expandBar, SWT.NONE);
-    xpndtmSort.setText("Sort");
     
     ViewForm editorViewForm = new ViewForm(shellSashForm, SWT.NONE);
     
@@ -117,6 +69,16 @@ public class DesignModel {
     Canvas canvas = new Canvas(editorViewForm, SWT.NONE);
     editorViewForm.setContent(canvas);
     shellSashForm.setWeights(new int[] {201, 169, 234});
+  }
+
+  //TODO Do I need to subscribe?
+  @Override
+  public void operationSelected(Operation operation) {
+    if(selectedOperation != null) {
+      selectedOperation.setSelection(false);;
+    }
+    selectedOperation = operation;
+    
   }
 
 }
