@@ -7,8 +7,9 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.ViewForm;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
+import cb.core.ui.design.IDesignViewPart;
 
-public class ClassSummaryView {
+public class ClassSummaryView implements IDesignViewPart {
   private Composite uiParent;
   private ViewForm summaryViewForm;
 
@@ -19,10 +20,12 @@ public class ClassSummaryView {
 
 
 
-  public ViewForm getUI() {
+  @Override
+  public ViewForm getGUI() {
     return summaryViewForm;
   }
 
+  @Override
   public void buildGUI() {
 
 
@@ -50,5 +53,18 @@ public class ClassSummaryView {
     summaryViewForm.setTopRight(treeViewFormToolBar);
 
 
+  }
+
+
+
+  @Override
+  public void setParent(Composite parent) {
+    uiParent = parent;
+
+  }
+
+  @Override
+  public Composite getParent() {
+    return uiParent;
   }
 }

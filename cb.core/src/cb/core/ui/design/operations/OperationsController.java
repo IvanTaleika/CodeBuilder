@@ -9,12 +9,13 @@ import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Group;
 import cb.core.ui.design.operations.components.Operation;
-import cb.core.ui.design.operations.components.OperationListener;
+import cb.core.ui.design.IDesignViewPart;
+import cb.core.ui.design.operations.components.IOperationListener;
 import cb.core.ui.design.operations.components.factories.ExpandItemFactory;
 import cb.core.ui.design.operations.components.factories.OperationButtonFactory;
 import cb.core.ui.utils.GridLayoutFactory;
 
-public class OperationsController {
+public class OperationsController implements IDesignViewPart {
   private Composite uiParent;
   private Group operationsGroup;
   private LinkedList<Operation> operations;
@@ -26,22 +27,24 @@ public class OperationsController {
   }
 
 
-  public void listenOperations(OperationListener listener) {
+  public void listenOperations(IOperationListener listener) {
     for (Operation operation : operations) {
       operation.addListener(listener);
     }
   }
 
-  public void removeOperationListener(OperationListener listener) {
+  public void removeOperationListener(IOperationListener listener) {
     for (Operation operation : operations) {
       operation.removeListener(listener);
     }
   }
 
-  public Group getUI() {
+  @Override
+  public Group getGUI() {
     return operationsGroup;
   }
 
+  @Override
   public void buildGUI() {
     operationsGroup = new Group(uiParent, SWT.NONE);
     // TODO get title from xml
@@ -73,5 +76,18 @@ public class OperationsController {
 
     scrolledComposite.setContent(operationsExpandBar);
     scrolledComposite.setMinSize(operationsExpandBar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+  }
+
+  @Override
+  public void setParent(Composite parent) {
+    uiParent = parent;
+
+  }
+
+
+  @Override
+  public Composite getParent() {
+    return uiParent;
+
   }
 }

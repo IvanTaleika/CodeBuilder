@@ -7,9 +7,9 @@ public interface Operation {
 
   void setSelection(boolean isSelected);
 
-  void addListener(OperationListener listener);
+  void addListener(IOperationListener listener);
 
-  void removeListener(OperationListener listener);
+  void removeListener(IOperationListener listener);
 
   // TODO public String(?) getCodeTemplate()
   // TODO public String(?) getImage()

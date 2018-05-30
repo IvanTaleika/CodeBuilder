@@ -3,15 +3,15 @@ package cb.core.ui.design.operations.components;
 import java.util.LinkedList;
 
 public abstract class AbstractOperation implements Operation {
-  LinkedList<OperationListener> listeners = new LinkedList<OperationListener>();
+  LinkedList<IOperationListener> listeners = new LinkedList<IOperationListener>();
 
 
 
-  public void addListener(OperationListener listener) {
+  public void addListener(IOperationListener listener) {
     listeners.add(listener);
   }
 
-  public void removeListener(OperationListener listener) {
+  public void removeListener(IOperationListener listener) {
     listeners.remove(listener);
   }
 }

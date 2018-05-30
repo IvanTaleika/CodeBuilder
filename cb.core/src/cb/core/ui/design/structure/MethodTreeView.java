@@ -8,8 +8,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
+import cb.core.ui.design.IDesignViewPart;
 
-public class MethodTreeView {
+public class MethodTreeView implements IDesignViewPart {
   private Composite uiParent;
   private ViewForm treeViewForm;
   private Composite treeComposite;
@@ -21,11 +22,12 @@ public class MethodTreeView {
   }
 
 
-
-  public ViewForm getUI() {
+  @Override
+  public ViewForm getGUI() {
     return treeViewForm;
   }
 
+  @Override
   public void buildGUI() {
 
 
@@ -57,6 +59,17 @@ public class MethodTreeView {
     collapseTreeItem.setText("b");
     collapseTreeItem.setToolTipText(StructureViewMessages.MethodTreeView_CollapseAllToolTip);
 
+  }
+
+  @Override
+  public void setParent(Composite parent) {
+    uiParent = parent;
+
+  }
+
+  @Override
+  public Composite getParent() {
+    return uiParent;
   }
 
 }

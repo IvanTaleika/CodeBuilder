@@ -14,7 +14,7 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import cb.core.editors.designEditor.DesignEditor;
 import cb.core.editors.sourceEditor.SourceEditor;
 
-
+//build.properties
 //package org.eclipse.wb.internal.core.editor.multi;
 //TODO try to extend FormEditor, IDesignerEditor
 //TODO 1st - add page listener, 2nd - parse source content, 3rd - use default listener for 1st page

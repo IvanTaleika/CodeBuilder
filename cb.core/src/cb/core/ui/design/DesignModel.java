@@ -15,11 +15,11 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import cb.core.ui.design.operations.OperationsController;
 import cb.core.ui.design.operations.components.Operation;
-import cb.core.ui.design.operations.components.OperationListener;
+import cb.core.ui.design.operations.components.IOperationListener;
 import cb.core.ui.design.structure.ClassSummaryView;
 import cb.core.ui.design.structure.MethodTreeView;
 
-public class DesignModel implements OperationListener {
+public class DesignModel implements IOperationListener {
   //TODO do I need to hold source?
   Composite source;
   Operation selectedOperation;

@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <operations>
 	<category name="Basic" open="true">
-		<item text="Begin" toolTip="Method start point. Each method can have only one begin" image="" />
-		<item text="End" toolTip="Output values section" image="" />
+		<operation text="End"
+			toolTip="Method end point. Additing any operation after `End` will cause an error"
+			image="images/operations/icons/begin_end.gif" />
+	</category>
+	<category name="Conditions" open="true">
+		<operation text="If" toolTip="Input values section"
+			image="images/operations/icons/condition.gif" />
 	</category>
 	<category name="Input/Output" open="true">
-		<item text="Input" toolTip="Input values section" image="" />
-		<item text="Output" toolTip="Output values section" image="" />
+		<operation text="Input" toolTip="Input values section"
+			image="images/operations/icons/input_output.gif" />
+		<operation text="Output" toolTip="Output values section"
+			image="images/operations/icons/intup_output.gif" />
 	</category>
-	<category name="Min/Max" open="close">
-		<item text="minString" toolTip="find minimal string" image="" />
-		<item text="maxString" toolTip="find maximal string" image="" />
-		<item text="minNumber" toolTip="find minimal number" image="" />
+	<category name="Min/Max" open="true">
+		<operation text="minString" toolTip="Find minimal string"
+			image="images/operations/icons/method.gif" />
+		<operation text="maxString" toolTip="Find maximal string"
+			image="images/operations/icons/method.gif" />
+		<operation text="minNumber" toolTip="Find minimal number"
+			image="images/operations/icons/method.gif" />
 	</category>
-	<category name="Min/Max" open="close">
-		<item text="minString" toolTip="find minimal string" image="" />
-		<item text="maxString" toolTip="find maximal string" image="" />
-		<item text="minNumber" toolTip="find minimal number" image="" />
+	<category name="Sorting" open="true">
+		<operation text="BubbleSort"
+			toolTip="Use bubble sort algorithm"
+			image="images/operations/icons/method.gif" />
+		<operation text="QuickSort"
+			toolTip="Use quick sort algorithm"
+			image="images/operations/icons/method.gif" />
 	</category>
-	<category name="Min/Max" open="close">
-		<item text="minString" toolTip="find minimal string" image="" />
-		<item text="maxString" toolTip="find maximal string" image="" />
-		<item text="minNumber" toolTip="find minimal number" image="" />
-		<item><![CDATA[text]]></item>
-	</category>
+
 </operations>

@@ -6,13 +6,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import cb.core.ui.design.operations.components.OperationButton;
 import cb.core.ui.design.operations.components.OperationWidget;
+import cb.core.ui.utils.BundleResourceProvider;
 
 //TODO add interface for OperationFactory
 public class OperationButtonFactory implements IOperationWidgetFactory {
 
   //TODO add xml Node as an argument
   public static OperationWidget create(Composite parent) {
-    //TODO style from xml???
     OperationButton operationButton = new OperationButton(parent, SWT.FLAT | SWT.TOGGLE);
     Button button = (Button) operationButton.getUI();
     //TODO check GridData
@@ -20,19 +20,11 @@ public class OperationButtonFactory implements IOperationWidgetFactory {
     
     //TODO text from xml
     button.setText("My button");
+    //TODO path frim xml
+    button.setImage(BundleResourceProvider.getImage("images/operations/icons/begin_end.gif"));
+
     
-    //FIXME move this to separate class
-//    IWorkspace workspace = ResourcesPlugin.getWorkspace();
-//    IPath path = workspace.getRoot().getFullPath();
-//    String stringPath = path.toString();
-//    IProject project = workspace.getRoot().getProject();
-//    IFolder images =  project.getFolder("images/operationsController");
-//    IFolder test =  project.getFolder("images");
-//    test = test.getFolder("operationsController");
-//    IFile file = images.getFile("begin.gif");
-//    
-//    path = file.getFullPath();
-//    stringPath = path.toOSString();
+
     //TODO convert to image
     return operationButton;
   }
