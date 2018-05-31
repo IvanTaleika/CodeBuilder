@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.osgi.framework.Bundle;
 import cb.core.exceptions.CBResourceException;
-import cb.core.ui.design.operations.OperationsController;
+import cb.core.ui.design.operations.OperationsView;
 import cb.core.ui.design.operations.components.IOperationListener;
 import cb.core.ui.design.operations.components.Operation;
 import cb.core.ui.design.structure.ClassSummaryView;
@@ -25,7 +25,7 @@ public class DesignModel implements IOperationListener {
   private Operation selectedOperation;
   private File templateFile;
   // TODO convert to local?
-  private OperationsController operationsController;
+  private OperationsView operationsView;
   private MethodTreeView methodTreeView;
   private ClassSummaryView classSummaryView;
 
@@ -66,9 +66,8 @@ public class DesignModel implements IOperationListener {
 
       }
 
-      operationsController = new OperationsController(shellSashForm, templateFile);
-      operationsController.buildGUI();
-      operationsController.listenOperations(this);
+      operationsView = new OperationsView(shellSashForm, templateFile);
+      operationsView.buildGUI();
 
 
       ViewForm editorViewForm = new ViewForm(shellSashForm, SWT.NONE);
@@ -82,6 +81,9 @@ public class DesignModel implements IOperationListener {
       Canvas canvas = new Canvas(editorViewForm, SWT.NONE);
       editorViewForm.setContent(canvas);
       shellSashForm.setWeights(new int[] {201, 169, 234});
+      
+      
+      operationsView.addOperationsListener(this);
     } catch (Exception e) {
       // TODO: create message that something wrong with resources
     }
@@ -90,8 +92,13 @@ public class DesignModel implements IOperationListener {
   // TODO Do I need to subscribe?
   @Override
   public void operationSelected(Operation operation) {
+    //TODO is it works?
+    if(selectedOperation == operation) {
+      selectedOperation = null;
+      return;
+    }
     if (selectedOperation != null) {
-      selectedOperation.setSelection(false);;
+      selectedOperation.setSelection(false);
     }
     selectedOperation = operation;
 

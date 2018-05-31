@@ -23,7 +23,7 @@
 		<operation text="Input" toolTip="Input values section"
 			image="images/operations/icons/input_output.gif" />
 		<operation text="Output" toolTip="Output values section"
-			image="images/operations/icons/intup_output.gif" />
+			image="images/operations/icons/input_output.gif" />
 	</category>
 	<category name="Min/Max" expanded="true">
 		<operation text="minString" toolTip="Find minimal string"

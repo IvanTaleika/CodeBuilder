@@ -23,7 +23,7 @@ import cb.core.ui.design.operations.components.factories.ExpandItemFactory;
 import cb.core.ui.design.operations.components.factories.OperationToggleButtonFactory;
 import cb.core.ui.utils.GridLayoutFactory;
 
-public class OperationsController implements IDesignViewPart {
+public class OperationsView implements IDesignViewPart {
   private int columsNumber;
   private Composite uiParent;
   private Group operationsGroup;
@@ -37,7 +37,7 @@ public class OperationsController implements IDesignViewPart {
   private final String operationToolTipAttribute = "toolTip";
   private final String operationImageAttribute = "image";
 
-  public OperationsController(Composite parent, File operationsTemplate) {
+  public OperationsView(Composite parent, File operationsTemplate) {
     operations = new LinkedList<>();
     uiParent = parent;
     this.operationsTemplate = operationsTemplate;
@@ -46,7 +46,7 @@ public class OperationsController implements IDesignViewPart {
   }
 
 
-  public void listenOperations(IOperationListener listener) {
+  public void addOperationsListener(IOperationListener listener) {
     for (Operation operation : operations) {
       operation.addListener(listener);
     }
