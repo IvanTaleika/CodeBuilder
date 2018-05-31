@@ -8,12 +8,10 @@ import org.eclipse.swt.widgets.ExpandItem;
 public class ExpandItemFactory {
 
 
-  //TODO add xml Node as an argument
-  public static ExpandItem create(ExpandBar parent) {
+  public static ExpandItem create(ExpandBar parent, String text, boolean isExpanded) {
     ExpandItem item = new ExpandItem(parent, SWT.NONE);
-    //FIXME text from xml
-    item.setText("Basic");
-    item.setExpanded(true);;
+    item.setText(text);
+    item.setExpanded(isExpanded);;
     return item;
   }
 

@@ -1,29 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <operations>
-	<category name="Basic" open="true">
+	<category name="Basic" expanded="true">
 		<operation text="End"
 			toolTip="Method end point. Additing any operation after `End` will cause an error"
-			image="images/operations/icons/begin_end.gif" />
+			image="images/operations/icons/begin_end.gif">
+			<node category="return">
+				<keywords>
+					<return_value default=""
+						wizzard_toolTip="Enter value wich your method will return" />
+				</keywords>
+				<code>
+					return ${return_value};
+				</code>
+			</node>
+		</operation>
 	</category>
-	<category name="Conditions" open="true">
+	<category name="Conditions" expanded="true">
 		<operation text="If" toolTip="Input values section"
 			image="images/operations/icons/condition.gif" />
 	</category>
-	<category name="Input/Output" open="true">
+	<category name="Input/Output" expanded="true">
 		<operation text="Input" toolTip="Input values section"
 			image="images/operations/icons/input_output.gif" />
 		<operation text="Output" toolTip="Output values section"
 			image="images/operations/icons/intup_output.gif" />
 	</category>
-	<category name="Min/Max" open="true">
+	<category name="Min/Max" expanded="true">
 		<operation text="minString" toolTip="Find minimal string"
-			image="images/operations/icons/method.gif" />
+			image="images/operations/icons/method.gif">
+
+		</operation>
 		<operation text="maxString" toolTip="Find maximal string"
 			image="images/operations/icons/method.gif" />
 		<operation text="minNumber" toolTip="Find minimal number"
 			image="images/operations/icons/method.gif" />
 	</category>
-	<category name="Sorting" open="true">
+	<category name="Sorting" expanded="true">
 		<operation text="BubbleSort"
 			toolTip="Use bubble sort algorithm"
 			image="images/operations/icons/method.gif" />
