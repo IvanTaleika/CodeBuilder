@@ -7,10 +7,11 @@ import org.eclipse.swt.custom.ViewForm;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.osgi.framework.Bundle;
 import cb.core.exceptions.CBResourceException;
 import cb.core.ui.design.operations.OperationsView;
 import cb.core.ui.design.operations.components.IOperationListener;
@@ -20,8 +21,8 @@ import cb.core.ui.design.structure.MethodTreeView;
 import cb.core.ui.utils.BundleResourceProvider;
 
 public class DesignModel implements IOperationListener {
-  // TODO do I need to hold source?
-  private Composite source;
+  // TODO do I need to hold parent?
+  private Composite parent;
   private Operation selectedOperation;
   private File templateFile;
   // TODO convert to local?
@@ -29,11 +30,11 @@ public class DesignModel implements IOperationListener {
   private MethodTreeView methodTreeView;
   private ClassSummaryView classSummaryView;
 
-  // TODO analyze code source extension and get path from specific class
+  // TODO analyze code parent extension and get path from specific class
   private final String templateFileClasspath = "resources/operations/operationsJava.xml";
 
   public DesignModel(Composite source) {
-    this.source = source;
+    this.parent = source;
   }
 
   public void buildGUI() {
@@ -41,10 +42,10 @@ public class DesignModel implements IOperationListener {
 
 
       // TODO check other layouts
-      source.setLayout(new FillLayout());
+      parent.setLayout(new FillLayout());
 
       // TODO convert to class-global?
-      SashForm shellSashForm = new SashForm(source, SWT.BORDER | SWT.SMOOTH);
+      SashForm shellSashForm = new SashForm(parent, SWT.BORDER | SWT.SMOOTH);
 
       Group structureGroup = new Group(shellSashForm, SWT.NONE);
       structureGroup.setText(DesignModelMessages.Structure_title);
@@ -86,13 +87,20 @@ public class DesignModel implements IOperationListener {
       operationsView.addOperationsListener(this);
     } catch (Exception e) {
       // TODO: create message that something wrong with resources
+      for(Control control : parent.getChildren()) {
+        if(!control.isDisposed()) {
+          control.dispose();
+        }
+      }
+      //TODO move message to specific file
+      Label errorLabel = new Label(parent, SWT.NONE);
+      errorLabel.setText("Plugin resources error:\n" + e.getMessage());
     }
   }
 
   // TODO Do I need to subscribe?
   @Override
   public void operationSelected(Operation operation) {
-    //TODO is it works?
     if(selectedOperation == operation) {
       selectedOperation = null;
       return;

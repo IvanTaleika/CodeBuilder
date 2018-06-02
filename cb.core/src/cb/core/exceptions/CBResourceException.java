@@ -1,10 +1,11 @@
 package cb.core.exceptions;
 
-public class CBResourceException extends Exception {
+public class CBResourceException extends CBException {
+
   /**
    * 
    */
-  private static final long serialVersionUID = 7485735778131982388L;
+  private static final long serialVersionUID = -6529164807719960654L;
 
   public CBResourceException() {
   }

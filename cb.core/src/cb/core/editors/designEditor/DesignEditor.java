@@ -9,7 +9,7 @@ import org.eclipse.ui.part.EditorPart;
 import cb.core.ui.design.DesignModel;
 
 
-//This class should use CodeGenerator and write result into the file
+//This class should use JavaCodeGenerator and write result into the file
 public class DesignEditor extends EditorPart {
   DesignModel designModel;
 
