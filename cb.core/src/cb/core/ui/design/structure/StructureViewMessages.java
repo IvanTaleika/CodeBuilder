@@ -12,6 +12,8 @@ public class StructureViewMessages extends NLS {
   public static String ClassSummaryView_ViewToolTip;
   public static String ClassSummaryView_1stTabName;
   public static String ClassSummaryView_2ndTabName;
+  public static String ClassSummaryView_AddToolTip;
+  public static String ClassSummaryView_DeleteToolTip;
   static {
     NLS.initializeMessages(BASE_NAME, StructureViewMessages.class);
   }

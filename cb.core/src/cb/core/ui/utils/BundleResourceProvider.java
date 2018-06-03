@@ -2,7 +2,6 @@ package cb.core.ui.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,11 +14,11 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleListener;
-import cb.core.Activator;
+import cb.core.CodeBuilder;
 
 // TODO make BundleResourceProvider (return resourceProvider for each bundle (plugin)) - non static
 public final class BundleResourceProvider {
-  private static final Bundle bundle = Activator.getDefault().getBundle();
+  private static final Bundle bundle = CodeBuilder.getDefault().getBundle();
   private static final Map<URL, Image> cashedImages = new HashMap<>();
   private static final Map<URL, ImageDescriptor> cashedImageDescriptors = new HashMap<>();
 

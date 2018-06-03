@@ -1,6 +1,6 @@
-package cb.core.ui.utils;
+package cb.core.utils;
 
-public final class TemplatePathProvider {
+public final class PathProvider {
   private static final String javaTemplatePath = "resources/operations/operationsJava.xml";
   
   public static String getTemplateClasspath() {
@@ -8,7 +8,7 @@ public final class TemplatePathProvider {
     return javaTemplatePath;
   }
   
-  private TemplatePathProvider() {
+  private PathProvider() {
     
   }
 }
