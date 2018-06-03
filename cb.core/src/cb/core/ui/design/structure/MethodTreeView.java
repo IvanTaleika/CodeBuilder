@@ -4,13 +4,21 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.ViewForm;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
+import cb.core.CodeBuilder;
 import cb.core.ui.design.IDesignViewPart;
 
 public class MethodTreeView implements IDesignViewPart {
+  public final String EXPAND_ALL_IMAGE = "expand_all.gif";
+  public final String COLLAPSE_ALL_IMAGE = "collapse_all.gif";
+
   private Composite uiParent;
   private ViewForm treeViewForm;
   private Composite treeComposite;
@@ -47,18 +55,41 @@ public class MethodTreeView implements IDesignViewPart {
     ToolBar treeViewFormToolBar = new ToolBar(treeViewForm, SWT.FLAT | SWT.RIGHT);
     treeViewForm.setTopRight(treeViewFormToolBar);
 
-    // TODO add toolbarItem listener
     ToolItem expandTreeItem = new ToolItem(treeViewFormToolBar, SWT.NONE);
-    // FIXME change to image
-    expandTreeItem.setText("a");
+    expandTreeItem.setImage(CodeBuilder.getImage(EXPAND_ALL_IMAGE));
     expandTreeItem.setToolTipText(StructureViewMessages.MethodTreeView_ExpandAllToolTip);
+    expandTreeItem.addSelectionListener(new SelectionAdapter() {
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        expandCurrentTree();
+      }
+    });
 
-    // TODO add toolbarItem listener
     ToolItem collapseTreeItem = new ToolItem(treeViewFormToolBar, SWT.NONE);
-    // FIXME change to image
-    collapseTreeItem.setText("b");
+    collapseTreeItem.setImage(CodeBuilder.getImage(COLLAPSE_ALL_IMAGE));
     collapseTreeItem.setToolTipText(StructureViewMessages.MethodTreeView_CollapseAllToolTip);
+    collapseTreeItem.addSelectionListener(new SelectionAdapter() {
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        collapseCurrentTree();
+      }
+    });
+  }
 
+  private void expandCurrentTree() {
+    if (currentTree != null) {
+      for (TreeItem treeItem : currentTree.getItems()) {
+        treeItem.setExpanded(false);
+      }
+    }
+  }
+
+  private void collapseCurrentTree() {
+    if (currentTree != null) {
+      for (TreeItem treeItem : currentTree.getItems()) {
+        treeItem.setExpanded(false);
+      }
+    }
   }
 
   @Override

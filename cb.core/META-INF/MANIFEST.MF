@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Core
 Bundle-SymbolicName: cb.core;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: cb.core.Activator
+Bundle-Activator: cb.core.CodeBuilder
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.editors;bundle-version="3.11.0",

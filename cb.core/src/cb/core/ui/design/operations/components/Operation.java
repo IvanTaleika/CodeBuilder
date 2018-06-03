@@ -1,18 +1,54 @@
-// TODO change package
 package cb.core.ui.design.operations.components;
 
-public interface Operation {
+import java.util.LinkedList;
+import org.eclipse.swt.graphics.Image;
+import cb.core.editors.designEditor.node.MethodNode;
 
-  boolean isSelected();
+public abstract class Operation implements IOperation {
+  private final LinkedList<IOperationListener> listeners;
+  private MethodNode operationNode;
+  private Image icon;
+  private String name;
+  // TODO is it should be here?
 
-  void setSelection(boolean isSelected);
+  public Operation() {
+    listeners = new LinkedList<IOperationListener>();
+  }
 
-  void addListener(IOperationListener listener);
+  public LinkedList<IOperationListener> getListeners() {
+    return listeners;
 
-  void removeListener(IOperationListener listener);
+  }
 
-  // TODO public String(?) getCodeTemplate()
-  // TODO public String(?) getImage()
+  public void addListener(IOperationListener listener) {
+    listeners.add(listener);
+  }
 
+  public void removeListener(IOperationListener listener) {
+    listeners.remove(listener);
+  }
 
+  public MethodNode getOperationNode() {
+    return operationNode;
+  }
+
+  public void setOperationNode(MethodNode operationNode) {
+    this.operationNode = operationNode;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public Image getIcon() {
+    return icon;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setIcon(Image icon) {
+    this.icon = icon;
+  }
 }

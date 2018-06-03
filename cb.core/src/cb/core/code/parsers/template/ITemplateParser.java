@@ -1,7 +1,7 @@
 package cb.core.code.parsers.template;
 
-import java.util.LinkedList;
+import java.util.HashSet;
 
 public interface ITemplateParser {
-  LinkedList<String> getKeywords(String template);
+  HashSet<String> getKeywords(String template);
 }

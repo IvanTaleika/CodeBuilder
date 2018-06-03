@@ -1,12 +1,12 @@
-package cb.core.code.node;
+package cb.core.editors.designEditor.node;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public abstract class MethodNode {
+public abstract class MethodNode implements IMethodNode {
   private final String TYPE;
-  private final LinkedList<MethodNode> nextNodes;
-  private final LinkedList<MethodNode> previousNodes;
+  private final LinkedList<IMethodNode> nextNodes;
+  private final LinkedList<IMethodNode> previousNodes;
   private String codeTemplate;
   private HashMap<String, String> keywordValueMap;
 
@@ -21,27 +21,27 @@ public abstract class MethodNode {
     TYPE = type;
   }
 
-  public LinkedList<MethodNode> getNextNodes() {
+  public LinkedList<IMethodNode> getNextNodes() {
     return nextNodes;
   }
 
-  public LinkedList<MethodNode> getPreviousNodes() {
+  public LinkedList<IMethodNode> getPreviousNodes() {
     return previousNodes;
   }
 
-  public void addNext(MethodNode methodNode) {
+  public void addNext(IMethodNode methodNode) {
     nextNodes.add(methodNode);
   }
 
-  public void addPrevious(MethodNode methodNode) {
+  public void addPrevious(IMethodNode methodNode) {
     previousNodes.add(methodNode);
   }
 
-  public void removePrevious(MethodNode methodNode) {
+  public void removePrevious(IMethodNode methodNode) {
     previousNodes.remove(methodNode);
   }
 
-  public void removeNext(MethodNode methodNode) {
+  public void removeNext(IMethodNode methodNode) {
     nextNodes.remove(methodNode);
   }
   

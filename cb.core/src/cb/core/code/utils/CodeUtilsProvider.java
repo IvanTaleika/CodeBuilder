@@ -1,10 +1,10 @@
-package cb.core.code.codeBuilder;
+package cb.core.code.utils;
 
 import cb.core.code.parsers.template.ITemplateParser;
 import cb.core.code.parsers.template.JavaTemplateParser;
 import cb.core.exceptions.CBException;
 
-public final class CodeBuilder {
+public final class CodeUtilsProvider {
   private static final String JAVA_FILE = ".java";
 
   public final static String CONDITION = "condition";
@@ -15,7 +15,7 @@ public final class CodeBuilder {
   private static ITemplateParser templateParser;
 
   // TODO change language attribute (not file extension)
-  public CodeBuilder(String sourceCodeExtention) throws CBException {
+  public CodeUtilsProvider(String sourceCodeExtention) throws CBException {
     switch (sourceCodeExtention) {
       case JAVA_FILE:
         fileType = JAVA_FILE;

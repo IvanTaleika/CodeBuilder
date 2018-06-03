@@ -8,7 +8,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
-import cb.core.code.codeBuilder.CodeBuilder;
+import cb.core.code.utils.CodeUtilsProvider;
 import cb.core.editors.designEditor.DesignEditor;
 import cb.core.editors.sourceEditor.SourceEditor;
 import cb.core.exceptions.CBException;
@@ -34,7 +34,7 @@ public class CodeBuilderMultipage extends MultiPageEditorPart {
     Matcher matcher = pattern.matcher(input.getName());
     if (matcher.find()) {
       try {
-        new CodeBuilder(matcher.group(0));
+        new CodeUtilsProvider(matcher.group(0));
       }catch (CBException e) {
         throw new PartInitException(e.getMessage());
       }

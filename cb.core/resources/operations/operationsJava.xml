@@ -9,9 +9,7 @@
 					<return_value default=""
 						wizzard_toolTip="Function's return value" />
 				</keywords>
-				<template>
-					return ${return_value};
-				</template>
+				<template code="return ${return_value};" />
 			</node>
 		</operation>
 		<operation text="Value initialization"
@@ -24,20 +22,18 @@
 					<value2 default="value2"
 						wizzard_toolTip="Value wich will initialize value1" />
 				</keywords>
-				<template>
-					${value1} = ${value2};
-				</template>
+				<template code="${value1} = ${value2};" />
 			</node>
 		</operation>
 	</category>
 	<category name="Conditions" expanded="true">
 		<operation text="If" toolTip="Input values section"
-			image="images/operations/icons/condition.gif" />
+			image="images/operations/icons/condition.gif"></operation>
 	</category>
 	<category name="Input/Output" expanded="true">
 
 		<operation text="Output" toolTip="Output values section"
-			image="images/operations/icons/input_output.gif" />
+			image="images/operations/icons/input_output.gif"></operation>
 		<operation text="Value initialization"
 			toolTip="Input values section"
 			image="images/operations/icons/function.gif">
@@ -45,9 +41,7 @@
 				<keywords>
 					<value default="string" wizzard_toolTip="Output value" />
 				</keywords>
-				<template>
-					System.out.println(${value});
-				</template>
+				<template code="System.out.println(${value});" />
 			</node>
 		</operation>
 	</category>
@@ -56,45 +50,124 @@
 			image="images/operations/icons/function.gif">
 			<node type="function">
 				<keywords>
-					<collection default="collection" wizzard_toolTip="Source String-type collection" />
-					<collection default="destination" wizzard_toolTip="Value where min String will be stored" />
+					<collection default="collection"
+						wizzard_toolTip="Source String-type collection" />
+					<destination default="destination"
+						wizzard_toolTip="Value where min String will be stored" />
 				</keywords>
-				<template>
-
-				</template>
+				<template
+					code="
+    if(!${collection}.isEmpty()) {
+      ${destination} = ${collection}.get(0);
+      for(String string: ${collection}) {
+        if(string.length() &lt; ${destination}.length()) {
+          ${destination} = string;
+        }
+      }
+    } else {
+      ${destination} = null;
+    }" />
 			</node>
 		</operation>
 		<operation text="maxString" toolTip="Find maximal string"
-			image="images/operations/icons/function.gif" />
-						<node type="function">
+			image="images/operations/icons/function.gif">
+			<node type="function">
 				<keywords>
-					<collection default="collection" wizzard_toolTip="Source String-type collection" />
-					<collection default="destination" wizzard_toolTip="Value where min String will be stored" />
+					<collection default="collection"
+						wizzard_toolTip="Source number-type collection" />
+					<collection default="destination"
+						wizzard_toolTip="Value where min String will be stored" />
 				</keywords>
-				<template>
-					
-					if(!${collection}.isEmpty()) {
-						${destination} = ${collection}.get(0);
-						for(String string: ${collection}) {
-							if(string.length() > ${destination}.length()) {
-								${destination} = string;
-							}
-						}
-					} else {
-						${destination} = null;
-					}
-				</template>
+				<template
+					code="
+    if(!${collection}.isEmpty()) {
+      ${destination} = ${collection}.get(0);
+      for(String string: ${collection}) {
+        if(string.length() &gt; ${destination}.length()) {
+          ${destination} = string;
+        }
+      }
+    } else {
+      ${destination} = null;
+    }" />
 			</node>
+		</operation>
 		<operation text="minNumber" toolTip="Find minimal number"
-			image="images/operations/icons/function.gif" />
+			image="images/operations/icons/function.gif"></operation>
 	</category>
 	<category name="Sorting" expanded="true">
 		<operation text="BubbleSort"
 			toolTip="Use bubble sort algorithm"
-			image="images/operations/icons/function.gif" />
+			image="images/operations/icons/function.gif">
+			<node type="function">
+				<keywords>
+					<collection default="collection"
+						wizzard_toolTip="Source number-type collection" />
+				</keywords>
+				<template
+					code="
+    int n = ${array}.length;
+    int temp = 0;
+    for (int i = 0; i &lt; n; i++) {
+      for (int j = 1; j &lt; (n - i); j++) {
+        if (arr[j - 1] &gt; arr[j]) {
+          temp = arr[j - 1];
+          arr[j - 1] = arr[j];
+          arr[j] = temp;
+       }
+     }
+   }" />
+			</node>
+		</operation>
 		<operation text="QuickSort"
 			toolTip="Use quick sort algorithm"
-			image="images/operations/icons/function.gif" />
+			image="images/operations/icons/function.gif">
+			<node type="function">
+				<keywords>
+					<collection default="collection"
+						wizzard_toolTip="Source number-type collection" />
+				</keywords>
+				<template
+					code="
+    int subArray = 0;
+    Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
+    stack.push(0);
+    stack.push(arr.length - 1);
+    do {
+        int right = stack.pop();
+        int left = stack.pop();
+        --subArray;
+        do {
+            int _left = left;
+            int _right = right;
+            int pivot = arr[(left + right) / 2];
+            do {
+                while (pivot &lt; arr[_right]) {
+                    _right--;
+                }
+                while (pivot &gt; arr[_left]) {
+                    _left++;
+                }
+                if (_left &lt;= _right) {
+                    if (_left != _right) {
+                        int temp = arr[_left];
+                        arr[_left] = arr[_right];
+                        arr[_right] = temp;
+                    }
+                    _right--;
+                    _left++;
+                }
+            } while (_right &gt;= _left);
+            if (_left &lt; right) {
+                ++subArray;
+                stack.push(_left);
+                stack.push(right);
+            }
+            right = _right;
+        } while (left &lt; right);
+    } while (subArray &gt; -1);" />
+			</node>
+		</operation>
 	</category>
 
 </operations>

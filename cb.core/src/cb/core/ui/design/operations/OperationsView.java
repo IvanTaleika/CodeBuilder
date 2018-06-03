@@ -4,40 +4,40 @@ import java.io.File;
 import java.util.LinkedList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Group;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import cb.core.exceptions.CBResourceException;
 import cb.core.ui.design.IDesignViewPart;
+import cb.core.ui.design.operations.components.IOperation;
 import cb.core.ui.design.operations.components.IOperationListener;
-import cb.core.ui.design.operations.components.Operation;
 import cb.core.ui.design.operations.components.factories.ExpandItemFactory;
 import cb.core.ui.design.operations.components.factories.OperationWidgetFactory;
 import cb.core.ui.utils.GridLayoutFactory;
+import cb.core.utils.XMLParseUtils;
 
 public class OperationsView implements IDesignViewPart {
   private int columsNumber;
   private Composite uiParent;
   private Group operationsGroup;
-  private LinkedList<Operation> operations;
+  private LinkedList<IOperation> iOperations;
   private File operationsTemplate;
 
-  // TODO move declarations somewhere
   private final String categoryNameAttribute = "name";
   private final String categoryIsExpandedAttribute = "expanded";
 
 
   public OperationsView(Composite parent, File operationsTemplate) {
-    operations = new LinkedList<>();
+    iOperations = new LinkedList<>();
     uiParent = parent;
     this.operationsTemplate = operationsTemplate;
     // TODO move it to plugin preferences
@@ -46,14 +46,14 @@ public class OperationsView implements IDesignViewPart {
 
 
   public void addOperationsListener(IOperationListener listener) {
-    for (Operation operation : operations) {
-      operation.addListener(listener);
+    for (IOperation iOperation : iOperations) {
+      iOperation.addListener(listener);
     }
   }
 
   public void removeOperationListener(IOperationListener listener) {
-    for (Operation operation : operations) {
-      operation.removeListener(listener);
+    for (IOperation iOperation : iOperations) {
+      iOperation.removeListener(listener);
     }
   }
 
@@ -70,7 +70,7 @@ public class OperationsView implements IDesignViewPart {
       DocumentBuilder builder = factory.newDocumentBuilder();
       document = builder.parse(operationsTemplate);
     } catch (Exception e) {
-      throw new CBResourceException("Unable to open operations template file.");
+      throw new CBResourceException("Unable to open Operations template file.", e);
     }
 
     operationsGroup = new Group(uiParent, SWT.NONE);
@@ -83,13 +83,17 @@ public class OperationsView implements IDesignViewPart {
     scrolledComposite.setExpandVertical(true);
 
     ExpandBar operationsExpandBar = new ExpandBar(scrolledComposite, SWT.NONE);
+    operationsExpandBar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 
     Node root = document.getDocumentElement();
-    try {
+    String errors = null;
 
-      String errors = buildExpandBar(operationsExpandBar, root);
-    } catch (CBResourceException e) {
-      // TODO: OutputDialog with errors
+    errors = buildExpandBar(operationsExpandBar, root);
+
+    if (!errors.isEmpty()) {
+      //FIXME turn on after debug
+//      MessageDialog.openWarning(uiParent.getShell(), "CodeBuilder error",
+//          "Error with source data, some operations can be inaccessible:\n" + errors);
     }
 
 
@@ -97,38 +101,32 @@ public class OperationsView implements IDesignViewPart {
     scrolledComposite.setMinSize(operationsExpandBar.computeSize(SWT.DEFAULT, SWT.DEFAULT));
   }
 
-  private String buildExpandBar(ExpandBar expandBar, Node root)
-      throws CBResourceException {
-    // TODO add check on empty tag attr
+
+
+  private String buildExpandBar(ExpandBar expandBar, Node root) throws CBResourceException {
+    // TODO add check on empty tag attribute
     String errorMessage = "";
+    LinkedList<Element> categories = XMLParseUtils.getElements(root.getChildNodes());
     try {
-      NodeList categories = root.getChildNodes();
-      for (int i = 0; i < categories.getLength(); i++) {
-        Node category = categories.item(i);
-        if (category.getNodeType() == Node.ELEMENT_NODE) {
-          String categoryErrorMessage = "";
-          String categoryName = null;
-          NamedNodeMap categoryAttributes = category.getAttributes();
-          categoryName = categoryAttributes.getNamedItem(categoryNameAttribute).getNodeValue();
-          String categoryIsExpanded =
-              categoryAttributes.getNamedItem(categoryIsExpandedAttribute).getNodeValue();
-          ExpandItem expandItem =
-              ExpandItemFactory.create(expandBar, categoryName, categoryIsExpanded.equals("true"));
+      for (Element category : categories) {
 
-          Composite composite = new Composite(expandBar, SWT.NONE);
-          // TODO change composite background
-          composite.setLayout(GridLayoutFactory.create(columsNumber, false, 1, 1));
+        String categoryErrorMessage = "";
+        String categoryName = category.getAttribute(categoryNameAttribute);
+        String categoryIsExpanded = category.getAttribute(categoryIsExpandedAttribute);
+        ExpandItem expandItem =
+            ExpandItemFactory.create(expandBar, categoryName, categoryIsExpanded.equals("true"));
 
-          expandItem.setControl(composite);
+        Composite composite = new Composite(expandBar, SWT.NONE);
+        composite.setLayout(GridLayoutFactory.create(columsNumber, true, 1, 1));
 
-          categoryErrorMessage += buildExpandItemComposite(composite, category);
+        expandItem.setControl(composite);
 
-          expandItem.setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+        categoryErrorMessage += buildExpandItemComposite(composite, category);
 
-          if (!categoryErrorMessage.isEmpty()) {
-            categoryErrorMessage = "Category " + categoryName + " has errors:" + errorMessage;
-            errorMessage += categoryErrorMessage;
-          }
+        expandItem.setHeight(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+
+        if (!categoryErrorMessage.isEmpty()) {
+          errorMessage += "Category " + categoryName + " has errors: " + categoryErrorMessage;
         }
       }
     } catch (Exception e) {
@@ -139,20 +137,15 @@ public class OperationsView implements IDesignViewPart {
 
   private String buildExpandItemComposite(Composite composite, Node category) {
     String errorMessage = "";
+    LinkedList<Element> operations = XMLParseUtils.getElements(category.getChildNodes());
     try {
-      NodeList categoryOperations = category.getChildNodes();
-      for (int j = 0; j < categoryOperations.getLength(); j++) {
-        Node operation = categoryOperations.item(j);
-        if (operation.getNodeType() == Node.ELEMENT_NODE) {
-          try {
-            operations.add(OperationWidgetFactory.create(composite, (Element) operation));
-          } catch (CBResourceException cbResourceException) {
-            errorMessage += cbResourceException.getMessage() + "\n";
-          }
-
+      for (Element operation : operations) {
+        try {
+          iOperations.add(OperationWidgetFactory.create(composite, (Element) operation));
+        } catch (CBResourceException cbResourceException) {
+          errorMessage += cbResourceException.getMessage() + "\n";
         }
       }
-
     } catch (Exception e) {
       return "Unable to parse operation's data:\n " + e.getMessage();
     }

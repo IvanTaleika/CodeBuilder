@@ -1,57 +1,48 @@
-package cb.core.code.node;
+package cb.core.editors.designEditor.node;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import cb.core.code.codeBuilder.CodeBuilder;
+import org.w3c.dom.Text;
+import cb.core.code.utils.CodeUtilsProvider;
 import cb.core.exceptions.CBResourceException;
-//FIXME add condition nodes
+import cb.core.utils.XMLParseUtils;
+
+// FIXME add condition nodes
 public class NodeFactory {
-  private static final String TEMPLATE_TYPE = "template";
   private static final String TEMPLATE_TAG = "template";
   private static final String KEYWORD_TAG = "keywords";
+  private static final String NODE_TYPE_ATTRIBUTE = "type";
   private static final String KEYWORD_DEFAULT_ATTRIBUTE = "default";
+  private static final String TEMPLATE_CODE_ATTRIBUTE = "code";
 
   public static MethodNode create(Element nodeData) throws CBResourceException {
     String type = null;
     String codeTemplate = null;
     HashMap<String, String> keywordValueMap = new HashMap<>();
     try {
-      type = nodeData.getAttribute(TEMPLATE_TYPE);
-      NodeList templatesList = nodeData.getElementsByTagName(TEMPLATE_TAG);
+      type = nodeData.getAttribute(NODE_TYPE_ATTRIBUTE);
 
-      Element template = null;
-      for (int i = 0; i < templatesList.getLength(); i++) {
-        if (templatesList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-          template = (Element) templatesList.item(i);
-        }
-      }
-      codeTemplate =template.getTextContent().trim();
-      LinkedList<String> templateKeywords =
-          CodeBuilder.getTemplateParser().getKeywords(codeTemplate);
-      NodeList keywordsList = nodeData.getElementsByTagName(KEYWORD_TAG);
-      Element keywords = null;
-      for (int i = 0; i < keywordsList.getLength(); i++) {
-        if (keywordsList.item(i).getNodeType() == Node.ELEMENT_NODE) {
-          keywords = (Element) keywordsList.item(i);
-        }
-      }
+      Element template = XMLParseUtils.getElements(nodeData.getElementsByTagName(TEMPLATE_TAG)).getFirst();
+
+      codeTemplate = template.getAttribute(TEMPLATE_CODE_ATTRIBUTE);
+      // TODO check for good looking text
+      HashSet<String> templateKeywords =
+          CodeUtilsProvider.getTemplateParser().getKeywords(codeTemplate);
+
+      Element keywords = XMLParseUtils.getElements(nodeData.getElementsByTagName(KEYWORD_TAG)).getFirst();
+
       HashMap<String, String> keyValueMap = new HashMap<>();
       for (String keyword : templateKeywords) {
         try {
 
-          NodeList keywordData = keywords.getElementsByTagName(keyword);
-          Element defaultValue = null;
-          for (int i = 0; i < keywordData.getLength(); i++) {
-            if (keywordData.item(i).getNodeType() == Node.ELEMENT_NODE) {
-              defaultValue = (Element) keywordData.item(i);
-            }
-          }
+          Element defaultValue = XMLParseUtils.getElements(keywords.getElementsByTagName(keyword)).getFirst();
           keyValueMap.put(keyword, defaultValue.getAttribute(KEYWORD_DEFAULT_ATTRIBUTE));
           // TODO getToolTip
-          
+
         } catch (Exception e) {
           keyValueMap.put(keyword, "");
         }
@@ -62,12 +53,13 @@ public class NodeFactory {
     return create(codeTemplate, keywordValueMap, type);
   }
 
+
   public static MethodNode create(String codeTemplate, HashMap<String, String> keywordValueMap,
       String type) {
     switch (type) {
-      case CodeBuilder.FUNCTION:
+      case CodeUtilsProvider.FUNCTION:
         return new FunctionNode(codeTemplate, keywordValueMap);
-      case CodeBuilder.RETURN:
+      case CodeUtilsProvider.RETURN:
         return new ReturnNode(codeTemplate, keywordValueMap);
       default:
         return null;
@@ -76,9 +68,9 @@ public class NodeFactory {
 
   public static MethodNode create(MethodNode methodNode) {
     switch (methodNode.getType()) {
-      case CodeBuilder.FUNCTION:
+      case CodeUtilsProvider.FUNCTION:
         return new FunctionNode(methodNode.getCodeTemplate(), methodNode.getKeywordValueMap());
-      case CodeBuilder.RETURN:
+      case CodeUtilsProvider.RETURN:
         return new ReturnNode(methodNode.getCodeTemplate(), methodNode.getKeywordValueMap());
       default:
         return null;
