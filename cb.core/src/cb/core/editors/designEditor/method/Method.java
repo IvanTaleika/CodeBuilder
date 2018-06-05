@@ -2,6 +2,7 @@ package cb.core.editors.designEditor.method;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import cb.core.editors.designEditor.node.MethodNode;
 import cb.core.editors.designEditor.node.NodeFactory;
 
@@ -12,15 +13,17 @@ public class Method implements IMethod {
   private String name;
   private Map<String, String> variablesMap;
   private Map<String, String> passedVariables;
-  
-  public Method(String access, String returnType, String name, HashMap<String, String> passedVariables) {
+
+  public Method(String access, String returnType, String name,
+      HashMap<String, String> passedVariables) {
     this.access = access;
     this.name = name;
+    this.returnType = returnType;
     this.passedVariables = passedVariables;
     variablesMap = new HashMap<>();
     variablesMap.putAll(passedVariables);
     beginNode = NodeFactory.create(null, null, MethodNode.FUNCTION);
-    
+
   }
 
   public String getAccess() {
@@ -54,6 +57,7 @@ public class Method implements IMethod {
   @Override
   public void deleteVariable(String name, String type) {
     variablesMap.remove(name);
+    passedVariables.remove(name);
   }
 
 
@@ -70,6 +74,31 @@ public class Method implements IMethod {
   @Override
   public MethodNode getBeginNode() {
     return beginNode;
+  }
+
+  @Override
+  public String getAsCode() {
+    String methodString = access + " " + returnType + " " + name + "(";
+    for (Entry<String, String> value : passedVariables.entrySet()) {
+      methodString += value.getValue() + " " + value.getKey() + ", ";
+    }
+
+    if (methodString.matches(".*(, )$")) {
+      methodString = methodString.substring(0, methodString.length() - 2);
+    }
+    methodString += ") {\n";
+    return methodString;
+  }
+
+  @Override
+  public String getValuesAsCode() {
+    String variablesString = "";
+    for (Entry<String, String> value : variablesMap.entrySet()) {
+      if (!passedVariables.containsKey(value.getKey())) {
+        variablesString += value.getValue() + " " + value.getKey() + ";\n";
+      }
+    }
+    return variablesString;
   }
 
 

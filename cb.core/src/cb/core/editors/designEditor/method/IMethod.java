@@ -26,4 +26,8 @@ public interface IMethod {
   Map<String, String> getPassedVariablesMap();
   
   MethodNode getBeginNode();
+  
+  String getAsCode();
+  
+  String getValuesAsCode();
 }

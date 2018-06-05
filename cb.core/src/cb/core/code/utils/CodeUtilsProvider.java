@@ -1,5 +1,7 @@
 package cb.core.code.utils;
 
+import cb.core.code.generators.ICodeGenerator;
+import cb.core.code.generators.JavaCodeGenerator;
 import cb.core.code.parsers.template.ITemplateParser;
 import cb.core.code.parsers.template.JavaTemplateParser;
 import cb.core.exceptions.CBException;
@@ -8,7 +10,7 @@ public final class CodeUtilsProvider {
   private static final String JAVA_FILE = ".java";
 
 
-
+  private static ICodeGenerator codeGenerator;
   private static String fileType;
   private static ITemplateParser templateParser;
 
@@ -18,6 +20,7 @@ public final class CodeUtilsProvider {
       case JAVA_FILE:
         fileType = JAVA_FILE;
         templateParser = new JavaTemplateParser();
+        codeGenerator = new JavaCodeGenerator();
 
         break;
 
@@ -34,6 +37,11 @@ public final class CodeUtilsProvider {
   public static String getFileType() {
     return fileType;
   }
+
+  public static ICodeGenerator getCodeGenerator() {
+    return codeGenerator;
+  }
+
 
 
 }

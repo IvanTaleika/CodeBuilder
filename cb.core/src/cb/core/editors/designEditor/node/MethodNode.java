@@ -15,14 +15,11 @@ public abstract class MethodNode {
   private String codeTemplate;
   private HashMap<String, String> keywordValueMap;
 
-  {
-    previousNodes = new LinkedList<>();
-  }
-
   public MethodNode(String codeTemplate, HashMap<String, String> keywordValueMap, String type) {
     this.codeTemplate = codeTemplate;
     this.keywordValueMap = keywordValueMap;
     this.type = type;
+    previousNodes = new LinkedList<>();
   }
 
   public List<MethodNode> getPreviousNodes() {

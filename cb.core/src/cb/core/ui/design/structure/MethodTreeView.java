@@ -178,7 +178,7 @@ public class MethodTreeView implements IOperationListener {
   private void expandCurrentTree() {
     if (currentTree != null) {
       for (TreeItem treeItem : currentTree.getValue().getItems()) {
-        treeItem.setExpanded(false);
+        treeItem.setExpanded(true);
       }
     }
   }
@@ -200,12 +200,13 @@ public class MethodTreeView implements IOperationListener {
             // FIXME add!
             break;
           case MethodNode.FUNCTION:
-            // FIXME move childs to new parent
+            // FIXME move children to new parent
             MethodNode newNode = NodeFactory.create((selectedOperation.getNode()));
             TreeItemNodeView newNodeView = new TreeItemNodeView(newNode);
             ((FunctionNode) selectedNode).addNext(newNode);
             for (TreeItem parent : treeItemNodeView.getNodeTreeItems()) {
               TreeItem nodeTreeItem = new TreeItem(parent, SWT.NONE);
+              parent.setExpanded(true);
               nodeTreeItem.setText(selectedOperation.getName());
               nodeTreeItem.setImage(selectedOperation.getIcon());
               newNodeView.addNodeTreeItem(nodeTreeItem);

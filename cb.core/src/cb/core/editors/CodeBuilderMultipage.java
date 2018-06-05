@@ -44,27 +44,12 @@ public class CodeBuilderMultipage extends MultiPageEditorPart {
       throw new PartInitException(MultipageMessages.InputError);
     }
 
-    // //FIXME
-    // //TODO this is here just for tests
-    // IWorkingCopyManager workingCopyManager = JavaUI.getWorkingCopyManager();
-    // ICompilationUnit compilationUnit = workingCopyManager.getWorkingCopy(input);
-    // if(compilationUnit != null) {
-    // try {
-    // IBuffer buffer = compilationUnit.getBuffer();
-    // buffer.append("Vanya vanya molodec");
-    // } catch (JavaModelException e) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    //
-    // }
-
     super.init(site, input);
   }
 
   @Override
   // @PostConstruct
-  // // TODO check PostCinstruct
+  // // TODO check PostConstruct
   protected void createPages() {
     createSourcePage();
     createDesignPage();

@@ -72,12 +72,10 @@ public class ClassSummaryView {
     methodsCTabItem.setControl(methodsTable);
     // TODO this listener works even if u didn't click the method item, but chose it
     methodsTable.addListener(SWT.MouseDoubleClick, new Listener() {
-
       @Override
       public void handleEvent(Event event) {
         switchMethod();
       }
-
     });
 
 
@@ -255,7 +253,6 @@ public class ClassSummaryView {
     int index = currentValuesTable.getSelectionIndex();
     if (index != -1) {
       TableItem deletedItem = currentValuesTable.getItem(index);
-      // TODO check regex
       String[] nameAndType = deletedItem.getText().split(" : ");
       deletedItem.dispose();
       for (IMethodListener iMethodListener : methodListeners) {
