@@ -1,4 +1,4 @@
-package cb.core.ui.design.operations.components.factories;
+package cb.core.ui.design.operations.components;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -7,8 +7,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Element;
 import cb.core.editors.designEditor.node.NodeFactory;
 import cb.core.exceptions.CBResourceException;
-import cb.core.ui.design.operations.components.IOperationWidget;
-import cb.core.ui.design.operations.components.OperationButton;
 import cb.core.ui.utils.BundleResourceProvider;
 import cb.core.utils.XMLParseUtils;
 
@@ -29,7 +27,7 @@ public class OperationWidgetFactory {
     String imageClassPath = widgetData.getAttribute(operationImageAttribute);
 
     try {
-      operationButton.setOperationNode(
+      operationButton.setNode(
           NodeFactory.create(XMLParseUtils.getElements(widgetData.getChildNodes()).getFirst()));
     } catch (Exception e) {
       throw new CBResourceException(e.getMessage() + " exeption in operation " + text, e);

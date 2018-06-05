@@ -2,38 +2,57 @@ package cb.core.editors.designEditor.node;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import cb.core.code.utils.CodeUtilsProvider;
+import java.util.List;
 
 public class ConditionNode extends MethodNode {
+  private List<MethodNode> nextNodes;
+
 
   public ConditionNode(LinkedList<String> conditionsTemplates,
       LinkedList<HashMap<String, String>> conditionsMaps, LinkedList<String> conditionsStyles) {
-    super(null, null, CodeUtilsProvider.CONDITION);
+    super(null, null, MethodNode.CONDITION);
+    nextNodes = new LinkedList<>();
     for (int i = 0; i < conditionsTemplates.size(); i++) {
-      super.addNext(NodeFactory.create(conditionsTemplates.get(i), conditionsMaps.get(i),
-          conditionsStyles.get(i)));
+      MethodNode nextNode = NodeFactory.create(conditionsTemplates.get(i), conditionsMaps.get(i),
+          conditionsStyles.get(i));
+      nextNode.addPrevious(this);
+      nextNodes.add(nextNode);
     }
   }
 
+  public List<MethodNode> getNextNodes() {
+    return nextNodes;
+  }
+
+  public void addBranch(MethodNode methodNode) {
+    nextNodes.add(methodNode);
+  }
+  
   // TODO check algorithm
-  @Override
-  public void addNext(IMethodNode methodNode) {
-    for (IMethodNode childNode : getNextNodes()) {
-      IMethodNode lastNode = getLastNode(childNode.getNextNodes());
-      if (lastNode == null) {
-        childNode.addNext(methodNode);
-      } else {
-        lastNode.addNext(methodNode);
-      }
+  public List<MethodNode> addNext(MethodNode methodNode) {
+    List<MethodNode> lastNodes = new LinkedList<>();
+    for (MethodNode childNode : nextNodes) {
+      lastNodes.addAll(addToLastNode(childNode, methodNode));
     }
+    return lastNodes;
   }
 
-  private IMethodNode getLastNode(LinkedList<IMethodNode> methodNodes) {
-    for (IMethodNode methodNode : methodNodes) {
-      if (methodNode.getNextNodes().isEmpty() || methodNode.getType() == CodeUtilsProvider.CONDITION) {
-        return methodNode;
-      }
-      return getLastNode(methodNode.getNextNodes());
+  private List<MethodNode> addToLastNode(MethodNode destinationNode, MethodNode inputNode) {
+    switch (destinationNode.getType()) {
+      case MethodNode.CONDITION:
+        return ((ConditionNode) destinationNode).addNext(inputNode);
+      case MethodNode.FUNCTION:
+        MethodNode functionNextNode = ((FunctionNode) destinationNode).getNext();
+        if (functionNextNode == null) {
+          List<MethodNode> lastNodes = new LinkedList<>();
+          lastNodes.add(destinationNode);
+          ((FunctionNode) destinationNode).addNext(inputNode);
+          return lastNodes;
+        } else {
+          return addToLastNode(functionNextNode, inputNode);
+        }
+      case MethodNode.RETURN:
+        return new LinkedList<>();
     }
     return null;
   }

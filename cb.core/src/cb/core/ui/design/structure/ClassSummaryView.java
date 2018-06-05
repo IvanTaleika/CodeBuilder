@@ -1,52 +1,67 @@
 package cb.core.ui.design.structure;
 
 import java.util.HashMap;
-import org.eclipse.jface.dialogs.TitleAreaDialog;
+import java.util.LinkedList;
+import java.util.Map.Entry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.custom.ViewForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import cb.core.CodeBuilder;
-import cb.core.ui.design.IDesignViewPart;
+import cb.core.editors.designEditor.method.IMethodListener;
 import cb.core.ui.design.structure.dialogs.AddMethodDialog;
 import cb.core.ui.design.structure.dialogs.AddValueDialog;
 
-public class ClassSummaryView implements IDesignViewPart {
+public class ClassSummaryView {
+  // TODO move this shit somewhere?
   private final String ADD_IMAGE = "add.png";
   private final String DELETE_IMAGE = "delete.png";
-  private AddMethodDialog addMethodDialog;
-  private AddValueDialog addValueDialog;
-  private Composite uiParent;
-  private ViewForm summaryViewForm;
-  private Table methodsTable;
-  private Table variablesTable;
+  private final HashMap<String, String> ACCESS_SYMBOLS_MAP = new HashMap<>();
 
-  // TODO add tabs here
-  public ClassSummaryView(Composite uiParent) {
-    this.uiParent = uiParent;
-
+  {
+    ACCESS_SYMBOLS_MAP.put("public", "+");
+    ACCESS_SYMBOLS_MAP.put("protected", "#");
+    ACCESS_SYMBOLS_MAP.put("private", "-");
   }
 
+  private AddMethodDialog addMethodDialog;
+  private AddValueDialog addValueDialog;
+  private Composite parent;
 
+  private Composite valueTabComposite;
+  private StackLayout valueTabCompositeLayout;
+  private LinkedList<Table> valueTables;
 
-  @Override
+  private ViewForm summaryViewForm;
+  private Table methodsTable;
+  private Table currentValuesTable;
+
+  private LinkedList<IMethodListener> methodListeners;
+
+  public ClassSummaryView(Composite parent) {
+    this.parent = parent;
+    methodListeners = new LinkedList<>();
+  }
+
   public ViewForm getGUI() {
     return summaryViewForm;
   }
 
-  @Override
   public void buildGUI() {
+    valueTables = new LinkedList<>();
 
-
-    summaryViewForm = new ViewForm(uiParent, SWT.NONE);
+    summaryViewForm = new ViewForm(parent, SWT.NONE);
 
     CTabFolder summaryTabFolder = new CTabFolder(summaryViewForm, SWT.BORDER);
     summaryViewForm.setContent(summaryTabFolder);
@@ -55,13 +70,24 @@ public class ClassSummaryView implements IDesignViewPart {
     methodsCTabItem.setText(StructureViewMessages.ClassSummaryView_1stTabName);
     methodsTable = new Table(summaryTabFolder, SWT.FULL_SELECTION);
     methodsCTabItem.setControl(methodsTable);
+    // TODO this listener works even if u didn't click the method item, but chose it
+    methodsTable.addListener(SWT.MouseDoubleClick, new Listener() {
+
+      @Override
+      public void handleEvent(Event event) {
+        switchMethod();
+      }
+
+    });
 
 
 
     CTabItem valuesTabItem = new CTabItem(summaryTabFolder, SWT.NONE);
     valuesTabItem.setText(StructureViewMessages.ClassSummaryView_2ndTabName);
-    variablesTable = new Table(summaryTabFolder, SWT.FULL_SELECTION);
-    valuesTabItem.setControl(variablesTable);
+    valueTabComposite = new Composite(summaryTabFolder, SWT.NONE);
+    valueTabCompositeLayout = new StackLayout();
+    valueTabComposite.setLayout(valueTabCompositeLayout);
+    valuesTabItem.setControl(valueTabComposite);
 
     CLabel viewFormTitle = new CLabel(summaryViewForm, SWT.NONE);
     // TODO set image
@@ -103,81 +129,149 @@ public class ClassSummaryView implements IDesignViewPart {
     summaryTabFolder.setSelection(methodsCTabItem);
   }
 
+
+  public void setParent(Composite parent) {
+    this.parent = parent;
+
+  }
+
+  public Composite getParent() {
+    return parent;
+  }
+
+  public void addMethodListener(IMethodListener listener) {
+    methodListeners.add(listener);
+  }
+
+  public void removeMethodListener(IMethodListener listener) {
+    methodListeners.remove(listener);
+  }
+
+  private void switchValueTable(Table table) {
+    currentValuesTable = table;
+    valueTabCompositeLayout.topControl = table;
+    valueTabComposite.layout();
+  }
+
+
   private void addMethod() {
     if (addMethodDialog == null) {
-      addMethodDialog = new AddMethodDialog(uiParent.getShell());
+      addMethodDialog = new AddMethodDialog(parent.getShell());
     }
     int result = addMethodDialog.open();
     if (result == AddMethodDialog.OK) {
-      String access = addMethodDialog.getAccess();
-      String returnType = addMethodDialog.getReturnType();
-      String name = addMethodDialog.getName();
-      String methodString = access.trim() + " " + returnType.trim() + " " + name.trim() + "(";
-      String variables = addMethodDialog.getVariables();
-      if (!variables.isEmpty()) {
-        String[] variablesArray = variables.split(",");
-        HashMap<String, String> typeVariableMap = new HashMap<>();
+      String access = addMethodDialog.getAccess().trim();
+      String returnType = addMethodDialog.getReturnType().trim();
+      String name = addMethodDialog.getName().trim();
+      String passedVariables = addMethodDialog.getVariables();
+
+      HashMap<String, String> passedVariablesMap = new HashMap<>();
+      if (!passedVariables.isEmpty()) {
+        String[] variablesArray = passedVariables.split(",");
         for (String variable : variablesArray) {
-          variable.trim();
+          variable = variable.trim();
           String[] temp = variable.split("\\s");
           if (temp.length == 2) {
-            typeVariableMap.put(temp[0], temp[1]);
-            methodString += temp[0] + ", ";
+            passedVariablesMap.put(temp[1], temp[0]);
           }
         }
       }
-      methodString.trim();
-      methodString += ")";
-      // TODO add images not access modifiers
-      TableItem method = new TableItem(methodsTable, SWT.NONE);
-      method.setText(methodString);
-      // TODO send this info to editor
+      addMethodToView(access, returnType, name, passedVariablesMap);
+      for (IMethodListener iMethodListener : methodListeners) {
+        iMethodListener.methodCreated(access, returnType, name, passedVariablesMap);
+      }
     }
 
   }
 
+  private void addMethodToView(String access, String returnType, String name,
+      HashMap<String, String> passedVariablesMap) {
+    String methodString = ACCESS_SYMBOLS_MAP.get(access) + " " + name + "(";
+
+
+    for (Entry<String, String> value : passedVariablesMap.entrySet()) {
+      methodString += value.getValue() + " " + value.getKey() + ", ";
+    }
+
+    if (methodString.matches(".*(, )$")) {
+      methodString = methodString.substring(0, methodString.length() - 2);
+    }
+    methodString += ") : " + returnType;
+    TableItem method = new TableItem(methodsTable, SWT.NONE);
+    method.setText(methodString);
+    methodsTable.setSelection(method);
+    valueTables.add(new Table(valueTabComposite, SWT.NONE));
+    switchValueTable(valueTables.get(methodsTable.getSelectionIndex()));
+
+    if (!passedVariablesMap.isEmpty()) {
+      for (Entry<String, String> passedVariable : passedVariablesMap.entrySet()) {
+        addValueToView(passedVariable.getKey(), passedVariable.getValue());
+      }
+    }
+  }
+
   private void addValue() {
+    // TODO protect from duplication variables
+    if(methodsTable.getItemCount() == 0) {
+      return;
+    }
     if (addValueDialog == null) {
-      addValueDialog = new AddValueDialog(uiParent.getShell());
+      addValueDialog = new AddValueDialog(parent.getShell());
     }
     int result = addValueDialog.open();
     if (result == AddValueDialog.OK) {
-      String access = addValueDialog.getAccess();
       String type = addValueDialog.getType();
       String name = addValueDialog.getName();
-      // TODO add images not access modifiers
-      
-      String valueString = access.trim() + " " + name.trim() + " : " + type.trim();
-      TableItem value = new TableItem(variablesTable, SWT.NONE);
-      value.setText(valueString);
-      // TODO send this info to editor
+      addValueToView(name, type);
+
+      for (IMethodListener iMethodListener : methodListeners) {
+        iMethodListener.valueCreated(valueTables.indexOf(currentValuesTable), name, type);
+      }
     }
+  }
+
+  private void addValueToView(String name, String type) {
+    String valueString = name + " : " + type;
+    TableItem value = new TableItem(currentValuesTable, SWT.NONE);
+    value.setText(valueString);
   }
 
   private void deleteMethod() {
     int index = methodsTable.getSelectionIndex();
-    if(index != -1) {
+    if (index != -1) {
+      Table table = valueTables.remove(index);
+      if (currentValuesTable == table) {
+        switchValueTable(null);
+      }
       methodsTable.getItem(index).dispose();
-      // TODO send this info to editor 
+
+      for (IMethodListener iMethodListener : methodListeners) {
+        iMethodListener.methodDeleted(index);
+      }
     }
   }
 
   private void deleteVariable() {
-    int index = variablesTable.getSelectionIndex();
-    if(index != -1) {
-      variablesTable.getItem(index).dispose();
-      // TODO send this info to editor 
+    int index = currentValuesTable.getSelectionIndex();
+    if (index != -1) {
+      TableItem deletedItem = currentValuesTable.getItem(index);
+      // TODO check regex
+      String[] nameAndType = deletedItem.getText().split(" : ");
+      deletedItem.dispose();
+      for (IMethodListener iMethodListener : methodListeners) {
+        iMethodListener.valueDeleted(valueTables.indexOf(currentValuesTable), nameAndType[0],
+            nameAndType[1]);
+      }
     }
   }
 
-  @Override
-  public void setParent(Composite parent) {
-    uiParent = parent;
-
-  }
-
-  @Override
-  public Composite getParent() {
-    return uiParent;
+  private void switchMethod() {
+    int methodIndex = methodsTable.getSelectionIndex();
+    if (methodIndex != -1) {
+      switchValueTable(valueTables.get(methodIndex));
+      for (IMethodListener iMethodListener : methodListeners) {
+        iMethodListener.methodSwitched(methodIndex);
+      }
+    }
   }
 }

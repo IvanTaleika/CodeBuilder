@@ -2,11 +2,7 @@ package cb.core.editors.designEditor.node;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 import cb.core.code.utils.CodeUtilsProvider;
 import cb.core.exceptions.CBResourceException;
 import cb.core.utils.XMLParseUtils;
@@ -35,16 +31,15 @@ public class NodeFactory {
 
       Element keywords = XMLParseUtils.getElements(nodeData.getElementsByTagName(KEYWORD_TAG)).getFirst();
 
-      HashMap<String, String> keyValueMap = new HashMap<>();
       for (String keyword : templateKeywords) {
         try {
 
           Element defaultValue = XMLParseUtils.getElements(keywords.getElementsByTagName(keyword)).getFirst();
-          keyValueMap.put(keyword, defaultValue.getAttribute(KEYWORD_DEFAULT_ATTRIBUTE));
+          keywordValueMap.put(keyword, defaultValue.getAttribute(KEYWORD_DEFAULT_ATTRIBUTE));
           // TODO getToolTip
 
         } catch (Exception e) {
-          keyValueMap.put(keyword, "");
+          keywordValueMap.put(keyword, "");
         }
       }
     } catch (Exception e) {
@@ -57,9 +52,9 @@ public class NodeFactory {
   public static MethodNode create(String codeTemplate, HashMap<String, String> keywordValueMap,
       String type) {
     switch (type) {
-      case CodeUtilsProvider.FUNCTION:
+      case MethodNode.FUNCTION:
         return new FunctionNode(codeTemplate, keywordValueMap);
-      case CodeUtilsProvider.RETURN:
+      case MethodNode.RETURN:
         return new ReturnNode(codeTemplate, keywordValueMap);
       default:
         return null;
@@ -68,9 +63,9 @@ public class NodeFactory {
 
   public static MethodNode create(MethodNode methodNode) {
     switch (methodNode.getType()) {
-      case CodeUtilsProvider.FUNCTION:
+      case MethodNode.FUNCTION:
         return new FunctionNode(methodNode.getCodeTemplate(), methodNode.getKeywordValueMap());
-      case CodeUtilsProvider.RETURN:
+      case MethodNode.RETURN:
         return new ReturnNode(methodNode.getCodeTemplate(), methodNode.getKeywordValueMap());
       default:
         return null;

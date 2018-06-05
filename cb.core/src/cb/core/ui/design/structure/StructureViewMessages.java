@@ -8,6 +8,8 @@ public class StructureViewMessages extends NLS {
   public static String MethodTreeView_ViewTooltip;
   public static String MethodTreeView_ExpandAllToolTip;
   public static String MethodTreeView_CollapseAllToolTip;
+  public static String MethodTreeView_AdditingToEndTitle;
+  public static String MethodTreeView_AdditingToEndMessage;
   public static String ClassSummaryView_ViewTitle;
   public static String ClassSummaryView_ViewToolTip;
   public static String ClassSummaryView_1stTabName;

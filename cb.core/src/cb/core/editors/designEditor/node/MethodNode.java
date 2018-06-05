@@ -2,47 +2,40 @@ package cb.core.editors.designEditor.node;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
-public abstract class MethodNode implements IMethodNode {
-  private final String TYPE;
-  private final LinkedList<IMethodNode> nextNodes;
-  private final LinkedList<IMethodNode> previousNodes;
+public abstract class MethodNode {
+  public final static String CONDITION = "condition";
+  public final static String FUNCTION = "function";
+  public final static String RETURN = "return";
+  
+  private final String type;
+  //TODO change to Set
+  private final LinkedList<MethodNode> previousNodes;
   private String codeTemplate;
   private HashMap<String, String> keywordValueMap;
 
   {
-    nextNodes = new LinkedList<>();
     previousNodes = new LinkedList<>();
   }
 
   public MethodNode(String codeTemplate, HashMap<String, String> keywordValueMap, String type) {
     this.codeTemplate = codeTemplate;
     this.keywordValueMap = keywordValueMap;
-    TYPE = type;
+    this.type = type;
   }
 
-  public LinkedList<IMethodNode> getNextNodes() {
-    return nextNodes;
-  }
-
-  public LinkedList<IMethodNode> getPreviousNodes() {
+  public List<MethodNode> getPreviousNodes() {
     return previousNodes;
   }
 
-  public void addNext(IMethodNode methodNode) {
-    nextNodes.add(methodNode);
-  }
-
-  public void addPrevious(IMethodNode methodNode) {
+  protected void addPrevious(MethodNode methodNode) {
     previousNodes.add(methodNode);
   }
 
-  public void removePrevious(IMethodNode methodNode) {
+  protected void removePrevious(MethodNode methodNode) {
     previousNodes.remove(methodNode);
-  }
-
-  public void removeNext(IMethodNode methodNode) {
-    nextNodes.remove(methodNode);
+      
   }
   
   public String getCodeTemplate() {
@@ -54,10 +47,8 @@ public abstract class MethodNode implements IMethodNode {
   }
 
   public String getType() {
-    return TYPE;
+    return type;
   }
-
-
 
 
 }

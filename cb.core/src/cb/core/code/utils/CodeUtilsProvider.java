@@ -7,9 +7,7 @@ import cb.core.exceptions.CBException;
 public final class CodeUtilsProvider {
   private static final String JAVA_FILE = ".java";
 
-  public final static String CONDITION = "condition";
-  public final static String FUNCTION = "function";
-  public final static String RETURN = "return";
+
 
   private static String fileType;
   private static ITemplateParser templateParser;

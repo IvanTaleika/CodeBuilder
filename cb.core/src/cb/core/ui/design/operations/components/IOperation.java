@@ -3,27 +3,26 @@ package cb.core.ui.design.operations.components;
 
 import org.eclipse.swt.graphics.Image;
 import cb.core.editors.designEditor.node.MethodNode;
+//TODO move node from Operation
 public interface IOperation {
 
   boolean isSelected();
 
   void setSelection(boolean isSelected);
 
-  public MethodNode getOperationNode();
-  
-  public void setOperationNode(MethodNode operationNode);
-  
+  MethodNode getNode();
+
+  void setNode(MethodNode operationNode);
+
   void addListener(IOperationListener listener);
 
   void removeListener(IOperationListener listener);
-  
-  public String getName();
-  
-  public Image getIcon();
 
-  public void setName(String name);
+  String getName();
+
+  void setName(String name);
 
   public void setIcon(Image icon);
 
-
+  public Image getIcon();
 }

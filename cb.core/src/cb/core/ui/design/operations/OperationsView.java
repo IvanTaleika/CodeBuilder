@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.LinkedList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridData;
@@ -17,17 +16,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import cb.core.exceptions.CBResourceException;
-import cb.core.ui.design.IDesignViewPart;
 import cb.core.ui.design.operations.components.IOperation;
 import cb.core.ui.design.operations.components.IOperationListener;
+import cb.core.ui.design.operations.components.OperationWidgetFactory;
 import cb.core.ui.design.operations.components.factories.ExpandItemFactory;
-import cb.core.ui.design.operations.components.factories.OperationWidgetFactory;
 import cb.core.ui.utils.GridLayoutFactory;
 import cb.core.utils.XMLParseUtils;
 
-public class OperationsView implements IDesignViewPart {
+public class OperationsView {
   private int columsNumber;
-  private Composite uiParent;
+  private Composite parent;
   private Group operationsGroup;
   private LinkedList<IOperation> iOperations;
   private File operationsTemplate;
@@ -38,7 +36,7 @@ public class OperationsView implements IDesignViewPart {
 
   public OperationsView(Composite parent, File operationsTemplate) {
     iOperations = new LinkedList<>();
-    uiParent = parent;
+    this.parent = parent;
     this.operationsTemplate = operationsTemplate;
     // TODO move it to plugin preferences
     columsNumber = 2;
@@ -57,12 +55,10 @@ public class OperationsView implements IDesignViewPart {
     }
   }
 
-  @Override
   public Group getGUI() {
     return operationsGroup;
   }
 
-  @Override
   public void buildGUI() throws CBResourceException {
     Document document;
     try {
@@ -73,7 +69,7 @@ public class OperationsView implements IDesignViewPart {
       throw new CBResourceException("Unable to open Operations template file.", e);
     }
 
-    operationsGroup = new Group(uiParent, SWT.NONE);
+    operationsGroup = new Group(parent, SWT.NONE);
     operationsGroup.setText(OperationsControllerMessages.OperationsController_title);
     operationsGroup.setLayout(GridLayoutFactory.create(1, false, 0, 0));
 
@@ -92,7 +88,7 @@ public class OperationsView implements IDesignViewPart {
 
     if (!errors.isEmpty()) {
       //FIXME turn on after debug
-//      MessageDialog.openWarning(uiParent.getShell(), "CodeBuilder error",
+//      MessageDialog.openWarning(parent.getShell(), "CodeBuilder error",
 //          "Error with source data, some operations can be inaccessible:\n" + errors);
     }
 
@@ -152,16 +148,13 @@ public class OperationsView implements IDesignViewPart {
     return errorMessage;
   }
 
-  @Override
   public void setParent(Composite parent) {
-    uiParent = parent;
-
+    this.parent = parent;
   }
 
 
-  @Override
   public Composite getParent() {
-    return uiParent;
+    return parent;
 
   }
 

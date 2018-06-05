@@ -9,7 +9,6 @@ public abstract class Operation implements IOperation {
   private MethodNode operationNode;
   private Image icon;
   private String name;
-  // TODO is it should be here?
 
   public Operation() {
     listeners = new LinkedList<IOperationListener>();
@@ -28,11 +27,11 @@ public abstract class Operation implements IOperation {
     listeners.remove(listener);
   }
 
-  public MethodNode getOperationNode() {
+  public MethodNode getNode() {
     return operationNode;
   }
 
-  public void setOperationNode(MethodNode operationNode) {
+  public void setNode(MethodNode operationNode) {
     this.operationNode = operationNode;
   }
 

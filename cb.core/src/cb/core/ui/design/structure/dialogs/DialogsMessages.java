@@ -17,6 +17,10 @@ public class DialogsMessages extends NLS {
   public static String AddValueDialog_AccessLabel;
   public static String AddValueDialog_ReturnTypeLabel;
   public static String AddValueDialog_NameLabel;
+  public static String CustomizeNodeDialog_Title;
+  public static String CustomizeNodeDialog_ShellTitle;
+  public static String CustomizeNodeDialog_Message;
+  public static String CustomizeNodeDialog_LabelDefaultMessage;
 
   static {
     NLS.initializeMessages(BASE_NAME, DialogsMessages.class);

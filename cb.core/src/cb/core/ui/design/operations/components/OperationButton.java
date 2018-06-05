@@ -5,9 +5,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Widget;
-import org.w3c.dom.Element;
-import cb.core.exceptions.CBResourceException;
 
 
 //TODO think about Custom Button implementation
@@ -62,5 +59,4 @@ public class OperationButton extends Operation implements IOperationWidget {
     super.setIcon(icon);
     uiOperation.setImage(icon);
   }
-
 }

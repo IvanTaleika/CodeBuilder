@@ -15,18 +15,15 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import cb.core.ui.utils.GridLayoutFactory;
 
-//TODO add abstract parent
+// TODO add abstract parent
 public class AddValueDialog extends TitleAreaDialog {
-  private String[] accesses = {"public", "protected", "private"};
   // TODO is it too many?
   private String[] returnTypes =
       {"byte", "short", "int", "long", "float", "double", "boleam", "char", "String", "Object"};
-  private Combo accessCombo;
   private Combo typeCombo;
   private Text nameText;
   // TODO add initialization
 
-  private String access;
   private String returnType;
   private String name;
 
@@ -39,28 +36,21 @@ public class AddValueDialog extends TitleAreaDialog {
   public void create() {
     super.create();
     setTitle(DialogsMessages.AddValueDialog_Title);
-    setMessage(DialogsMessages.AddValueDialog_Message, IMessageProvider.INFORMATION);
   }
 
   @Override
   protected Control createDialogArea(Composite parent) {
+    setMessage(DialogsMessages.AddValueDialog_Message, IMessageProvider.INFORMATION);
     Composite area = (Composite) super.createDialogArea(parent);
     Composite container = new Composite(area, SWT.NONE);
     container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     GridLayout layout = GridLayoutFactory.create(2, false);
     container.setLayout(layout);
 
-    createAccessPart(container);
     createReturnTypePart(container);
 
     createNamePart(container);
 
-    accessCombo.addModifyListener(new ModifyListener() {
-      @Override
-      public void modifyText(ModifyEvent e) {
-        verifyInput();
-      }
-    });
     typeCombo.addModifyListener(new ModifyListener() {
       @Override
       public void modifyText(ModifyEvent e) {
@@ -80,26 +70,9 @@ public class AddValueDialog extends TitleAreaDialog {
     return name;
   }
 
-  public String getAccess() {
-    return access;
-  }
 
   public String getType() {
     return returnType;
-  }
-
-
-  private void createAccessPart(Composite container) {
-    Label accessLabel = new Label(container, SWT.NONE);
-    accessLabel.setText(DialogsMessages.AddValueDialog_AccessLabel);
-
-    accessCombo = new Combo(container, SWT.READ_ONLY);
-    accessCombo.setItems(accesses);
-
-    GridData gridData = new GridData();
-    gridData.grabExcessHorizontalSpace = true;
-    gridData.horizontalAlignment = GridData.FILL;
-    accessCombo.setLayoutData(gridData);
   }
 
   private void createReturnTypePart(Composite container) {
@@ -133,7 +106,6 @@ public class AddValueDialog extends TitleAreaDialog {
   }
 
   private void saveInput() {
-    access = accessCombo.getText();
     returnType = typeCombo.getText();
     name = nameText.getText();
   }
@@ -152,8 +124,7 @@ public class AddValueDialog extends TitleAreaDialog {
   }
 
   private void verifyInput() {
-    if (!accessCombo.getText().isEmpty() && !typeCombo.getText().isEmpty()
-        && !nameText.getText().isEmpty()) {
+    if (!typeCombo.getText().isEmpty() && !nameText.getText().isEmpty()) {
       getButton(OK).setEnabled(true);
     } else {
       getButton(OK).setEnabled(false);

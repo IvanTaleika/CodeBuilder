@@ -39,11 +39,13 @@ public class AddMethodDialog extends TitleAreaDialog {
   public void create() {
     super.create();
     setTitle(DialogsMessages.AddMethodDialog_Title);
+    //TODO Message dissapear after closing dialog
     setMessage(DialogsMessages.AddMethodDialog_Message, IMessageProvider.INFORMATION);
   }
 
   @Override
   protected Control createDialogArea(Composite parent) {
+
     Composite area = (Composite) super.createDialogArea(parent);
     Composite container = new Composite(area, SWT.NONE);
     container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));

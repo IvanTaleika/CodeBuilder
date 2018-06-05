@@ -34,8 +34,8 @@
 
 		<operation text="Output" toolTip="Output values section"
 			image="images/operations/icons/input_output.gif"></operation>
-		<operation text="Value initialization"
-			toolTip="Input values section"
+		<operation text="Value output"
+			toolTip="Console value output"
 			image="images/operations/icons/function.gif">
 			<node type="function">
 				<keywords>
@@ -75,7 +75,7 @@
 				<keywords>
 					<collection default="collection"
 						wizzard_toolTip="Source number-type collection" />
-					<collection default="destination"
+					<destination default="destination"
 						wizzard_toolTip="Value where min String will be stored" />
 				</keywords>
 				<template
@@ -101,7 +101,7 @@
 			image="images/operations/icons/function.gif">
 			<node type="function">
 				<keywords>
-					<collection default="collection"
+					<array default="array"
 						wizzard_toolTip="Source number-type collection" />
 				</keywords>
 				<template
@@ -111,9 +111,9 @@
     for (int i = 0; i &lt; n; i++) {
       for (int j = 1; j &lt; (n - i); j++) {
         if (arr[j - 1] &gt; arr[j]) {
-          temp = arr[j - 1];
-          arr[j - 1] = arr[j];
-          arr[j] = temp;
+          temp = ${array}[j - 1];
+          ${array}[j - 1] = ${array}[j];
+          ${array}[j] = temp;
        }
      }
    }" />
@@ -124,7 +124,7 @@
 			image="images/operations/icons/function.gif">
 			<node type="function">
 				<keywords>
-					<collection default="collection"
+					<array default="array"
 						wizzard_toolTip="Source number-type collection" />
 				</keywords>
 				<template
@@ -132,7 +132,7 @@
     int subArray = 0;
     Stack&lt;Integer&gt; stack = new Stack&lt;&gt;();
     stack.push(0);
-    stack.push(arr.length - 1);
+    stack.push(${array}.length - 1);
     do {
         int right = stack.pop();
         int left = stack.pop();
@@ -140,19 +140,19 @@
         do {
             int _left = left;
             int _right = right;
-            int pivot = arr[(left + right) / 2];
+            int pivot = ${array}[(left + right) / 2];
             do {
-                while (pivot &lt; arr[_right]) {
+                while (pivot &lt; ${array}[_right]) {
                     _right--;
                 }
-                while (pivot &gt; arr[_left]) {
+                while (pivot &gt; ${array}[_left]) {
                     _left++;
                 }
                 if (_left &lt;= _right) {
                     if (_left != _right) {
-                        int temp = arr[_left];
-                        arr[_left] = arr[_right];
-                        arr[_right] = temp;
+                        int temp = ${array}[_left];
+                        ${array}[_left] = ${array}[_right];
+                        ${array}[_right] = temp;
                     }
                     _right--;
                     _left++;

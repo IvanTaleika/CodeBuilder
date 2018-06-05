@@ -13,6 +13,7 @@ import cb.core.editors.designEditor.DesignEditor;
 import cb.core.editors.sourceEditor.SourceEditor;
 import cb.core.exceptions.CBException;
 
+//TODO dispose Images
 // build.properties
 // package org.eclipse.wb.internal.core.editor.multi;
 // TODO try to extend FormEditor, IDesignerEditor
