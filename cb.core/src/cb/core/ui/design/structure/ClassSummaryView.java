@@ -24,7 +24,7 @@ import cb.core.ui.design.structure.dialogs.AddMethodDialog;
 import cb.core.ui.design.structure.dialogs.AddValueDialog;
 
 public class ClassSummaryView {
-  // TODO move this shit somewhere?
+
   private final String ADD_IMAGE = "add.png";
   private final String DELETE_IMAGE = "delete.png";
   private final HashMap<String, String> ACCESS_SYMBOLS_MAP = new HashMap<>();
@@ -179,7 +179,6 @@ public class ClassSummaryView {
         iMethodListener.methodCreated(access, returnType, name, passedVariablesMap);
       }
     }
-
   }
 
   private void addMethodToView(String access, String returnType, String name,

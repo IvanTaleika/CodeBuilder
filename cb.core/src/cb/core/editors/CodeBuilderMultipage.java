@@ -13,11 +13,11 @@ import cb.core.editors.designEditor.DesignEditor;
 import cb.core.editors.sourceEditor.SourceEditor;
 import cb.core.exceptions.CBException;
 
-//TODO dispose Images
+// TODO ADD MultiPageEditorActionBarContributor
+// TODO dispose Images
 // build.properties
 // package org.eclipse.wb.internal.core.editor.multi;
 // TODO try to extend FormEditor, IDesignerEditor
-// TODO 1st - add page listener, 2nd - parse source content, 3rd - use default listener for 1st page
 // TODO why ICompilationUnit could be null?
 public class CodeBuilderMultipage extends MultiPageEditorPart {
   private SourceEditor sourceEditor;
@@ -36,11 +36,11 @@ public class CodeBuilderMultipage extends MultiPageEditorPart {
     if (matcher.find()) {
       try {
         new CodeUtilsProvider(matcher.group(0));
-      }catch (CBException e) {
+      } catch (CBException e) {
         throw new PartInitException(e.getMessage());
       }
     } else {
-      //move Errors messages to global .properties
+      // move Errors messages to global .properties
       throw new PartInitException(MultipageMessages.InputError);
     }
 
@@ -48,8 +48,6 @@ public class CodeBuilderMultipage extends MultiPageEditorPart {
   }
 
   @Override
-  // @PostConstruct
-  // // TODO check PostConstruct
   protected void createPages() {
     createSourcePage();
     createDesignPage();
@@ -59,7 +57,6 @@ public class CodeBuilderMultipage extends MultiPageEditorPart {
   private void createSourcePage() {
     try {
       sourceEditor = new SourceEditor();
-      // TODO What is getEditorInput(), getTitle()?
 
       int index = addPage(sourceEditor, getEditorInput());
       // TODO define "Source" in .properties
@@ -74,7 +71,7 @@ public class CodeBuilderMultipage extends MultiPageEditorPart {
 
     try {
       designEditor = new DesignEditor();
-      // TODO What is getEditorInput(), getTitle()?
+
       int index = addPage(designEditor, getEditorInput());
       // TODO define "Design" in .properties
       setPageText(index, MultipageMessages.SecondPage);

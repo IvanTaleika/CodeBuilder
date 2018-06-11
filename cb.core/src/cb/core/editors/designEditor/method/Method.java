@@ -86,7 +86,7 @@ public class Method implements IMethod {
     if (methodString.matches(".*(, )$")) {
       methodString = methodString.substring(0, methodString.length() - 2);
     }
-    methodString += ") {\n";
+    methodString += ") {";
     return methodString;
   }
 
@@ -95,7 +95,7 @@ public class Method implements IMethod {
     String variablesString = "";
     for (Entry<String, String> value : variablesMap.entrySet()) {
       if (!passedVariables.containsKey(value.getKey())) {
-        variablesString += value.getValue() + " " + value.getKey() + ";\n";
+        variablesString += value.getValue() + " " + value.getKey() + ";";
       }
     }
     return variablesString;

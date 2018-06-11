@@ -1,13 +1,14 @@
 package cb.core.editors.designEditor.node;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Set;
 import org.w3c.dom.Element;
 import cb.core.code.utils.CodeUtilsProvider;
 import cb.core.exceptions.CBResourceException;
 import cb.core.utils.XMLParseUtils;
 
-// FIXME add condition nodes
+// FIXME FIX CONDITION IMPORT
+// TODO return null, not throws exceptions
 public class NodeFactory {
   private static final String TEMPLATE_TAG = "template";
   private static final String KEYWORD_TAG = "keywords";
@@ -21,29 +22,38 @@ public class NodeFactory {
     HashMap<String, String> keywordValueMap = new HashMap<>();
     try {
       type = nodeData.getAttribute(NODE_TYPE_ATTRIBUTE);
+      if (!type.equals(MethodNode.CONDITION) && !type.equals(MethodNode.FUNCTION)
+          && !type.equals(MethodNode.RETURN)) {
+        throw new CBResourceException("Unknown node type");
+      }
+      if (type.equals(MethodNode.CONDITION)) {
+        return getIf();
+      }
 
-      Element template = XMLParseUtils.getElements(nodeData.getElementsByTagName(TEMPLATE_TAG)).getFirst();
+      Element template =
+          XMLParseUtils.getElements(nodeData.getElementsByTagName(TEMPLATE_TAG)).getFirst();
 
       codeTemplate = template.getAttribute(TEMPLATE_CODE_ATTRIBUTE);
-      // TODO check for good looking text
-      HashSet<String> templateKeywords =
+      Set<String> templateKeywords =
           CodeUtilsProvider.getTemplateParser().getKeywords(codeTemplate);
 
-      Element keywords = XMLParseUtils.getElements(nodeData.getElementsByTagName(KEYWORD_TAG)).getFirst();
+      Element keywords =
+          XMLParseUtils.getElements(nodeData.getElementsByTagName(KEYWORD_TAG)).getFirst();
 
       for (String keyword : templateKeywords) {
         try {
 
-          Element defaultValue = XMLParseUtils.getElements(keywords.getElementsByTagName(keyword)).getFirst();
+          Element defaultValue =
+              XMLParseUtils.getElements(keywords.getElementsByTagName(keyword)).getFirst();
           keywordValueMap.put(keyword, defaultValue.getAttribute(KEYWORD_DEFAULT_ATTRIBUTE));
-          // TODO getToolTip
+          // TODO getToolTip for a wizzard
 
         } catch (Exception e) {
           keywordValueMap.put(keyword, "");
         }
       }
     } catch (Exception e) {
-      throw new CBResourceException("Node data error.", e);
+      throw new CBResourceException("Node data error. " + e.getMessage(), e);
     }
     return create(codeTemplate, keywordValueMap, type);
   }
@@ -63,6 +73,8 @@ public class NodeFactory {
 
   public static MethodNode create(MethodNode methodNode) {
     switch (methodNode.getType()) {
+      case MethodNode.CONDITION:
+        return getIf();
       case MethodNode.FUNCTION:
         return new FunctionNode(methodNode.getCodeTemplate(), methodNode.getKeywordValueMap());
       case MethodNode.RETURN:
@@ -72,6 +84,13 @@ public class NodeFactory {
     }
   }
 
-
+  private static ConditionNode getIf() {
+    HashMap<String, String> keywordValueMap = new HashMap<>();
+    keywordValueMap.put("condition", "condition");
+    ConditionNode node = new ConditionNode("if(${condition}) {", keywordValueMap);
+    node.addBranch(new FunctionNode(null, null));
+    node.addBranch(new FunctionNode("else {", null));
+    return node;
+  }
 
 }

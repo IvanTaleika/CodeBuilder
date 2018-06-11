@@ -100,7 +100,6 @@ public class OperationsView {
 
 
   private String buildExpandBar(ExpandBar expandBar, Node root) throws CBResourceException {
-    // TODO add check on empty tag attribute
     String errorMessage = "";
     LinkedList<Element> categories = XMLParseUtils.getElements(root.getChildNodes());
     try {

@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import cb.core.CodeBuilder;
 import cb.core.editors.designEditor.method.IMethod;
+import cb.core.editors.designEditor.node.ConditionNode;
 import cb.core.editors.designEditor.node.FunctionNode;
 import cb.core.editors.designEditor.node.MethodNode;
 import cb.core.editors.designEditor.node.NodeFactory;
@@ -191,16 +192,40 @@ public class MethodTreeView implements IOperationListener {
     }
   }
 
+  // FIXME move children to new parent
   private void addNewNode(TreeItem selectedItem) {
     for (TreeItemNodeView treeItemNodeView : currentTreeNodes) {
       if (treeItemNodeView.containsNodeTreeItem(selectedItem)) {
         MethodNode selectedNode = treeItemNodeView.getNode();
         switch (selectedNode.getType()) {
-          case MethodNode.CONDITION:
-            // FIXME add!
+          case MethodNode.CONDITION: {
+            MethodNode newNode = NodeFactory.create((selectedOperation.getNode()));
+
+            TreeItemNodeView newNodeView = new TreeItemNodeView(newNode);
+
+            List<MethodNode> parentNodes = ((ConditionNode) selectedNode).addNext(newNode);
+            for (MethodNode methodNode : parentNodes) {
+              for (TreeItemNodeView nodeView : currentTreeNodes) {
+                if (nodeView.getNode() == methodNode) {
+                  for (TreeItem parent : nodeView.getNodeTreeItems()) {
+                    TreeItem nodeTreeItem = new TreeItem(parent, SWT.NONE);
+                    parent.setExpanded(true);
+                    nodeTreeItem.setText(selectedOperation.getName());
+                    nodeTreeItem.setImage(selectedOperation.getIcon());
+                    newNodeView.addNodeTreeItem(nodeTreeItem);
+                  }
+                }
+              }
+            }
+            if (newNode.getType() == MethodNode.CONDITION) {
+              buildIf((ConditionNode) newNode, newNodeView);
+
+            }
+
+            currentTreeNodes.add(newNodeView);
             break;
+          }
           case MethodNode.FUNCTION:
-            // FIXME move children to new parent
             MethodNode newNode = NodeFactory.create((selectedOperation.getNode()));
             TreeItemNodeView newNodeView = new TreeItemNodeView(newNode);
             ((FunctionNode) selectedNode).addNext(newNode);
@@ -212,6 +237,11 @@ public class MethodTreeView implements IOperationListener {
               newNodeView.addNodeTreeItem(nodeTreeItem);
             }
             currentTreeNodes.add(newNodeView);
+            if (newNode.getType() == MethodNode.CONDITION) {
+              buildIf((ConditionNode) newNode, newNodeView);
+
+            }
+
             break;
           case MethodNode.RETURN:
             MessageDialog.openWarning(parent.getShell(),
@@ -292,6 +322,30 @@ public class MethodTreeView implements IOperationListener {
       }
 
     });
+    // TODO add delete operation
+  }
+
+  // TODO delete
+  private void buildIf(ConditionNode node, TreeItemNodeView conditionNodeView) {
+    List<MethodNode> nextNodes = node.getNextNodes();
+    TreeItemNodeView trueNodeView = new TreeItemNodeView(nextNodes.get(0));
+    for (TreeItem parent : conditionNodeView.getNodeTreeItems()) {
+      TreeItem nodeTreeItem = new TreeItem(parent, SWT.NONE);
+      parent.setExpanded(true);
+      nodeTreeItem.setText("true");
+      nodeTreeItem.setImage(selectedOperation.getIcon());
+      trueNodeView.addNodeTreeItem(nodeTreeItem);
+    }
+    currentTreeNodes.add(trueNodeView);
+    TreeItemNodeView falseNodeView = new TreeItemNodeView(nextNodes.get(1));
+    for (TreeItem parent : conditionNodeView.getNodeTreeItems()) {
+      TreeItem nodeTreeItem = new TreeItem(parent, SWT.NONE);
+      parent.setExpanded(true);
+      nodeTreeItem.setText("false");
+      nodeTreeItem.setImage(selectedOperation.getIcon());
+      falseNodeView.addNodeTreeItem(nodeTreeItem);
+    }
+    currentTreeNodes.add(falseNodeView);
   }
 
 }

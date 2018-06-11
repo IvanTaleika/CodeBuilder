@@ -38,6 +38,7 @@ import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import cb.core.CodeBuilder;
@@ -46,6 +47,7 @@ import cb.core.code.utils.CodeUtilsProvider;
 import cb.core.editors.designEditor.method.IMethod;
 import cb.core.editors.designEditor.method.IMethodListener;
 import cb.core.editors.designEditor.method.Method;
+import cb.core.editors.designEditor.node.ConditionNode;
 import cb.core.editors.designEditor.node.FunctionNode;
 import cb.core.editors.designEditor.node.MethodNode;
 import cb.core.exceptions.CBGenerationException;
@@ -56,7 +58,7 @@ import cb.core.ui.design.structure.MethodTreeView;
 import cb.core.ui.utils.BundleResourceProvider;
 import cb.core.utils.PathProvider;
 
-
+// TODO add save possibility
 // This class should use JavaCodeGenerator and write result into the file
 public class DesignEditor extends EditorPart implements IMethodListener {
   private final String GENERATE_IMAGE = "generate.png";
@@ -66,15 +68,15 @@ public class DesignEditor extends EditorPart implements IMethodListener {
   private IMethod currentMethod;
   private ICompilationUnit compilationUnit;
   private ICodeGenerator codeGenerator;
-  // TODO convert to local?
+  // TODO add interface for all method views
   private OperationsView operationsView;
   private MethodTreeView methodTreeView;
   private ClassSummaryView classSummaryView;
 
   private int[] defaultWeight = {120, 150, 250};
 
-  // TODO delete
-  IEditorInput input;
+  private IWorkbenchPartSite partSite;
+
 
   @Override
   public void doSave(IProgressMonitor monitor) {
@@ -93,8 +95,8 @@ public class DesignEditor extends EditorPart implements IMethodListener {
     IWorkingCopyManager workingCopyManager = JavaUI.getWorkingCopyManager();
     compilationUnit = workingCopyManager.getWorkingCopy(input);
     codeGenerator = CodeUtilsProvider.getCodeGenerator();
-    this.input = input;
     methods = new LinkedList<>();
+    partSite = site;
 
   }
 
@@ -208,9 +210,9 @@ public class DesignEditor extends EditorPart implements IMethodListener {
       code = formateCode(code);
       buffer.replace(pos, 0, code);
     } catch (JavaModelException exception) {
-      // TODO Auto-generated catch block
       exception.printStackTrace();
     } catch (CBGenerationException exception) {
+      // TODO open error for all exceptions
       MessageDialog.openWarning(getSite().getShell(), "CodeBuilder error",
           "Error while generated data: \n" + exception.getMessage());
     } catch (Exception exception) {
@@ -220,14 +222,16 @@ public class DesignEditor extends EditorPart implements IMethodListener {
 
   private String generateCode() throws CBGenerationException {
     visitedNodes = new LinkedList<>();
-    StringBuffer methodCode = recursiveCodeGeneration(currentMethod.getBeginNode());
+    StringBuffer methodCode = recursiveCodeGeneration(currentMethod.getBeginNode(), new StringBuffer());
     methodCode.append("}\n");
     methodCode.insert(0, currentMethod.getValuesAsCode());
     methodCode.insert(0, currentMethod.getAsCode());
     return methodCode.toString();
   }
 
+  @SuppressWarnings("unchecked")
   private String formateCode(String source) {
+    @SuppressWarnings("rawtypes")
     Map options = DefaultCodeFormatterConstants.getEclipseDefaultSettings();
 
     options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_10);
@@ -250,6 +254,9 @@ public class DesignEditor extends EditorPart implements IMethodListener {
         0, // initial indentation
         System.getProperty("line.separator") // line separator
     );
+    if(edit == null) {
+      return source;
+    }
 
     IDocument document = new Document(source);
     try {
@@ -261,23 +268,22 @@ public class DesignEditor extends EditorPart implements IMethodListener {
   }
 
 
-  private StringBuffer recursiveCodeGeneration(MethodNode node) throws CBGenerationException {
+  private StringBuffer recursiveCodeGeneration(MethodNode node, StringBuffer code) throws CBGenerationException {
     if (visitedNodes.contains(node)) {
-      return new StringBuffer("{\n");
+      return code.insert(0, "}");
     }
     visitedNodes.add(node);
-    StringBuffer code = new StringBuffer();
     try {
-
-
       switch (node.getType()) {
         case MethodNode.CONDITION:
-          // ConditionNode conditionNode = (ConditionNode) node;
-          // if (conditionNode.getNextNodes().isEmpty()) {
-          // throw new CBGenerationException(node.getType() + " no return node");
-          // }
-          //
-          // FIXME add
+          ConditionNode conditionNode = (ConditionNode) node;
+          List<MethodNode> nextNodes = conditionNode.getNextNodes();
+          if (nextNodes.isEmpty()) {
+            throw new CBGenerationException(node.getType() + " no return node");
+          }
+          for (int i = nextNodes.size() - 1; i >= 0; i--) {
+            recursiveCodeGeneration(nextNodes.get(i), code);
+          }
           break;
         case MethodNode.FUNCTION:
           FunctionNode functionNode = (FunctionNode) node;
@@ -285,12 +291,12 @@ public class DesignEditor extends EditorPart implements IMethodListener {
           if (nextNode == null) {
             throw new CBGenerationException(node.getType() + " no return node");
           }
-          code.insert(0, recursiveCodeGeneration(nextNode));
+          recursiveCodeGeneration(nextNode, code);
           break;
         case MethodNode.RETURN:
           code.insert(0, codeGenerator.generate(node.getCodeTemplate(), node.getKeywordValueMap()));
           if (node.getPreviousNodes().size() > 1) {
-            code.insert(0, "}\n");
+            code.insert(0, "}");
           }
           return code;
       }
@@ -298,7 +304,7 @@ public class DesignEditor extends EditorPart implements IMethodListener {
       throw new CBGenerationException(node.getType() + " - " + exception.getMessage());
     }
     if (node.getPreviousNodes().size() > 1) {
-      code.insert(0, "}\n");
+      code.insert(0, "}");
     }
     return code.insert(0,
         codeGenerator.generate(node.getCodeTemplate(), node.getKeywordValueMap()));
@@ -333,5 +339,12 @@ public class DesignEditor extends EditorPart implements IMethodListener {
     currentMethod = methods.get(methodIndex);
     methodTreeView.switchMethod(methodIndex);
   }
+
+  // TODO what is this? Note: this solve error with nullpointer exception
+  @Override
+  public IWorkbenchPartSite getSite() {
+    return partSite;
+  }
+
 
 }

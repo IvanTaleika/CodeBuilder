@@ -18,7 +18,6 @@
          point="org.eclipse.ui.editors">
       <editor
             class="cb.core.editors.CodeBuilderMultipage"
-            contributorClass="org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditorActionContributor"
             default="false"
             extensions="java"
             id="cb.core.editor1"

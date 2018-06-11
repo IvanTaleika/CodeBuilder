@@ -6,5 +6,4 @@ import org.eclipse.swt.widgets.Widget;
 public interface IOperationWidget extends IOperation {
   Widget getUI();
   Widget buildUI(Composite parent, int style);
-  //TODO add dialogs
 }

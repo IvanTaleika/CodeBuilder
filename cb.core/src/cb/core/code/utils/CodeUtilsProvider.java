@@ -3,7 +3,7 @@ package cb.core.code.utils;
 import cb.core.code.generators.ICodeGenerator;
 import cb.core.code.generators.JavaCodeGenerator;
 import cb.core.code.parsers.template.ITemplateParser;
-import cb.core.code.parsers.template.JavaTemplateParser;
+import cb.core.code.parsers.template.TemplateParser;
 import cb.core.exceptions.CBException;
 
 public final class CodeUtilsProvider {
@@ -19,13 +19,13 @@ public final class CodeUtilsProvider {
     switch (sourceCodeExtention) {
       case JAVA_FILE:
         fileType = JAVA_FILE;
-        templateParser = new JavaTemplateParser();
+        templateParser = new TemplateParser();
         codeGenerator = new JavaCodeGenerator();
 
         break;
 
       default:
-        // TODO move error to .properties file
+        // TODO move exceptions to .properties file
         throw new CBException("Unknown source file type: " + sourceCodeExtention);
     }
   }

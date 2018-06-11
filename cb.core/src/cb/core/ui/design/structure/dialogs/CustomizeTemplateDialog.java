@@ -52,7 +52,7 @@ public class CustomizeTemplateDialog extends TitleAreaDialog {
     for (Map.Entry<String, String> keywordValue : nodeKeywordValueMap.entrySet()) {
       Label messageLabel = new Label(container, SWT.NONE);
       messageLabel.setText(DialogsMessages.CustomizeNodeDialog_LabelDefaultMessage + keywordValue.getKey());
-      Combo combo = new Combo(container,  SWT.READ_ONLY);
+      Combo combo = new Combo(container,  SWT.NONE);
       
       GridData gridData = new GridData();
       gridData.grabExcessHorizontalSpace = true;

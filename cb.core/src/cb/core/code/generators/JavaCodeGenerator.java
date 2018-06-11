@@ -10,8 +10,10 @@ public class JavaCodeGenerator implements ICodeGenerator {
 //TODO NO HARD CODE
   @Override
   public String generate(String template, HashMap<String, String> values) {
-    if(template == null || values == null) {
+    if(template == null) {
       return "";
+    } else if(values == null) {
+      return template;
     }
 
     for (Map.Entry<String, String> entry : values.entrySet()) {

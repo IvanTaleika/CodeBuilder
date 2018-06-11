@@ -1,4 +1,3 @@
-// TODO change package
 package cb.core.ui.design.operations.components;
 
 import org.eclipse.swt.graphics.Image;

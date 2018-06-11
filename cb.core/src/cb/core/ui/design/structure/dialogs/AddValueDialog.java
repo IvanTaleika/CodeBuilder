@@ -15,14 +15,12 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import cb.core.ui.utils.GridLayoutFactory;
 
-// TODO add abstract parent
 public class AddValueDialog extends TitleAreaDialog {
-  // TODO is it too many?
   private String[] returnTypes =
-      {"byte", "short", "int", "long", "float", "double", "boleam", "char", "String", "Object"};
+      {"byte", "short", "int", "long", "float", "double", "bolean", "char", "String", "Object"};
   private Combo typeCombo;
   private Text nameText;
-  // TODO add initialization
+  // TODO add initialization for values
 
   private String returnType;
   private String name;

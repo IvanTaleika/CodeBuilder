@@ -32,9 +32,16 @@ public class TreeItemNodeView {
     return nodeTreeItems.remove(treeItem);
   }
   
+  //TODO this work weird 
   public boolean containsNodeTreeItem(TreeItem treeItem) {
-    return nodeTreeItems.contains(treeItem);
+    for (TreeItem item : nodeTreeItems) {
+      if(item == treeItem) {
+        return true;
+      }
+    }
+    return false;
   }
+  
 
   public CustomizeTemplateDialog getCustomizeNodeDialog() {
     return customizeTemplateDialog;

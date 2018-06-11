@@ -10,7 +10,6 @@ public abstract class MethodNode {
   public final static String RETURN = "return";
   
   private final String type;
-  //TODO change to Set
   private final LinkedList<MethodNode> previousNodes;
   private String codeTemplate;
   private HashMap<String, String> keywordValueMap;

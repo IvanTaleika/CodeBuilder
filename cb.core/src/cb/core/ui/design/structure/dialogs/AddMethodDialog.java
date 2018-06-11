@@ -17,9 +17,8 @@ import cb.core.ui.utils.GridLayoutFactory;
 
 public class AddMethodDialog extends TitleAreaDialog {
   private String[] accesses = {"public", "protected", "private"};
-  // TODO is it too many?
   private String[] returnTypes =
-      {"byte", "short", "int", "long", "float", "double", "boleam", "char", "String", "Object"};
+      {"byte", "short", "int", "long", "float", "double", "bolean", "char", "String", "Object"};
   private Combo accessCombo;
   private Combo returnTypeCombo;
   private Text nameText;
@@ -39,7 +38,7 @@ public class AddMethodDialog extends TitleAreaDialog {
   public void create() {
     super.create();
     setTitle(DialogsMessages.AddMethodDialog_Title);
-    //TODO Message dissapear after closing dialog
+    //TODO Message disappear after closing dialog
     setMessage(DialogsMessages.AddMethodDialog_Message, IMessageProvider.INFORMATION);
   }
 

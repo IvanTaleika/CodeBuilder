@@ -8,16 +8,9 @@ public class ConditionNode extends MethodNode {
   private List<MethodNode> nextNodes;
 
 
-  public ConditionNode(LinkedList<String> conditionsTemplates,
-      LinkedList<HashMap<String, String>> conditionsMaps, LinkedList<String> conditionsStyles) {
-    super(null, null, MethodNode.CONDITION);
+  public ConditionNode(String codeTemplate, HashMap<String, String> keywordValueMap) {
+    super(codeTemplate, keywordValueMap, MethodNode.CONDITION);
     nextNodes = new LinkedList<>();
-    for (int i = 0; i < conditionsTemplates.size(); i++) {
-      MethodNode nextNode = NodeFactory.create(conditionsTemplates.get(i), conditionsMaps.get(i),
-          conditionsStyles.get(i));
-      nextNode.addPrevious(this);
-      nextNodes.add(nextNode);
-    }
   }
 
   public List<MethodNode> getNextNodes() {
@@ -26,6 +19,7 @@ public class ConditionNode extends MethodNode {
 
   public void addBranch(MethodNode methodNode) {
     nextNodes.add(methodNode);
+    methodNode.addPrevious(this);
   }
   
   // TODO check algorithm

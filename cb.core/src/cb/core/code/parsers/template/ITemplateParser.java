@@ -1,7 +1,7 @@
 package cb.core.code.parsers.template;
 
-import java.util.HashSet;
+import java.util.Set;
 
 public interface ITemplateParser {
-  HashSet<String> getKeywords(String template);
+  Set<String> getKeywords(String template);
 }
