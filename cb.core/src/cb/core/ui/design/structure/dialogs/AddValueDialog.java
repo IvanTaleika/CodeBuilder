@@ -17,7 +17,7 @@ import cb.core.ui.utils.GridLayoutFactory;
 
 public class AddValueDialog extends TitleAreaDialog {
   private String[] returnTypes =
-      {"byte", "short", "int", "long", "float", "double", "bolean", "char", "String", "Object"};
+      {"byte", "short", "int", "long", "float", "double", "boolean", "char", "String", "Object"};
   private Combo typeCombo;
   private Text nameText;
   // TODO add initialization for values

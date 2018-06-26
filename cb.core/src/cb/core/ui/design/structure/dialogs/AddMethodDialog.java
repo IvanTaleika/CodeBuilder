@@ -18,7 +18,7 @@ import cb.core.ui.utils.GridLayoutFactory;
 public class AddMethodDialog extends TitleAreaDialog {
   private String[] accesses = {"public", "protected", "private"};
   private String[] returnTypes =
-      {"byte", "short", "int", "long", "float", "double", "bolean", "char", "String", "Object"};
+      {"byte", "short", "int", "long", "float", "double", "boolean", "char", "String", "Object"};
   private Combo accessCombo;
   private Combo returnTypeCombo;
   private Text nameText;
