@@ -3,7 +3,8 @@
       id="cb.feature"
       label="Feature"
       version="1.0.0.qualifier"
-      provider-name="Ivan Taleika">
+      provider-name="Ivan Taleika"
+      plugin="cb.core">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
