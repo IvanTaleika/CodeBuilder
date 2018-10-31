@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Code Builder" uid="cb" id="org.eclipse.equinox.p2.director.product" application="org.eclipse.ui.ide.workbench" useFeatures="true" includeLaunchers="true">
+<product name="Code Builder" uid="cb" id="cb.core.CodeBuilder" application="org.eclipse.ui.ide.workbench" useFeatures="true" includeLaunchers="true">
 
    <configIni use="default">
    </configIni>
