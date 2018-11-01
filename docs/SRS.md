@@ -71,9 +71,9 @@ IT является одной из самых быстрорастущих сф
 ### 2.2 Интерфейс пользователя <a name="2.2"></a>
 
 - Вкладка текстового редактора.
-  ![Source Tab](https://github.com/IvanTaleika/CodeBuilder/tree/master/docs/mockups/sourceTab.png)
+  ![Source Tab](mockups/sourceTab.png)
 - Вкладка графического редактора.
-  ![Design Tab](https://github.com/IvanTaleika/CodeBuilder/tree/master/docs/mockups/designTab.png)
+  ![Design Tab](mockups/designTab.png)
 
 
 ### 2.3 Характеристики пользователей <a name="2.3"></a>
