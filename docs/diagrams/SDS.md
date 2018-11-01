@@ -17,7 +17,7 @@
 		1.2.12. [Generate code](#1.2.12) <br>
 
 ## 1. Диаграмма использования<a name="1"></a>
-![use case](useCase/useCase.png)
+![use case](useCase/useCases.png)
 ### 1.1. Описание актёров<a name="1.1"></a>
 |Актёр|Описание|
 |:---|:---|
@@ -188,7 +188,7 @@
 6. Окно закрывается.
 7. Вариант использования завершается.  
 ##### 1.2.11.2. Диаграмма активности
-![Parameterize functional block](activity/parameterizeFunctionalBlockupload.png)
+![Parameterize functional block](activity/parameterizeFunctionalBlock.png)
 
 #### 1.2.12. Generate code<a name="1.2.12"></a>
 ##### 1.2.12.1. Поток событий
@@ -200,5 +200,5 @@
  3. Вариант использования завершается.  
 
 ##### 1.2.12.2. Диаграмма активности
-![Generate code](diagrams/activity/generateCode.png)
+![Generate code](activity/generateCode.png)
 
