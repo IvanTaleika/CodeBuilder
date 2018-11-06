@@ -123,7 +123,7 @@
 ##### 1.2.6.2. Диаграмма активности
 ![class member deleting](activity/classMemberDeleting.png)
 ##### 1.2.6.3. Диаграмма последовательности
-![class member deleting](sequence/classMemberDeleting.png)
+![Class member deleting](sequence/classMemberDeleting.png)
 
 #### 1.2.7. Method editing<a name="1.2.7"></a>
 ##### 1.2.7.1. Поток событий
