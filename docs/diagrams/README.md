@@ -1,8 +1,8 @@
 # Проектирование системы
 ## Содержание
-1. [Диаграмма использования](#1) <br>
-	1.1. [Описание актёров](#1.1) <br> 
-	1.2. [Варианты использования (сценарии)-требования](#1.2) <br>
+1. [Use cases](#1) <br>
+	1.1. [Actors description](#1.1) <br> 
+	1.2. [Use case requirements](#1.2) <br>
 		1.2.1. [Edit code](#1.2.1) <br>
 		1.2.2. [Save file](#1.2.2) <br>
 		1.2.3. [View class structure](#1.2.3) <br>
@@ -17,7 +17,7 @@
 		1.2.12. [Generate code](#1.2.12) <br>
 
 ## 1. Диаграмма использования<a name="1"></a>
-![use case](useCase/useCases.png)
+![use case](useCase/useCase.png)
 ### 1.1. Описание актёров<a name="1.1"></a>
 |Актёр|Описание|
 |:---|:---|
@@ -37,6 +37,8 @@
 
 ##### 1.2.1.2. Диаграмма активности
 ![edit code](activity/editCode.png)
+##### 1.2.1.3. Диаграмма последовательности
+![edit code](sequence/editCode.png)
 
 #### 1.2.2. Save file<a name="1.2.2"></a>
 ##### 1.2.2.1. Поток событий
@@ -55,6 +57,8 @@
  4. Если была нажата кнопка "Ок" начинается выполнение пункта 3 основного потока. Если была нажата кнопка "Отмена" вариант использования завершается.
 ##### 1.2.2.2. Диаграмма активности
 ![save file](activity/saveFile.png)
+##### 1.2.2.3. Диаграмма последовательности
+![save file](sequence/saveFile.png)
 
 #### 1.2.3. View class structure<a name="1.2.3"></a>
 ##### 1.2.3.1. Поток событий
@@ -66,6 +70,8 @@
 3. Вариант использования завершается.  
 ##### 1.2.3.2. Диаграмма активности
 ![view class structure](activity/viewClassStructure.png)
+##### 1.2.3.3. Диаграмма последовательности
+![view class structure](sequence/viewClassStructure.png)
 
 #### 1.2.4. Method declaration<a name="1.2.4"></a>
 ##### 1.2.4.1. Поток событий
@@ -83,6 +89,8 @@
 8. Вариант использования завершается.  
 ##### 1.2.4.2. Диаграмма активности
 ![method declaration](activity/methodDeclaration.png)
+##### 1.2.4.3. Диаграмма последовательности
+![method declaration](sequence/methodDeclaration.png)
 
 #### 1.2.5. Class variable declaration<a name="1.2.5"></a>
 ##### 1.2.5.1. Поток событий
@@ -100,6 +108,8 @@
 8. Вариант использования завершается.  
 ##### 1.2.5.2. Диаграмма активности
 ![class variable declaration](activity/classVariableDeclaration.png)
+##### 1.2.5.3. Диаграмма последовательности
+![class variable declaration](sequence/classVariableDeclaration.png)
 
 #### 1.2.6. Class member deleting<a name="1.2.6"></a>
 ##### 1.2.6.1. Поток событий
@@ -112,6 +122,8 @@
 3. Вариант использования завершается.  
 ##### 1.2.6.2. Диаграмма активности
 ![class member deleting](activity/classMemberDeleting.png)
+##### 1.2.6.3. Диаграмма последовательности
+![class member deleting](sequence/classMemberDeleting.png)
 
 #### 1.2.7. Method editing<a name="1.2.7"></a>
 ##### 1.2.7.1. Поток событий
@@ -125,6 +137,8 @@
 4. Вариант использования завершается.  
 ##### 1.2.7.2. Диаграмма активности
 ![method editing](activity/methodEditing.png)
+##### 1.2.7.3. Диаграмма последовательности
+![method editing](sequence/methodEditing.png)
 
 #### 1.2.8. Method variable declaration<a name="1.2.8"></a>
 ##### 1.2.8.1. Поток событий
@@ -141,6 +155,8 @@
 7. Вариант использования завершается.  
 ##### 1.2.8.2. Диаграмма активности
 ![method variable declaration](activity/methodVariableDeclaration.png)
+##### 1.2.8.3. Диаграмма последовательности
+![method variable declaration](sequence/methodVariableDeclaration.png)
 
 #### 1.2.9. Method variable deleting<a name="1.2.9"></a>
 ##### 1.2.9.1. Поток событий
@@ -154,6 +170,8 @@
 
 ##### 1.2.9.2. Диаграмма активности
 ![Method variable deleting](activity/methodVariableDeleting.png)
+##### 1.2.9.3. Диаграмма последовательности
+![Method variable deleting](sequence/methodVariableDeleting.png)
 
 #### 1.2.10. Add functional block<a name="1.2.10"></a>
 ##### 1.2.10.1. Поток событий
@@ -173,6 +191,8 @@
 
 ##### 1.2.10.2. Диаграмма активности
 ![Add functional block](activity/addFunctionalBlock.png)
+##### 1.2.10.3. Диаграмма последовательности
+![Add functional block](sequence/addFunctionalBlock.png)
 
 #### 1.2.11. Parameterize functional block<a name="1.2.11"></a>
 ##### 1.2.11.1. Поток событий
@@ -188,7 +208,9 @@
 6. Окно закрывается.
 7. Вариант использования завершается.  
 ##### 1.2.11.2. Диаграмма активности
-![Parameterize functional block](activity/parameterizeFunctionalBlock.png)
+![Parameterize functional block](activity/parameterizeFunctionalBlockupload.png)
+##### 1.2.11.3. Диаграмма последовательности
+![Parameterize functional block](sequence/parameterizeFunctionalBlockupload.png)
 
 #### 1.2.12. Generate code<a name="1.2.12"></a>
 ##### 1.2.12.1. Поток событий
@@ -201,4 +223,6 @@
 
 ##### 1.2.12.2. Диаграмма активности
 ![Generate code](activity/generateCode.png)
+##### 1.2.12.3. Диаграмма последовательности
+![Generate code](sequence/generateCode.png)
 
