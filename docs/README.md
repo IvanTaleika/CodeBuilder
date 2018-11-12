@@ -38,7 +38,7 @@
 ##### 1.2.1.2. Диаграмма активности
 ![edit code](activity/editCode.png)
 ##### 1.2.1.3. Диаграмма последовательности
-![edit code](sequence/EditCode.png)
+![edit code](sequence/editCode.png)
 
 #### 1.2.2. Save file<a name="1.2.2"></a>
 ##### 1.2.2.1. Поток событий
@@ -58,7 +58,7 @@
 ##### 1.2.2.2. Диаграмма активности
 ![save file](activity/saveFile.png)
 ##### 1.2.2.3. Диаграмма последовательности
-![save file](sequence/SaveFile.png)
+![save file](sequence/saveFile.png)
 
 #### 1.2.3. View class structure<a name="1.2.3"></a>
 ##### 1.2.3.1. Поток событий
@@ -71,7 +71,7 @@
 ##### 1.2.3.2. Диаграмма активности
 ![view class structure](activity/viewClassStructure.png)
 ##### 1.2.3.3. Диаграмма последовательности
-![view class structure](sequence/ViewClassStructure.png)
+![view class structure](sequence/viewClassStructure.png)
 
 #### 1.2.4. Method declaration<a name="1.2.4"></a>
 ##### 1.2.4.1. Поток событий
@@ -90,7 +90,7 @@
 ##### 1.2.4.2. Диаграмма активности
 ![method declaration](activity/methodDeclaration.png)
 ##### 1.2.4.3. Диаграмма последовательности
-![method declaration](sequence/MethodDeclaration.png)
+![method declaration](sequence/methodDeclaration.png)
 
 #### 1.2.5. Class variable declaration<a name="1.2.5"></a>
 ##### 1.2.5.1. Поток событий
@@ -109,7 +109,7 @@
 ##### 1.2.5.2. Диаграмма активности
 ![class variable declaration](activity/classVariableDeclaration.png)
 ##### 1.2.5.3. Диаграмма последовательности
-![class variable declaration](sequence/ClassVariableDeclaration.png)
+![class variable declaration](sequence/classVariableDeclaration.png)
 
 #### 1.2.6. Class member deleting<a name="1.2.6"></a>
 ##### 1.2.6.1. Поток событий
@@ -123,7 +123,7 @@
 ##### 1.2.6.2. Диаграмма активности
 ![class member deleting](activity/classMemberDeleting.png)
 ##### 1.2.6.3. Диаграмма последовательности
-![Class member deleting](sequence/ClassMemberDeleting.png)
+![class member deleting](sequence/classMemberDeleting.png)
 
 #### 1.2.7. Method editing<a name="1.2.7"></a>
 ##### 1.2.7.1. Поток событий
@@ -138,7 +138,7 @@
 ##### 1.2.7.2. Диаграмма активности
 ![method editing](activity/methodEditing.png)
 ##### 1.2.7.3. Диаграмма последовательности
-![method editing](sequence/MethodEditing.png)
+![method editing](sequence/methodEditing.png)
 
 #### 1.2.8. Method variable declaration<a name="1.2.8"></a>
 ##### 1.2.8.1. Поток событий
@@ -156,7 +156,7 @@
 ##### 1.2.8.2. Диаграмма активности
 ![method variable declaration](activity/methodVariableDeclaration.png)
 ##### 1.2.8.3. Диаграмма последовательности
-![method variable declaration](sequence/MethodVariableDeclaration.png)
+![method variable declaration](sequence/methodVariableDeclaration.png)
 
 #### 1.2.9. Method variable deleting<a name="1.2.9"></a>
 ##### 1.2.9.1. Поток событий
@@ -171,7 +171,7 @@
 ##### 1.2.9.2. Диаграмма активности
 ![Method variable deleting](activity/methodVariableDeleting.png)
 ##### 1.2.9.3. Диаграмма последовательности
-![Method variable deleting](sequence/MethodVariableDeleting.png)
+![Method variable deleting](sequence/methodVariableDeleting.png)
 
 #### 1.2.10. Add functional block<a name="1.2.10"></a>
 ##### 1.2.10.1. Поток событий
@@ -192,7 +192,7 @@
 ##### 1.2.10.2. Диаграмма активности
 ![Add functional block](activity/addFunctionalBlock.png)
 ##### 1.2.10.3. Диаграмма последовательности
-![Add functional block](sequence/AddFunctionalBlock.png)
+![Add functional block](sequence/addFunctionalBlock.png)
 
 #### 1.2.11. Parameterize functional block<a name="1.2.11"></a>
 ##### 1.2.11.1. Поток событий
@@ -208,9 +208,9 @@
 6. Окно закрывается.
 7. Вариант использования завершается.  
 ##### 1.2.11.2. Диаграмма активности
-![Parameterize functional block](activity/parameterizeFunctionalBlock.png)
+![Parameterize functional block](activity/parameterizeFunctionalBlockupload.png)
 ##### 1.2.11.3. Диаграмма последовательности
-![Parameterize functional block](sequence/ParameterizeFunctionalBlock.png)
+![Parameterize functional block](sequence/parameterizeFunctionalBlockupload.png)
 
 #### 1.2.12. Generate code<a name="1.2.12"></a>
 ##### 1.2.12.1. Поток событий
@@ -224,5 +224,5 @@
 ##### 1.2.12.2. Диаграмма активности
 ![Generate code](activity/generateCode.png)
 ##### 1.2.12.3. Диаграмма последовательности
-![Generate code](sequence/GenerateCode.png)
+![Generate code](sequence/generateCode.png)
 
