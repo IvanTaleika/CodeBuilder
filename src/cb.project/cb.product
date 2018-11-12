@@ -3,6 +3,7 @@
 
 <product name="Code Builder" uid="cb" id="cb.core.CodeBuilder" application="org.eclipse.ui.ide.workbench" useFeatures="true" includeLaunchers="true">
 
+
    <configIni use="default">
    </configIni>
 
@@ -13,14 +14,18 @@
 
    <windowImages/>
 
+
    <launcher>
       <win useIco="false">
          <bmp/>
       </win>
    </launcher>
 
+
    <vm>
+      <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-10</windows>
    </vm>
+
 
    <plugins>
    </plugins>
