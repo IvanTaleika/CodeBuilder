@@ -1,14 +1,14 @@
 package by.bsuir.cb.design;
 
 import by.bsuir.cb.CodeBuilder;
-import by.bsuir.cb.design.code.ICodeGenerator;
-import by.bsuir.cb.design.code.JavaCodeGenerator;
+import by.bsuir.cb.design.code.CbGenerationException;
+import by.bsuir.cb.design.code.Formatter;
+import by.bsuir.cb.design.code.Generator;
+import by.bsuir.cb.design.code.IParser;
+import by.bsuir.cb.design.code.Parser;
 import by.bsuir.cb.design.code.method.IMethod;
 import by.bsuir.cb.design.code.method.IMethodListener;
 import by.bsuir.cb.design.code.method.Method;
-import by.bsuir.cb.design.code.node.ConditionNode;
-import by.bsuir.cb.design.code.node.FunctionNode;
-import by.bsuir.cb.design.code.node.MethodNode;
 import by.bsuir.cb.design.ui.BundleResourceProvider;
 import by.bsuir.cb.design.ui.operations.OperationPicker;
 import by.bsuir.cb.design.ui.structure.ClassSummary;
@@ -20,25 +20,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jdt.core.IBuffer;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.ISourceRange;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.ToolFactory;
-import org.eclipse.jdt.core.compiler.IScanner;
-import org.eclipse.jdt.core.compiler.ITerminalSymbols;
-import org.eclipse.jdt.core.formatter.CodeFormatter;
-import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
 import org.eclipse.jdt.ui.IWorkingCopyManager;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.Document;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ViewForm;
@@ -51,8 +38,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.text.edits.MalformedTreeException;
-import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPartSite;
@@ -65,17 +50,13 @@ public class DesignEditor extends EditorPart implements IMethodListener {
   private static final String GENERATE_IMAGE = "generate.png";
   private static final int[] SASH_FORM_WEIGHT = {120, 150, 250};
 
-  private List<MethodNode> visitedNodes;
   private List<IMethod> methods;
   private IMethod currentMethod;
-  private ICompilationUnit compilationUnit;
-  private ICodeGenerator codeGenerator;
   // TODO add interface for all method views
-  // TODO this is not view - rename!
   private OperationPicker operationPicker;
   private MethodTree methodTree;
   private ClassSummary classSummary;
-
+  private ICompilationUnit compilationUnit;
   private IWorkbenchPartSite partSite;
 
 
@@ -93,12 +74,13 @@ public class DesignEditor extends EditorPart implements IMethodListener {
 
   @Override
   public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-    IWorkingCopyManager workingCopyManager = JavaUI.getWorkingCopyManager();
-    compilationUnit = workingCopyManager.getWorkingCopy(input);
     methods = new LinkedList<>();
     partSite = site;
+    // TODO move it to addMethod class.
+    // use getMethodInput(), but compilationUnit can be null then.
+    IWorkingCopyManager workingCopyManager = JavaUI.getWorkingCopyManager();
+    compilationUnit = workingCopyManager.getWorkingCopy(input);
     // TODO May be there might be the way to use DI
-    codeGenerator = new JavaCodeGenerator();
   }
 
   @Override
@@ -141,8 +123,6 @@ public class DesignEditor extends EditorPart implements IMethodListener {
       ViewForm mainViewForm = new ViewForm(parent, SWT.NONE);
       createToolbar(mainViewForm);
 
-
-
       SashForm shellSashForm = new SashForm(mainViewForm, SWT.BORDER | SWT.SMOOTH);
       mainViewForm.setContent(shellSashForm);
 
@@ -156,7 +136,6 @@ public class DesignEditor extends EditorPart implements IMethodListener {
       dummy.setLayout(new FillLayout());
       Label dummyLabel = new Label(dummy, SWT.NONE);
       dummyLabel.setText("Coming soon");
-
 
       classSummary = new ClassSummary(structureSashForm);
       classSummary.buildGui();
@@ -191,26 +170,10 @@ public class DesignEditor extends EditorPart implements IMethodListener {
 
   private void addMethod() {
     try {
-      IBuffer buffer = compilationUnit.getBuffer();
-      ISourceRange range = compilationUnit.getSourceRange();
-      int start = range.getOffset();
-      int length = range.getLength();
-      IScanner scanner;
-      scanner = ToolFactory.createScanner(false, false, false, false);
-      scanner.setSource(buffer.getCharacters());
-      scanner.resetTo(start, start + length - 1);
-      int token;
-      int pos = 0;
-      while ((token = scanner.getNextToken()) != ITerminalSymbols.TokenNameEOF) {
-        if (token == ITerminalSymbols.TokenNameRBRACE) {
-          pos = scanner.getCurrentTokenStartPosition();
-        }
-      }
-      String code = generateCode();
-      code = formateCode(code);
-      buffer.replace(pos, 0, code);
-    } catch (JavaModelException exception) {
-      exception.printStackTrace();
+      String code = new Generator().generateCode(currentMethod);
+      code = new Formatter().formateCode(code);
+      IParser parser = new Parser(compilationUnit);
+      parser.insertCode(parser.getInsertPosition(), code);
     } catch (CbGenerationException exception) {
       // TODO open error for all exceptions
       MessageDialog.openWarning(getSite().getShell(), "CodeBuilder error",
@@ -219,99 +182,6 @@ public class DesignEditor extends EditorPart implements IMethodListener {
       e.printStackTrace();
     }
   }
-
-  private String generateCode() throws CbGenerationException {
-    visitedNodes = new LinkedList<>();
-    StringBuffer methodCode =
-        recursiveCodeGeneration(currentMethod.getBeginNode(), new StringBuffer());
-    methodCode.append("}\n");
-    methodCode.insert(0, currentMethod.getValuesAsCode());
-    methodCode.insert(0, currentMethod.getAsCode());
-    return methodCode.toString();
-  }
-
-  @SuppressWarnings("unchecked")
-  private String formateCode(String source) {
-    @SuppressWarnings("rawtypes")
-    Map options = DefaultCodeFormatterConstants.getEclipseDefaultSettings();
-
-    options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_10);
-    options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_10);
-    options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_10);
-
-    // change the option to wrap each enum constant on a new line
-    options.put(DefaultCodeFormatterConstants.FORMATTER_ALIGNMENT_FOR_ENUM_CONSTANTS,
-        DefaultCodeFormatterConstants.createAlignmentValue(true,
-            DefaultCodeFormatterConstants.WRAP_ONE_PER_LINE,
-            DefaultCodeFormatterConstants.INDENT_ON_COLUMN));
-
-    // instantiate the default code formatter with the given options
-    final CodeFormatter codeFormatter = ToolFactory.createCodeFormatter(options);
-
-    final TextEdit edit = codeFormatter.format(CodeFormatter.K_CLASS_BODY_DECLARATIONS, // format a
-        source, // source to format
-        0, // starting position
-        source.length(), // length
-        0, // initial indentation
-        System.getProperty("line.separator") // line separator
-    );
-    if (edit == null) {
-      return source;
-    }
-
-    IDocument document = new Document(source);
-    try {
-      edit.apply(document);
-    } catch (MalformedTreeException | BadLocationException e) {
-      e.printStackTrace();
-    }
-    return document.get();
-  }
-
-
-  private StringBuffer recursiveCodeGeneration(MethodNode node, StringBuffer code)
-      throws CbGenerationException {
-    if (visitedNodes.contains(node)) {
-      return code.insert(0, "}");
-    }
-    visitedNodes.add(node);
-    try {
-      switch (node.getType()) {
-        case MethodNode.CONDITION:
-          ConditionNode conditionNode = (ConditionNode) node;
-          List<MethodNode> nextNodes = conditionNode.getNextNodes();
-          if (nextNodes.isEmpty()) {
-            throw new CbGenerationException(node.getType() + " no return node");
-          }
-          for (int i = nextNodes.size() - 1; i >= 0; i--) {
-            recursiveCodeGeneration(nextNodes.get(i), code);
-          }
-          break;
-        case MethodNode.FUNCTION:
-          FunctionNode functionNode = (FunctionNode) node;
-          MethodNode nextNode = functionNode.getNext();
-          if (nextNode == null) {
-            throw new CbGenerationException(node.getType() + " no return node");
-          }
-          recursiveCodeGeneration(nextNode, code);
-          break;
-        case MethodNode.RETURN:
-          code.insert(0, codeGenerator.generate(node.getCodeTemplate(), node.getKeywordValueMap()));
-          if (node.getPreviousNodes().size() > 1) {
-            code.insert(0, "}");
-          }
-          return code;
-      }
-    } catch (CbGenerationException exception) {
-      throw new CbGenerationException(node.getType() + " - " + exception.getMessage());
-    }
-    if (node.getPreviousNodes().size() > 1) {
-      code.insert(0, "}");
-    }
-    return code.insert(0,
-        codeGenerator.generate(node.getCodeTemplate(), node.getKeywordValueMap()));
-  }
-
 
   @Override
   public void methodCreated(String access, String returnType, String name,

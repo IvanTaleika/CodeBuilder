@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 public class TemplateParser implements ITemplateParser {
   private static final String KEYWORD_REGEX = "\\$\\{(.*?)\\}";
 
-
   @Override
   public Set<String> getKeywords(String template) {
     Pattern pattern = Pattern.compile(KEYWORD_REGEX);
