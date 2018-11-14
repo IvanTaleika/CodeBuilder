@@ -6,8 +6,8 @@ import by.bsuir.cb.design.code.node.ConditionNode;
 import by.bsuir.cb.design.code.node.FunctionNode;
 import by.bsuir.cb.design.code.node.MethodNode;
 import by.bsuir.cb.design.code.node.NodeFactory;
-import by.bsuir.cb.design.ui.components.IOperation;
-import by.bsuir.cb.design.ui.components.IOperationListener;
+import by.bsuir.cb.design.ui.operation.IOperation;
+import by.bsuir.cb.design.ui.operation.IOperationListener;
 import by.bsuir.cb.design.ui.structure.dialogs.CustomizeTemplateDialog;
 
 import java.util.AbstractMap;

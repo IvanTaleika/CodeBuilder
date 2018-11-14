@@ -10,7 +10,7 @@ import by.bsuir.cb.design.code.method.IMethod;
 import by.bsuir.cb.design.code.method.IMethodListener;
 import by.bsuir.cb.design.code.method.Method;
 import by.bsuir.cb.design.ui.BundleResourceProvider;
-import by.bsuir.cb.design.ui.operations.OperationPicker;
+import by.bsuir.cb.design.ui.operation.OperationPicker;
 import by.bsuir.cb.design.ui.structure.ClassSummary;
 import by.bsuir.cb.design.ui.structure.MethodTree;
 import by.bsuir.cb.utils.PathProvider;
