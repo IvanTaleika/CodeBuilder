@@ -16,7 +16,7 @@
 		1.3.10. [Add functional block](#1.3.10) <br>
 		1.3.11. [Parameterize functional block](#1.3.11) <br>
 		1.3.12. [Generate code](#1.3.12) <br>
-2. [Behavioral design](#2) <br>
+2. [Structureal design](#2) <br>
 	2.1. [Class diagrams](#2.1) <br>
 	2.1.1 [Logic class diagram](#2.1.1) <br>
 	2.1.2 [UI class diagram](#2.1.2) <br>
@@ -262,6 +262,6 @@
 ### 2.1 Диаграммы классов <a name="2.1"></a>
 
 #### 2.1.1 Диаграмма классов бизнес логики <a name="2.1.1"></a>
-![Business logic class diagram](classDiagram/logicClassDiagram.png)
+![Business logic class diagram](class/logicClassDiagram.png)
 #### 2.1.2 Диаграмма классов пользовательского интерфейса <a name="2.1.2"></a>
-![UI class diagram](classDiagram/uiClassDiagram.png)
+![UI class diagram](class/uiClassDiagram.png)
