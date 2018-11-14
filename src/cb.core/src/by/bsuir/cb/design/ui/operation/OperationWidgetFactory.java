@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Element;
 
+// TODO delete
 public class OperationWidgetFactory {
   private static final String operationTextAttribute = "text";
   private static final String operationToolTipAttribute = "toolTip";

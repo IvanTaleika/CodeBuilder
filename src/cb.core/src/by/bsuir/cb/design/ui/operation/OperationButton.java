@@ -6,14 +6,11 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-
 // TODO think about Custom Button implementation
 public class OperationButton extends Operation implements IOperationWidget {
   private Button uiOperation;
 
-  public OperationButton() {
-
-  }
+  public OperationButton() {}
 
   @Override
   public boolean isSelected() {

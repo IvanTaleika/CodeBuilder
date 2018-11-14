@@ -22,6 +22,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+// TODO create operation's XSD
 public class OperationPicker {
   private int columsNumber;
   private Composite parent;
