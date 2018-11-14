@@ -17,7 +17,7 @@
 		1.2.12. [Generate code](#1.2.12) <br>
 
 ## 1. Диаграмма использования<a name="1"></a>
-![use case](useCase/useCase.png)
+![use case](useCase/useCases.png)
 ### 1.1. Описание актёров<a name="1.1"></a>
 |Актёр|Описание|
 |:---|:---|
