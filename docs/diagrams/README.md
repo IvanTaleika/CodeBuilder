@@ -1,4 +1,4 @@
-# Проектирование системы
+﻿# Проектирование системы
 ## Содержание
 1. [Behavioral design](#1) <br>
 	1.1. [Use cases](#1.1) <br>
@@ -18,8 +18,10 @@
 		1.3.12. [Generate code](#1.3.12) <br>
 2. [Structureal design](#2) <br>
 	2.1. [Class diagrams](#2.1) <br>
-	2.1.1 [Logic class diagram](#2.1.1) <br>
-	2.1.2 [UI class diagram](#2.1.2) <br>
+		2.1.1 [Logic class diagram](#2.1.1) <br>
+		2.1.2 [UI class diagram](#2.1.2) <br>
+	2.2 [Component diagram](#2.2)<br>
+	2.3 [Deployment diagram](#2.3)<br>
 
 ## 1. Поведенческое проектирование<a name="1"></a>
 
@@ -265,3 +267,9 @@
 ![Business logic class diagram](class/logicClassDiagram.png)
 #### 2.1.2 Диаграмма классов пользовательского интерфейса <a name="2.1.2"></a>
 ![UI class diagram](class/uiClassDiagram.png)
+
+### 2.2 Диаграмма компонентов <a name="2.2"></a>
+![Component diagram](component/codeBuilderComponent.png)
+
+### 2.3 Диаграмма развёртывания <a name="2.3"></a>
+![Deployment diagram](deployment/codeBuilderDeployment.png)
