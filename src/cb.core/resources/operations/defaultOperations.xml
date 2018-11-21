@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<operations xmlns="http://www.w3.org/codeBuilder"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="operationSchema.xsd ">
+    <category>
+        <name>Basic</name>
+        <operation>
+            <name>End</name>
+            <node>
+                <type>return</type>
+                <keywords>
+                    <keyword>return_value</keyword>
+                </keywords>
+                <template><![CDATA[return ${return_value};]]>
+                </template>
+            </node>
+            <toolTip>Method end point. Additing any operation after
+                `End` will cause an error
+            </toolTip>
+            <image>images/operations/icons/begin_end.gif</image>
+        </operation>
+
+        <operation>
+            <name>Initialization</name>
+            <node>
+                <type>function</type>
+                <keywords>
+                    <keyword>initialization</keyword>
+                </keywords>
+                <template><![CDATA[${destination} = ${initialization};]]>
+                </template>
+            </node>
+            <toolTip>Initialize value with another value</toolTip>
+            <image>images/operations/icons/function.gif</image>
+        </operation>
+    </category>
+    <category>
+        <name>Conditions</name>
+        <operation>
+            <name>If</name>
+            <node>
+                <type>condition</type>
+                <keywords>
+                    <keyword>initialization</keyword>
+                </keywords>
+                <template><![CDATA[]]>
+                </template>
+            </node>
+            <toolTip>Input values section</toolTip>
+            <image>images/operations/icons/condition.gif</image>
+        </operation>
+    </category>
+    <category>
+        <name>Input/Output</name>
+        <operation>
+            <name>Console input</name>
+            <node>
+                <type>function</type>
+                <keywords>
+                    <keyword>string</keyword>
+                </keywords>
+                <template><![CDATA[
+BufferedReader br = null;
+try {
+    br = new BufferedReader(new InputStreamReader(System.in));
+    ${value} = br.readLine(); 
+} catch (IOException e) { 
+    e.printStackTrace();
+} finally { 
+    if (br != null) { 
+        try { 
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } 
+    } 
+}]]>
+                </template>
+            </node>
+            <toolTip>Input value from console</toolTip>
+            <image>images/operations/icons/input_output.gif</image>
+        </operation>
+        <operation>
+            <name>Console output</name>
+            <node>
+                <type>function</type>
+                <keywords>
+                    <keyword>string</keyword>
+                </keywords>
+                <template><![CDATA[System.out.println(${value});]]>
+                </template>
+            </node>
+            <toolTip>Output value on console</toolTip>
+            <image>images/operations/icons/function.gif</image>
+        </operation>
+    </category>
+    <category>
+        <name>Min/Max</name>
+        <operation>
+            <name>minString</name>
+            <node>
+                <type>function</type>
+                <keywords>
+                    <keyword>collection</keyword>
+                    <keyword>destination</keyword>
+                </keywords>
+                <template><![CDATA[
+if(!${collection}.isEmpty()) {
+   ${destination} = ${collection}.get(0);
+   for(String string: ${collection}) {
+       if(string.length() < ${destination}.length()) {
+           ${destination} = string; 
+       }
+   }
+} else {
+    ${destination} = null;
+}]]>
+                </template>
+            </node>
+            <toolTip>Find minimal string</toolTip>
+            <image>images/operations/icons/function.gif</image>
+        </operation>
+        <operation>
+            <name>maxString</name>
+            <node>
+                <type>function</type>
+                <keywords>
+                    <keyword>collection</keyword>
+                    <keyword>destination</keyword>
+                </keywords>
+                <template><![CDATA[
+if(!${collection}.isEmpty()) {
+   ${destination} = ${collection}.get(0);
+   for(String string: ${collection}) {
+       if(string.length() > ${destination}.length()) {
+           ${destination} = string; 
+       }
+   }
+} else {
+    ${destination} = null;
+}]]>
+                </template>
+            </node>
+            <toolTip>Find maximal string</toolTip>
+            <image>images/operations/icons/function.gif</image>
+        </operation>
+    </category>
+    <category>
+        <name>Sorting</name>
+        <operation>
+            <name>BubbleSort</name>
+            <node>
+                <type>function</type>
+                <keywords>
+                    <keyword>array</keyword>
+                </keywords>
+                <template><![CDATA[
+int n = ${array}.length;
+int temp = 0; 
+for (int i = 0; i < n; i++) {
+    for (int j = 1; j < (n - i); j++) {
+        if (arr[j - 1] > arr[j]) {
+            temp = ${array}[j - 1];
+            ${array}[j - 1] = ${array}[j];
+            ${array}[j] = temp;
+        }
+    }
+}]]>
+                </template>
+            </node>
+            <toolTip>Use bubble sort algorithm</toolTip>
+            <image>images/operations/icons/function.gif</image>
+        </operation>
+        <operation>
+            <name>QuickSort</name>
+            <node>
+                <type>function</type>
+                <keywords>
+                    <keyword>array</keyword>
+                </keywords>
+                <template><![CDATA[
+int sub${array} = 0;
+Stack<Integer> stack = new Stack<>();
+stack.push(0);
+stack.push(${array}.length - 1);
+do {
+  int right = stack.pop();
+  int left = stack.pop();
+  --sub${array};
+  do {
+    int _left = left;
+    int _right = right;
+    int pivot = ${array}[(left + right) / 2];
+    do {
+      while (pivot < ${array}[_right]) {
+        _right--;
+      }
+      while (pivot > ${array}[_left]) {
+        _left++;
+      }
+      if (_left <= _right) {
+        if (_left != _right) {
+          int temp = ${array}[_left];
+          ${array}[_left] = ${array}[_right];
+          ${array}[_right] = temp;
+        }
+        _right--;
+        _left++;
+      }
+    } while (_right >= _left);
+    if (_left < right) {
+      ++sub${array};
+      stack.push(_left);
+      stack.push(right);
+    }
+    right = _right;
+  } while (left < right);
+} while (sub${array} > -1);]]>
+                </template>
+            </node>
+            <toolTip>Use quicksort algorithm</toolTip>
+            <image>images/operations/icons/function.gif</image>
+        </operation>
+    </category>
+</operations>

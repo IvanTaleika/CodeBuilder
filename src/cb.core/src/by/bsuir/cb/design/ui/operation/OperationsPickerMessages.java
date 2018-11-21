@@ -4,7 +4,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class OperationsPickerMessages extends NLS {
   private static final String BASE_NAME =
-      "by.bsuir.cb.design.ui.operations.operationsPickerMessages"; //$NON-NLS-1$
+      "by.bsuir.cb.design.ui.operation.operationsPickerMessages"; //$NON-NLS-1$
   public static String OperationsPicker_title;
 
   static {

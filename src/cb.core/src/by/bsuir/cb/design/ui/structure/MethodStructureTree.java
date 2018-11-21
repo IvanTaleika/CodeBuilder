@@ -38,7 +38,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
 // TODO use TreeView
-public class MethodTree implements IOperationListener {
+public class MethodStructureTree implements IOperationListener {
   private IOperation selectedOperation;
 
   public static final String BEGIN_ITEM_IMAGE = "operations/icons/begin_end.gif";
@@ -57,7 +57,7 @@ public class MethodTree implements IOperationListener {
   private Cursor addNodeCursor;
   private Cursor arrowCursor;
 
-  public MethodTree(Composite parent) {
+  public MethodStructureTree(Composite parent) {
     this.parent = parent;
     methodTrees = new LinkedList<>();
     treeNodesMap = new HashMap<>();

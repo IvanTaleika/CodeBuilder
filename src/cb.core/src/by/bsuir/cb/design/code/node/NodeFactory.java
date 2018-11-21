@@ -1,7 +1,6 @@
 package by.bsuir.cb.design.code.node;
 
 import by.bsuir.cb.design.CbResourceException;
-import by.bsuir.cb.design.code.TemplateParser;
 import by.bsuir.cb.utils.XMLParseUtils;
 
 import java.util.HashMap;

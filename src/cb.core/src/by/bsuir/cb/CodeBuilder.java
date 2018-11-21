@@ -1,11 +1,12 @@
 package by.bsuir.cb;
 
 import by.bsuir.cb.design.ui.BundleResourceProvider;
-
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+// FIXME if XML node template is empty
+// TODO: add tooltip to XSD?
 // TODO: Auto-generated Javadoc
 /**
  * The activator class controls the plug-in life cycle.

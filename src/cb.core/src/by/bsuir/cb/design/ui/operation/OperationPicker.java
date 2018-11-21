@@ -31,7 +31,6 @@ public class OperationPicker {
   private File operationsTemplate;
 
   private final String categoryNameAttribute = "name";
-  private final String categoryIsExpandedAttribute = "expanded";
 
 
   public OperationPicker(Composite parent, File operationsTemplate) {
@@ -106,9 +105,8 @@ public class OperationPicker {
       for (Element category : categories) {
         String categoryErrorMessage = "";
         String categoryName = category.getAttribute(categoryNameAttribute);
-        String categoryIsExpanded = category.getAttribute(categoryIsExpandedAttribute);
         ExpandItem expandItem =
-            ExpandItemFactory.create(expandBar, categoryName, categoryIsExpanded.equals("true"));
+            ExpandItemFactory.create(expandBar, categoryName, true);
 
         Composite composite = new Composite(expandBar, SWT.NONE);
         composite.setLayout(GridLayoutFactory.create(columsNumber, true, 1, 1));

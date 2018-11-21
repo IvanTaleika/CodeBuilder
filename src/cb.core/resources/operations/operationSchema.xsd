@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.codeBuilder.by/codeBuilder"
+    xmlns="http://www.codeBuilder.by/codeBuilder" elementFormDefault="qualified">
+
+    <!-- root element -->
+    <xs:element name="operationPicker"
+        type="operationPickerType"></xs:element>
+
+    <!-- types definition -->
+
+    <xs:complexType name="operationPickerType">
+        <xs:sequence>
+            <xs:element name="category" type="categoryType"
+                minOccurs="0" maxOccurs="unbounded"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="categoryType">
+        <xs:sequence>
+            <xs:element name="name" type="xs:token" />
+            <xs:element name="operation" type="operationType"
+                minOccurs="0" maxOccurs="unbounded"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="operationType">
+        <xs:sequence>
+            <xs:element name="name" type="xs:token" />
+            <xs:element name="node" type="nodeType" />
+            <xs:element name="toolTip" type="xs:token"
+                minOccurs="0" />
+            <xs:element name="imagePath" type="xs:token"
+                minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="nodeType">
+        <xs:sequence>
+            <xs:element name="type" type="xs:token" />
+            <xs:element name="keywords" type="keywordsType" />
+            <xs:element name="template" type="xs:token" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="keywordsType">
+        <xs:sequence>
+            <xs:element name="keyword" type="xs:token"
+                minOccurs="0" maxOccurs="unbounded"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

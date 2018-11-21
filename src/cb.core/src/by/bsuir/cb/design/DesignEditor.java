@@ -12,7 +12,7 @@ import by.bsuir.cb.design.code.method.Method;
 import by.bsuir.cb.design.ui.BundleResourceProvider;
 import by.bsuir.cb.design.ui.operation.OperationPicker;
 import by.bsuir.cb.design.ui.structure.ClassSummary;
-import by.bsuir.cb.design.ui.structure.MethodTree;
+import by.bsuir.cb.design.ui.structure.MethodStructureTree;
 import by.bsuir.cb.utils.PathProvider;
 
 import java.io.File;
@@ -53,9 +53,7 @@ public class DesignEditor extends EditorPart implements IMethodListener {
   private List<IMethod> methods;
   private IMethod currentMethod;
   // TODO add interface for all method views
-  private OperationPicker operationPicker;
-  private MethodTree methodTree;
-  private ClassSummary classSummary;
+  private MethodStructureTree methodTree;
   private ICompilationUnit compilationUnit;
   private IWorkbenchPartSite partSite;
 
@@ -137,7 +135,7 @@ public class DesignEditor extends EditorPart implements IMethodListener {
       Label dummyLabel = new Label(dummy, SWT.NONE);
       dummyLabel.setText("Coming soon");
 
-      classSummary = new ClassSummary(structureSashForm);
+      ClassSummary classSummary = new ClassSummary(structureSashForm);
       classSummary.buildGui();
       classSummary.addMethodListener(this);
       File templateFile;
@@ -147,10 +145,10 @@ public class DesignEditor extends EditorPart implements IMethodListener {
         throw new CbResourceException("Unable to load operations template File");
       }
 
-      operationPicker = new OperationPicker(shellSashForm, templateFile);
+      OperationPicker operationPicker = new OperationPicker(shellSashForm, templateFile);
       operationPicker.buildGui();
 
-      methodTree = new MethodTree(shellSashForm);
+      methodTree = new MethodStructureTree(shellSashForm);
       methodTree.buildGui();
       operationPicker.addOperationsListener(methodTree);
 
