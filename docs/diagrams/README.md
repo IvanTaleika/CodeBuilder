@@ -237,11 +237,11 @@
 6. Окно закрывается.
 7. Вариант использования завершается.  
 ##### 1.3.11.3. Диаграмма активности
-![Parameterize functional block](activity/parameterizeFunctionalBlockupload.png)
+![Parameterize functional block](activity/parameterizeFunctionalBlock.png)
 ##### 1.3.11.3. Диаграмма последовательности
-![Parameterize functional block](sequence/parameterizeFunctionalBlockupload.png)
+![Parameterize functional block](sequence/parameterizeFunctionalBlock.png)
 ##### 1.3.1.4. Диаграмма состояний
-![Parameterize functional block](state/parameterizeFunctionalBlockupload.png)
+![Parameterize functional block](state/parameterizeFunctionalBlock.png)
 
 #### 1.3.12. Generate code<a name="1.3.12"></a>
 ##### 1.3.12.1. Поток событий
