@@ -19,7 +19,7 @@
 
     <xs:complexType name="categoryType">
         <xs:sequence>
-            <xs:element name="name" type="xs:token" />
+            <xs:element name="title" type="xs:token" />
             <xs:element name="operation" type="operationType"
                 minOccurs="0" maxOccurs="unbounded"></xs:element>
         </xs:sequence>

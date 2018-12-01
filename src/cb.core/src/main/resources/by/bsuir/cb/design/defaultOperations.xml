@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.codeBuilder.by/codeBuilder operationSchema.xsd ">
     <category>
-        <name>Basic</name>
+        <title>Basic</title>
         <operation>
             <name>End</name>
             <node>
@@ -36,7 +36,7 @@
         </operation>
     </category>
     <category>
-        <name>Conditions</name>
+        <title>Conditions</title>
         <operation>
             <name>If</name>
             <node>
@@ -52,7 +52,7 @@
         </operation>
     </category>
     <category>
-        <name>Input/Output</name>
+        <title>Input/Output</title>
         <operation>
             <name>Console input</name>
             <node>
@@ -96,7 +96,7 @@ try {
         </operation>
     </category>
     <category>
-        <name>Min/Max</name>
+        <title>Min/Max</title>
         <operation>
             <name>minString</name>
             <node>
@@ -147,7 +147,7 @@ if(!${collection}.isEmpty()) {
         </operation>
     </category>
     <category>
-        <name>Sorting</name>
+        <title>Sorting</title>
         <operation>
             <name>BubbleSort</name>
             <node>

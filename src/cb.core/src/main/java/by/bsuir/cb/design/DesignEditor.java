@@ -9,18 +9,13 @@ import by.bsuir.cb.design.code.Parser;
 import by.bsuir.cb.design.code.method.IMethod;
 import by.bsuir.cb.design.code.method.IMethodListener;
 import by.bsuir.cb.design.code.method.Method;
-import by.bsuir.cb.design.ui.BundleResourceProvider;
 import by.bsuir.cb.design.ui.operation.OperationPicker;
+import by.bsuir.cb.design.ui.operation.xml.XmlParsingException;
 import by.bsuir.cb.design.ui.structure.ClassSummary;
 import by.bsuir.cb.design.ui.structure.MethodStructureTree;
-import by.bsuir.cb.utils.PathProvider;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.ui.IWorkingCopyManager;
@@ -33,7 +28,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
@@ -47,6 +41,8 @@ import org.eclipse.ui.part.EditorPart;
 // TODO add save possibility
 // This class should use JavaCodeGenerator and write result into the file
 public class DesignEditor extends EditorPart implements IMethodListener {
+  public DesignEditor() {}
+
   private static final String GENERATE_IMAGE = "generate.png";
   private static final int[] SASH_FORM_WEIGHT = {120, 150, 250};
 
@@ -116,54 +112,59 @@ public class DesignEditor extends EditorPart implements IMethodListener {
 
   @Override
   public void createPartControl(Composite parent) {
-    try {
-      parent.setLayout(new FillLayout());
-      ViewForm mainViewForm = new ViewForm(parent, SWT.NONE);
-      createToolbar(mainViewForm);
+    // try {
+    parent.setLayout(new FillLayout());
+    ViewForm mainViewForm = new ViewForm(parent, SWT.NONE);
+    createToolbar(mainViewForm);
 
-      SashForm shellSashForm = new SashForm(mainViewForm, SWT.BORDER | SWT.SMOOTH);
-      mainViewForm.setContent(shellSashForm);
+    SashForm shellSashForm = new SashForm(mainViewForm, SWT.BORDER | SWT.SMOOTH);
+    mainViewForm.setContent(shellSashForm);
 
-      Group structureGroup = new Group(shellSashForm, SWT.NONE);
-      structureGroup.setText(DesignPageMessages.Structure_title);
-      structureGroup.setLayout(new FillLayout());
+    Group structureGroup = new Group(shellSashForm, SWT.NONE);
+    structureGroup.setText(DesignPageMessages.Structure_title);
+    structureGroup.setLayout(new FillLayout());
 
-      SashForm structureSashForm = new SashForm(structureGroup, SWT.BORDER | SWT.VERTICAL);
+    SashForm structureSashForm = new SashForm(structureGroup, SWT.BORDER | SWT.VERTICAL);
 
-      Composite dummy = new Composite(structureSashForm, SWT.BORDER);
-      dummy.setLayout(new FillLayout());
-      Label dummyLabel = new Label(dummy, SWT.NONE);
-      dummyLabel.setText("Coming soon");
+    Composite dummy = new Composite(structureSashForm, SWT.BORDER);
+    dummy.setLayout(new FillLayout());
+    Label dummyLabel = new Label(dummy, SWT.NONE);
+    dummyLabel.setText("Coming soon");
 
-      ClassSummary classSummary = new ClassSummary(structureSashForm);
-      classSummary.buildGui();
-      classSummary.addMethodListener(this);
-      File templateFile;
+    ClassSummary classSummary = new ClassSummary(structureSashForm);
+    classSummary.buildGui();
+    classSummary.addMethodListener(this);
+
+    OperationPicker operationPicker = new OperationPicker();
+    operationPicker.buildUi(shellSashForm);
+    // TODO move filename to constants;
+    // TODO refactor to not perform null check
+    var operationsXml = getClass().getResourceAsStream("defaultOperations.xml");
+    if (operationsXml != null) {
       try {
-        templateFile = BundleResourceProvider.getFile(PathProvider.getTemplateClasspath());
-      } catch (IOException e) {
-        throw new CbResourceException("Unable to load operations template File");
+        operationPicker.loadOperations(operationsXml);
+      } catch (XmlParsingException e) {
+        // TODO Alert
+        e.printStackTrace();
       }
-
-      OperationPicker operationPicker = new OperationPicker(shellSashForm, templateFile);
-      operationPicker.buildGui();
-
-      methodTree = new MethodStructureTree(shellSashForm);
-      methodTree.buildGui();
-      operationPicker.addOperationsListener(methodTree);
-
-      shellSashForm.setWeights(SASH_FORM_WEIGHT);
-
-    } catch (Exception e) {
-      for (Control control : parent.getChildren()) {
-        if (!control.isDisposed()) {
-          control.dispose();
-        }
-      }
-      // TODO move exception messages to specific file
-      Label errorLabel = new Label(parent, SWT.NONE);
-      errorLabel.setText("Plugin resources error:\n" + e.getMessage());
     }
+    // TODO add logging
+
+    methodTree = new MethodStructureTree(shellSashForm);
+    methodTree.buildGui();
+    operationPicker.getOperations().forEach(o -> o.addListener(methodTree));
+    shellSashForm.setWeights(SASH_FORM_WEIGHT);
+
+    // } catch (Exception e) {
+    // for (Control control : parent.getChildren()) {
+    // if (!control.isDisposed()) {
+    // control.dispose();
+    // }
+    // }
+    // // TODO move exception messages to specific file
+    // Label errorLabel = new Label(parent, SWT.NONE);
+    // errorLabel.setText("Plugin resources error:\n" + e.getMessage());
+    // }
   }
 
   private void addMethod() {
