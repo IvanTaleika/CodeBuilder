@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<operations xmlns="http://www.w3.org/codeBuilder"
+<operationPicker
+    xmlns="http://www.codeBuilder.by/codeBuilder"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="operationSchema.xsd ">
+    xsi:schemaLocation="http://www.codeBuilder.by/codeBuilder operationSchema.xsd ">
     <category>
         <name>Basic</name>
         <operation>
@@ -14,10 +15,10 @@
                 <template><![CDATA[return ${return_value};]]>
                 </template>
             </node>
-            <toolTip>Method end point. Additing any operation after
+            <tooltip>Method end point. Additing any operation after
                 `End` will cause an error
-            </toolTip>
-            <image>images/operations/icons/begin_end.gif</image>
+            </tooltip>
+            <imagePath>images/operations/icons/begin_end.gif</imagePath>
         </operation>
 
         <operation>
@@ -30,8 +31,8 @@
                 <template><![CDATA[${destination} = ${initialization};]]>
                 </template>
             </node>
-            <toolTip>Initialize value with another value</toolTip>
-            <image>images/operations/icons/function.gif</image>
+            <tooltip>Initialize value with another value</tooltip>
+            <imagePath>images/operations/icons/function.gif</imagePath>
         </operation>
     </category>
     <category>
@@ -46,8 +47,8 @@
                 <template><![CDATA[]]>
                 </template>
             </node>
-            <toolTip>Input values section</toolTip>
-            <image>images/operations/icons/condition.gif</image>
+            <tooltip>Input values section</tooltip>
+            <imagePath>images/operations/icons/condition.gif</imagePath>
         </operation>
     </category>
     <category>
@@ -77,8 +78,8 @@ try {
 }]]>
                 </template>
             </node>
-            <toolTip>Input value from console</toolTip>
-            <image>images/operations/icons/input_output.gif</image>
+            <tooltip>Input value from console</tooltip>
+            <imagePath>images/operations/icons/input_output.gif</imagePath>
         </operation>
         <operation>
             <name>Console output</name>
@@ -90,8 +91,8 @@ try {
                 <template><![CDATA[System.out.println(${value});]]>
                 </template>
             </node>
-            <toolTip>Output value on console</toolTip>
-            <image>images/operations/icons/function.gif</image>
+            <tooltip>Output value on console</tooltip>
+            <imagePath>images/operations/icons/function.gif</imagePath>
         </operation>
     </category>
     <category>
@@ -117,8 +118,8 @@ if(!${collection}.isEmpty()) {
 }]]>
                 </template>
             </node>
-            <toolTip>Find minimal string</toolTip>
-            <image>images/operations/icons/function.gif</image>
+            <tooltip>Find minimal string</tooltip>
+            <imagePath>images/operations/icons/function.gif</imagePath>
         </operation>
         <operation>
             <name>maxString</name>
@@ -141,8 +142,8 @@ if(!${collection}.isEmpty()) {
 }]]>
                 </template>
             </node>
-            <toolTip>Find maximal string</toolTip>
-            <image>images/operations/icons/function.gif</image>
+            <tooltip>Find maximal string</tooltip>
+            <imagePath>images/operations/icons/function.gif</imagePath>
         </operation>
     </category>
     <category>
@@ -168,8 +169,8 @@ for (int i = 0; i < n; i++) {
 }]]>
                 </template>
             </node>
-            <toolTip>Use bubble sort algorithm</toolTip>
-            <image>images/operations/icons/function.gif</image>
+            <tooltip>Use bubble sort algorithm</tooltip>
+            <imagePath>images/operations/icons/function.gif</imagePath>
         </operation>
         <operation>
             <name>QuickSort</name>
@@ -218,8 +219,8 @@ do {
 } while (sub${array} > -1);]]>
                 </template>
             </node>
-            <toolTip>Use quicksort algorithm</toolTip>
-            <image>images/operations/icons/function.gif</image>
+            <tooltip>Use quicksort algorithm</tooltip>
+            <imagePath>images/operations/icons/function.gif</imagePath>
         </operation>
     </category>
-</operations>
+</operationPicker>

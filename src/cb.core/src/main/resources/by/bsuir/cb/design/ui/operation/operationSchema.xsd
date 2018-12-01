@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
     targetNamespace="http://www.codeBuilder.by/codeBuilder"
-    xmlns="http://www.codeBuilder.by/codeBuilder" elementFormDefault="qualified">
+    xmlns="http://www.codeBuilder.by/codeBuilder"
+    elementFormDefault="qualified">
 
     <!-- root element -->
     <xs:element name="operationPicker"
@@ -28,7 +29,7 @@
         <xs:sequence>
             <xs:element name="name" type="xs:token" />
             <xs:element name="node" type="nodeType" />
-            <xs:element name="toolTip" type="xs:token"
+            <xs:element name="tooltip" type="xs:token"
                 minOccurs="0" />
             <xs:element name="imagePath" type="xs:token"
                 minOccurs="0" />
