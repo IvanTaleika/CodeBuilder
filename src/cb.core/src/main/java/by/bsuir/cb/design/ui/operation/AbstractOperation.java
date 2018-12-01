@@ -1,24 +1,25 @@
 package by.bsuir.cb.design.ui.operation;
 
 import by.bsuir.cb.design.code.node.MethodNode;
-
 import java.util.LinkedList;
-
+import java.util.List;
 import org.eclipse.swt.graphics.Image;
 
-public abstract class Operation implements IOperation {
-  private final LinkedList<IOperationListener> listeners;
+// @Data
+public abstract class AbstractOperation implements IOperation {
+
+  private final List<IOperationListener> listeners;
   private MethodNode operationNode;
   private Image icon;
   private String name;
+  private String tooltip;
 
-  public Operation() {
+  public AbstractOperation() {
     listeners = new LinkedList<IOperationListener>();
   }
 
-  public LinkedList<IOperationListener> getListeners() {
+  public List<IOperationListener> getListeners() {
     return listeners;
-
   }
 
   @Override
@@ -59,5 +60,16 @@ public abstract class Operation implements IOperation {
   @Override
   public void setIcon(Image icon) {
     this.icon = icon;
+  }
+
+  @Override
+  public String getTooltip() {
+    return tooltip;
+  }
+
+  @Override
+  public void setTooltip(String tooltip) {
+    this.tooltip = tooltip;
+
   }
 }

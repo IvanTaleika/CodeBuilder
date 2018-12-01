@@ -1,11 +1,16 @@
 package by.bsuir.cb.design.ui.operation;
 
 import by.bsuir.cb.design.code.node.MethodNode;
-
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Widget;
 
-// TODO move node from Operation
+// TODO make abstract class instead
 public interface IOperation {
+
+  Widget getUi();
+
+  Widget buildUi(Composite parent);
 
   boolean isSelected();
 
@@ -22,6 +27,10 @@ public interface IOperation {
   String getName();
 
   void setName(String name);
+
+  String getTooltip();
+
+  void setTooltip(String tooltip);
 
   public void setIcon(Image icon);
 
