@@ -34,7 +34,6 @@ public class DesignEditorOutlineLabelProvider implements ILabelProvider {
 
   @Override
   public boolean isLabelProperty(Object element, String property) {
-    // TODO Auto-generated method stub
     return false;
   }
 
@@ -51,7 +50,7 @@ public class DesignEditorOutlineLabelProvider implements ILabelProvider {
     } else if (element instanceof IMethod) {
       return BundleResourceProvider.getImage(METHOD_ICON_PATH);
     } else if (element instanceof IField) {
-      return BundleResourceProvider.getImage(TYPE_ICON_PATH);
+      return BundleResourceProvider.getImage(FIELD_ICON_PATH);
     }
     return null;
   }

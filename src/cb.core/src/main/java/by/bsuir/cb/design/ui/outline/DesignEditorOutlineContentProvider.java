@@ -8,7 +8,6 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.Viewer;
 
 public class DesignEditorOutlineContentProvider implements ITreeContentProvider {
   private static final ILog LOGGER = CodeBuilder.getDefault().getLog();
@@ -52,12 +51,6 @@ public class DesignEditorOutlineContentProvider implements ITreeContentProvider 
   @Override
   public boolean hasChildren(Object element) {
     return getChildren(element).length > 0;
-  }
-
-  @Override
-  public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-    // TODO Auto-generated method stub
-    ITreeContentProvider.super.inputChanged(viewer, oldInput, newInput);
   }
 
 }
