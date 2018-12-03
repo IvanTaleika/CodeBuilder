@@ -16,8 +16,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.swt,
  org.eclipse.ui.ide,
  org.eclipse.ui.views,
- org.eclipse.ui.navigator
-Bundle-RequiredExecutionEnvironment: JavaSE-9
+ org.eclipse.e4.core.di,
+ org.eclipse.e4.ui.di
+Bundle-RequiredExecutionEnvironment: JavaSE-10
 Automatic-Module-Name: cb.core
 Bundle-ActivationPolicy: lazy
 Export-Package: by.bsuir.cb,
@@ -25,7 +26,6 @@ Export-Package: by.bsuir.cb,
  by.bsuir.cb.design.code,
  by.bsuir.cb.design.code.method,
  by.bsuir.cb.design.code.node,
- by.bsuir.cb.design.ui,
  by.bsuir.cb.design.ui.operation,
  by.bsuir.cb.design.ui.structure,
  by.bsuir.cb.design.ui.structure.dialogs,
