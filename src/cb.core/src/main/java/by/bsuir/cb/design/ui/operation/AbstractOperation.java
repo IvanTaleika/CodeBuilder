@@ -8,15 +8,12 @@ import org.eclipse.swt.graphics.Image;
 // @Data
 public abstract class AbstractOperation implements IOperation {
 
-  private final List<IOperationListener> listeners;
+  private final List<IOperationListener> listeners = new LinkedList<>();
   private MethodNode operationNode;
   private Image icon;
   private String name;
   private String tooltip;
 
-  public AbstractOperation() {
-    listeners = new LinkedList<IOperationListener>();
-  }
 
   public List<IOperationListener> getListeners() {
     return listeners;

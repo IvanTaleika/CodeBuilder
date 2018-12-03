@@ -1,8 +1,8 @@
 package by.bsuir.cb.design.ui.operation;
 
-import by.bsuir.cb.design.ui.GridLayoutFactory;
 import by.bsuir.cb.design.ui.operation.xml.StaxBuilder;
 import by.bsuir.cb.design.ui.operation.xml.XmlParsingException;
+import by.bsuir.cb.design.ui.utils.GridLayoutFactory;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;

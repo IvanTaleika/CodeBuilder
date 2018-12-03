@@ -1,5 +1,6 @@
 package by.bsuir.cb.design;
 
+import by.bsuir.cb.BundleResourceProvider;
 import by.bsuir.cb.CodeBuilder;
 import by.bsuir.cb.design.code.CbGenerationException;
 import by.bsuir.cb.design.code.Formatter;
@@ -11,16 +12,17 @@ import by.bsuir.cb.design.code.method.IMethodListener;
 import by.bsuir.cb.design.code.method.Method;
 import by.bsuir.cb.design.ui.operation.OperationPicker;
 import by.bsuir.cb.design.ui.operation.xml.XmlParsingException;
-import by.bsuir.cb.design.ui.structure.ClassSummary;
 import by.bsuir.cb.design.ui.structure.MethodStructureTree;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.ui.IWorkingCopyManager;
 import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.text.IInputChangedListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ViewForm;
@@ -29,77 +31,68 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 // TODO add save possibility
 // This class should use JavaCodeGenerator and write result into the file
 public class DesignEditor extends EditorPart implements IMethodListener {
-  public DesignEditor() {}
 
+  private List<IInputChangedListener> listeners;
+  private static final String OPERATIONS_PATH = "defaultOperations.xml";
   private static final String GENERATE_IMAGE = "generate.png";
   private static final int[] SASH_FORM_WEIGHT = {120, 150, 250};
 
   private List<IMethod> methods;
   private IMethod currentMethod;
+  private IContentOutlinePage outlineAdapter;
   // TODO add interface for all method views
   private MethodStructureTree methodTree;
-  private ICompilationUnit compilationUnit;
-  private IWorkbenchPartSite partSite;
 
+  @Override
+  public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+    setInput(input);
+    setSite(site);
+    methods = new LinkedList<>();
+    listeners = new LinkedList<>();
+  }
 
   @Override
   public void doSave(IProgressMonitor monitor) {
-    // TODO Auto-generated method stub
-
+    // TODO implement
   }
 
   @Override
   public void doSaveAs() {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-    methods = new LinkedList<>();
-    partSite = site;
-    // TODO move it to addMethod class.
-    // use getMethodInput(), but compilationUnit can be null then.
-    IWorkingCopyManager workingCopyManager = JavaUI.getWorkingCopyManager();
-    compilationUnit = workingCopyManager.getWorkingCopy(input);
-    // TODO May be there might be the way to use DI
+    throw new UnsupportedOperationException("Save as is disabled for this view");
   }
 
   @Override
   public boolean isDirty() {
-    // TODO Auto-generated method stub
     return false;
   }
 
   @Override
   public boolean isSaveAsAllowed() {
-    // TODO Auto-generated method stub
     return false;
   }
 
   @Override
   public void setFocus() {
-    // TODO Auto-generated method stub
+    outlineAdapter.setFocus();
   }
 
   private void createToolbar(ViewForm parent) {
     ToolBar mainViewFormToolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
     parent.setTopLeft(mainViewFormToolBar);
     ToolItem addItem = new ToolItem(mainViewFormToolBar, SWT.NONE);
-    addItem.setImage(CodeBuilder.getImage(GENERATE_IMAGE));
-    addItem.setToolTipText(DesignPageMessages.GenerateButton_ToolTip);
+    addItem.setImage(BundleResourceProvider.getImage(GENERATE_IMAGE));
+    addItem.setToolTipText(DesignEditorMessages.GenerateButton_ToolTip);
     addItem.addSelectionListener(new SelectionAdapter() {
       @Override
       public void widgetSelected(SelectionEvent e) {
@@ -112,7 +105,6 @@ public class DesignEditor extends EditorPart implements IMethodListener {
 
   @Override
   public void createPartControl(Composite parent) {
-    // try {
     parent.setLayout(new FillLayout());
     ViewForm mainViewForm = new ViewForm(parent, SWT.NONE);
     createToolbar(mainViewForm);
@@ -121,54 +113,49 @@ public class DesignEditor extends EditorPart implements IMethodListener {
     mainViewForm.setContent(shellSashForm);
 
     Group structureGroup = new Group(shellSashForm, SWT.NONE);
-    structureGroup.setText(DesignPageMessages.Structure_title);
+    structureGroup.setText(DesignEditorMessages.Structure_Title);
     structureGroup.setLayout(new FillLayout());
+
+
 
     SashForm structureSashForm = new SashForm(structureGroup, SWT.BORDER | SWT.VERTICAL);
 
-    Composite dummy = new Composite(structureSashForm, SWT.BORDER);
-    dummy.setLayout(new FillLayout());
-    Label dummyLabel = new Label(dummy, SWT.NONE);
-    dummyLabel.setText("Coming soon");
+    // ClassSummary classSummary = new ClassSummary(structureSashForm);
+    // classSummary.buildGui();
+    // try {
+    // classSummary.updateMethods(getEditorInput());
+    // } catch (JavaModelException e1) {
+    // // FIXME display error if it occurs
+    // e1.printStackTrace();
+    // }
+    // classSummary.addMethodListener(this);
 
-    ClassSummary classSummary = new ClassSummary(structureSashForm);
-    classSummary.buildGui();
-    classSummary.addMethodListener(this);
+    outlineAdapter = getAdapter(IContentOutlinePage.class);
+    outlineAdapter.createControl(structureSashForm);
+    outlineAdapter.setFocus();
 
     OperationPicker operationPicker = new OperationPicker();
     operationPicker.buildUi(shellSashForm);
-    // TODO move filename to constants;
-    // TODO refactor to not perform null check
-    var operationsXml = getClass().getResourceAsStream("defaultOperations.xml");
-    if (operationsXml != null) {
-      try {
-        operationPicker.loadOperations(operationsXml);
-      } catch (XmlParsingException e) {
-        // TODO Alert
-        e.printStackTrace();
-      }
+    var operationsXml = getClass().getResourceAsStream(OPERATIONS_PATH);
+    try {
+      operationPicker.loadOperations(operationsXml);
+    } catch (XmlParsingException | NullPointerException e) {
+      ErrorDialog.openError(getSite().getShell(),
+          DesignEditorMessages.XmlOperationsErrorDialog_Title,
+          DesignEditorMessages.XmlOperationsErrorDialog_Message,
+          new Status(Status.WARNING, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
     }
-    // TODO add logging
 
     methodTree = new MethodStructureTree(shellSashForm);
     methodTree.buildGui();
     operationPicker.getOperations().forEach(o -> o.addListener(methodTree));
     shellSashForm.setWeights(SASH_FORM_WEIGHT);
-
-    // } catch (Exception e) {
-    // for (Control control : parent.getChildren()) {
-    // if (!control.isDisposed()) {
-    // control.dispose();
-    // }
-    // }
-    // // TODO move exception messages to specific file
-    // Label errorLabel = new Label(parent, SWT.NONE);
-    // errorLabel.setText("Plugin resources error:\n" + e.getMessage());
-    // }
   }
 
   private void addMethod() {
     try {
+      ICompilationUnit compilationUnit =
+          JavaUI.getWorkingCopyManager().getWorkingCopy(getEditorInput());
       String code = new Generator().generateCode(currentMethod);
       code = new Formatter().formateCode(code);
       IParser parser = new Parser(compilationUnit);
@@ -211,11 +198,19 @@ public class DesignEditor extends EditorPart implements IMethodListener {
     methodTree.switchMethod(methodIndex);
   }
 
-  // TODO what is this? Note: this solve error with nullpointer exception
-  @Override
-  public IWorkbenchPartSite getSite() {
-    return partSite;
+
+  public void inputChanged(IEditorInput input) {
+    setInput(input);
+    for (IInputChangedListener listener : listeners) {
+      listener.inputChanged(input);
+    }
   }
 
+  public void addInputChangedListener(IInputChangedListener listener) {
+    listeners.add(listener);
+  }
 
+  public void removeInputChangedListener(IInputChangedListener listener) {
+    listeners.remove(listener);
+  }
 }

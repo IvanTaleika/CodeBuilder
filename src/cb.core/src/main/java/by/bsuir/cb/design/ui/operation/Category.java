@@ -1,6 +1,6 @@
 package by.bsuir.cb.design.ui.operation;
 
-import by.bsuir.cb.design.ui.GridLayoutFactory;
+import by.bsuir.cb.design.ui.utils.GridLayoutFactory;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.EqualsAndHashCode;

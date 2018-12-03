@@ -2,8 +2,8 @@ package by.bsuir.cb.design.ui.structure;
 
 import by.bsuir.cb.BundleResourceProvider;
 import by.bsuir.cb.design.code.method.IMethodListener;
-import by.bsuir.cb.design.ui.structure.dialogs.AddMethodDialog;
-import by.bsuir.cb.design.ui.structure.dialogs.AddVariableDialog;
+import by.bsuir.cb.design.ui.outline.AddMethodDialog;
+import by.bsuir.cb.design.ui.outline.AddVariableDialog;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
@@ -171,8 +171,8 @@ public class ClassSummary {
     }
     int result = addMethodDialog.open();
     if (result == AddMethodDialog.OK) {
-      String access = addMethodDialog.getAccess().trim();
-      String returnType = addMethodDialog.getReturnType().trim();
+      String access = addMethodDialog.getAccess().toString().toLowerCase().trim();
+      String returnType = addMethodDialog.getReturnType().getElementName();
       String name = addMethodDialog.getName().trim();
       String passedVariables = addMethodDialog.getVariables();
 
@@ -230,7 +230,7 @@ public class ClassSummary {
     }
     int result = addVariableDialog.open();
     if (result == AddVariableDialog.OK) {
-      String type = addVariableDialog.getType();
+      String type = addVariableDialog.getType().getElementName();
       String name = addVariableDialog.getName();
       addVariableToView(name, type);
 

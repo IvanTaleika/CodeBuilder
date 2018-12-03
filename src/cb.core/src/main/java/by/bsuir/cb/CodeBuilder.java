@@ -1,20 +1,14 @@
 package by.bsuir.cb;
 
-import by.bsuir.cb.design.ui.BundleResourceProvider;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-// FIXME if XML node template is empty
+// FIXME check if XML node template is empty
 // TODO: add tooltip to XSD?
-// TODO: Auto-generated Javadoc
 /**
  * The activator class controls the plug-in life cycle.
  */
 public class CodeBuilder extends AbstractUIPlugin {
-
-  /** The folder with images. */
-  public static final String IMAGES_FOLDER = "images/";
 
   /** The plagin's ID. */
   public static final String PLUGIN_ID = "cb.core"; //$NON-NLS-1$
@@ -53,16 +47,6 @@ public class CodeBuilder extends AbstractUIPlugin {
    */
   public static CodeBuilder getDefault() {
     return plugin;
-  }
-
-  /**
-   * Returns the image from image folder.
-   *
-   * @param name the name of the image
-   * @return the image
-   */
-  public static Image getImage(String name) {
-    return BundleResourceProvider.getImage(IMAGES_FOLDER + name);
   }
 
 }

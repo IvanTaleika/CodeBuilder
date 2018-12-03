@@ -1,11 +1,9 @@
 package by.bsuir.cb.design.ui.structure.dialogs;
 
-import by.bsuir.cb.design.ui.GridLayoutFactory;
-
+import by.bsuir.cb.design.ui.utils.GridLayoutFactory;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
@@ -35,7 +33,7 @@ public class CustomizeTemplateDialog extends TitleAreaDialog {
 
   @Override
   protected Control createDialogArea(Composite parent) {
-    variablesCombo = new LinkedList<Combo>();
+    variablesCombo = new LinkedList<>();
     Composite area = (Composite) super.createDialogArea(parent);
     Composite container = new Composite(area, SWT.NONE);
     container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
