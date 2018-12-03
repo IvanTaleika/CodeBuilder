@@ -1,7 +1,7 @@
 package by.bsuir.cb.design.ui.outline;
 
-import by.bsuir.cb.design.ui.GridLayoutFactory;
 import by.bsuir.cb.design.ui.utils.DialogUtils;
+import by.bsuir.cb.design.ui.utils.GridLayoutFactory;
 import lombok.Getter;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.dialogs.TitleAreaDialog;

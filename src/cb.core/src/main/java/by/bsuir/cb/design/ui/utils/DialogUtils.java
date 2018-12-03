@@ -1,6 +1,8 @@
-package by.bsuir.cb.design.ui.structure.dialogs;
+package by.bsuir.cb.design.ui.utils;
 
+import by.bsuir.cb.CodeBuilder;
 import java.util.Optional;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.search.SearchEngine;
@@ -16,26 +18,27 @@ public final class DialogUtils {
   private DialogUtils() {}
 
   /**
-   * 
-   * @return
+   * Opens dialog for workspace's scope Java types.
+   *
+   * @return optional with type if it was chosen by user, empty optional otherwise.
    */
-  public static Optional<IType> selectJavaType(Shell shell) {
+  public static Optional<IType> openJavaTypeDialog(Shell shell) {
     try {
       SelectionDialog dialog = JavaUI.createTypeDialog(shell, new ProgressMonitorDialog(shell),
           SearchEngine.createWorkspaceScope(), IJavaElementSearchConstants.CONSIDER_ALL_TYPES,
           false);
-      dialog.setTitle(DialogsMessages.TypeDialog_Title);
-      dialog.setMessage(DialogsMessages.TypeDialog_Message);
+      dialog.setTitle(DialogMessages.TypeDialog_Title);
+      dialog.setMessage(DialogMessages.TypeDialog_Message);
 
       if (dialog.open() == Window.OK) {
         IType type = (IType) dialog.getResult()[0];
         return Optional.of(type);
       }
-    } catch (JavaModelException e1) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
+    } catch (JavaModelException e) {
+      CodeBuilder.getDefault().getLog()
+          .log(new Status(Status.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
     }
-    return null;
+    return Optional.empty();
 
   }
 

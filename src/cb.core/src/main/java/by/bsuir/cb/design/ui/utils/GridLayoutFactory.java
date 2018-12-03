@@ -1,4 +1,4 @@
-package by.bsuir.cb.design.ui;
+package by.bsuir.cb.design.ui.utils;
 
 import org.eclipse.swt.layout.GridLayout;
 

@@ -1,8 +1,8 @@
 package by.bsuir.cb.design.ui.outline;
 
 import by.bsuir.cb.design.code.AccessModifyer;
-import by.bsuir.cb.design.ui.GridLayoutFactory;
 import by.bsuir.cb.design.ui.utils.DialogUtils;
+import by.bsuir.cb.design.ui.utils.GridLayoutFactory;
 import java.util.Arrays;
 import lombok.Getter;
 import org.eclipse.jdt.core.IType;
