@@ -18,7 +18,7 @@ public enum OperationXml {
   KEYWORD("keyword"),
   TEMPLATE("template"),
   TOOLTIP("tooltip"),
-  IMAGE_PATH("imagePath");
+  IMAGE_PATH("iconPath");
 
   /**
    * XML tag or attribute value.

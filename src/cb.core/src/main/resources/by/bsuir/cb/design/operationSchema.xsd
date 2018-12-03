@@ -31,7 +31,7 @@
             <xs:element name="node" type="nodeType" />
             <xs:element name="tooltip" type="xs:token"
                 minOccurs="0" />
-            <xs:element name="imagePath" type="xs:token"
+            <xs:element name="iconPath" type="xs:token"
                 minOccurs="0" />
         </xs:sequence>
     </xs:complexType>

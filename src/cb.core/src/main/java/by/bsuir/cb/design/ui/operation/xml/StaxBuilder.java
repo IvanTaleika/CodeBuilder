@@ -1,7 +1,7 @@
 package by.bsuir.cb.design.ui.operation.xml;
 
+import by.bsuir.cb.BundleResourceProvider;
 import by.bsuir.cb.design.code.node.MethodNode;
-import by.bsuir.cb.design.ui.BundleResourceProvider;
 import by.bsuir.cb.design.ui.operation.Category;
 import by.bsuir.cb.design.ui.operation.IOperation;
 import by.bsuir.cb.design.ui.operation.OperationButton;

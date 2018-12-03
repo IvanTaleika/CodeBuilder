@@ -1,14 +1,17 @@
 package by.bsuir.cb.design.ui.structure;
 
-import by.bsuir.cb.CodeBuilder;
+import by.bsuir.cb.BundleResourceProvider;
 import by.bsuir.cb.design.code.method.IMethodListener;
 import by.bsuir.cb.design.ui.structure.dialogs.AddMethodDialog;
-import by.bsuir.cb.design.ui.structure.dialogs.AddValueDialog;
-
+import by.bsuir.cb.design.ui.structure.dialogs.AddVariableDialog;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
-
+import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.CTabFolder;
@@ -18,27 +21,26 @@ import org.eclipse.swt.custom.ViewForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.ui.IEditorInput;
 
 public class ClassSummary {
 
-  private static final String ADD_IMAGE = "add.png";
-  private static final String DELETE_IMAGE = "delete.png";
+  private static final String ADD_IMAGE = "treeView/add.png";
+  private static final String DELETE_IMAGE = "treeView/delete.png";
   private static final HashMap<String, String> ACCESS_SYMBOLS_MAP = new HashMap<>();
 
-  {
+  static {
     ACCESS_SYMBOLS_MAP.put("public", "+");
     ACCESS_SYMBOLS_MAP.put("protected", "#");
     ACCESS_SYMBOLS_MAP.put("private", "-");
   }
 
   private AddMethodDialog addMethodDialog;
-  private AddValueDialog addValueDialog;
+  private AddVariableDialog addVariableDialog;
   private Composite parent;
 
   private Composite valueTabComposite;
@@ -47,7 +49,7 @@ public class ClassSummary {
 
   private ViewForm summaryViewForm;
   private Table methodsTable;
-  private Table currentValuesTable;
+  private Table currentVariablesTable;
 
   private LinkedList<IMethodListener> methodListeners;
 
@@ -73,12 +75,7 @@ public class ClassSummary {
     methodsTable = new Table(summaryTabFolder, SWT.FULL_SELECTION);
     methodsCTabItem.setControl(methodsTable);
     // TODO this listener works even if u didn't click the method item, but chose it
-    methodsTable.addListener(SWT.MouseDoubleClick, new Listener() {
-      @Override
-      public void handleEvent(Event event) {
-        switchMethod();
-      }
-    });
+    methodsTable.addListener(SWT.MouseDoubleClick, event -> switchMethod());
 
 
 
@@ -99,7 +96,7 @@ public class ClassSummary {
     summaryViewForm.setTopRight(summaryViewFormToolBar);
 
     ToolItem addItem = new ToolItem(summaryViewFormToolBar, SWT.NONE);
-    addItem.setImage(CodeBuilder.getImage(ADD_IMAGE));
+    addItem.setImage(BundleResourceProvider.getImage(ADD_IMAGE));
     addItem.setToolTipText(StructureViewMessages.ClassSummary_AddToolTip);
     addItem.addSelectionListener(new SelectionAdapter() {
       @Override
@@ -107,13 +104,13 @@ public class ClassSummary {
         if (summaryTabFolder.getSelection() == methodsCTabItem) {
           addMethod();
         } else {
-          addValue();
+          addVariable();
         }
       }
     });
 
     ToolItem deleteItem = new ToolItem(summaryViewFormToolBar, SWT.NONE);
-    deleteItem.setImage(CodeBuilder.getImage(DELETE_IMAGE));
+    deleteItem.setImage(BundleResourceProvider.getImage(DELETE_IMAGE));
     deleteItem.setToolTipText(StructureViewMessages.ClassSummary_DeleteToolTip);
     deleteItem.addSelectionListener(new SelectionAdapter() {
       @Override
@@ -147,12 +144,26 @@ public class ClassSummary {
     methodListeners.remove(listener);
   }
 
-  private void switchValueTable(Table table) {
-    currentValuesTable = table;
+  public void updateMethods(IEditorInput input) throws JavaModelException {
+    var types = JavaUI.getWorkingCopyManager().getWorkingCopy(input).getTypes();
+
+    for (IType type : types) {
+
+      for (IMethod method : type.getMethods()) {
+        // TODO create class e.g. MethodView that will contains all info and override toString
+      }
+      for (IField field : type.getFields()) {
+        // TODO same with fields
+      }
+    }
+
+  }
+
+  private void switchVariableTable(Table table) {
+    currentVariablesTable = table;
     valueTabCompositeLayout.topControl = table;
     valueTabComposite.layout();
   }
-
 
   private void addMethod() {
     if (addMethodDialog == null) {
@@ -200,38 +211,38 @@ public class ClassSummary {
     method.setText(methodString);
     methodsTable.setSelection(method);
     valueTables.add(new Table(valueTabComposite, SWT.NONE));
-    switchValueTable(valueTables.get(methodsTable.getSelectionIndex()));
+    switchVariableTable(valueTables.get(methodsTable.getSelectionIndex()));
 
     if (!passedVariablesMap.isEmpty()) {
       for (Entry<String, String> passedVariable : passedVariablesMap.entrySet()) {
-        addValueToView(passedVariable.getKey(), passedVariable.getValue());
+        addVariableToView(passedVariable.getKey(), passedVariable.getValue());
       }
     }
   }
 
-  private void addValue() {
+  private void addVariable() {
     // TODO protect from duplication variables
     if (methodsTable.getItemCount() == 0) {
       return;
     }
-    if (addValueDialog == null) {
-      addValueDialog = new AddValueDialog(parent.getShell());
+    if (addVariableDialog == null) {
+      addVariableDialog = new AddVariableDialog(parent.getShell());
     }
-    int result = addValueDialog.open();
-    if (result == AddValueDialog.OK) {
-      String type = addValueDialog.getType();
-      String name = addValueDialog.getName();
-      addValueToView(name, type);
+    int result = addVariableDialog.open();
+    if (result == AddVariableDialog.OK) {
+      String type = addVariableDialog.getType();
+      String name = addVariableDialog.getName();
+      addVariableToView(name, type);
 
       for (IMethodListener methodListener : methodListeners) {
-        methodListener.valueCreated(valueTables.indexOf(currentValuesTable), name, type);
+        methodListener.valueCreated(valueTables.indexOf(currentVariablesTable), name, type);
       }
     }
   }
 
-  private void addValueToView(String name, String type) {
+  private void addVariableToView(String name, String type) {
     String valueString = name + " : " + type;
-    TableItem value = new TableItem(currentValuesTable, SWT.NONE);
+    TableItem value = new TableItem(currentVariablesTable, SWT.NONE);
     value.setText(valueString);
   }
 
@@ -239,8 +250,8 @@ public class ClassSummary {
     int index = methodsTable.getSelectionIndex();
     if (index != -1) {
       Table table = valueTables.remove(index);
-      if (currentValuesTable == table) {
-        switchValueTable(null);
+      if (currentVariablesTable == table) {
+        switchVariableTable(null);
       }
       methodsTable.getItem(index).dispose();
 
@@ -251,13 +262,13 @@ public class ClassSummary {
   }
 
   private void deleteVariable() {
-    int index = currentValuesTable.getSelectionIndex();
+    int index = currentVariablesTable.getSelectionIndex();
     if (index != -1) {
-      TableItem deletedItem = currentValuesTable.getItem(index);
+      TableItem deletedItem = currentVariablesTable.getItem(index);
       String[] nameAndType = deletedItem.getText().split(" : ");
       deletedItem.dispose();
       for (IMethodListener methodListener : methodListeners) {
-        methodListener.valueDeleted(valueTables.indexOf(currentValuesTable), nameAndType[0],
+        methodListener.valueDeleted(valueTables.indexOf(currentVariablesTable), nameAndType[0],
             nameAndType[1]);
       }
     }
@@ -266,7 +277,7 @@ public class ClassSummary {
   private void switchMethod() {
     int methodIndex = methodsTable.getSelectionIndex();
     if (methodIndex != -1) {
-      switchValueTable(valueTables.get(methodIndex));
+      switchVariableTable(valueTables.get(methodIndex));
       for (IMethodListener methodListener : methodListeners) {
         methodListener.methodSwitched(methodIndex);
       }

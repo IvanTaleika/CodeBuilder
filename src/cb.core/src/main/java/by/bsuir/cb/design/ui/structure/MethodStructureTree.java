@@ -1,6 +1,6 @@
 package by.bsuir.cb.design.ui.structure;
 
-import by.bsuir.cb.CodeBuilder;
+import by.bsuir.cb.BundleResourceProvider;
 import by.bsuir.cb.design.code.method.IMethod;
 import by.bsuir.cb.design.code.node.ConditionNode;
 import by.bsuir.cb.design.code.node.FunctionNode;
@@ -9,13 +9,11 @@ import by.bsuir.cb.design.code.node.NodeFactory;
 import by.bsuir.cb.design.ui.operation.IOperation;
 import by.bsuir.cb.design.ui.operation.IOperationListener;
 import by.bsuir.cb.design.ui.structure.dialogs.CustomizeTemplateDialog;
-
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
@@ -41,10 +39,10 @@ import org.eclipse.swt.widgets.TreeItem;
 public class MethodStructureTree implements IOperationListener {
   private IOperation selectedOperation;
 
-  public static final String BEGIN_ITEM_IMAGE = "operations/icons/begin_end.gif";
-  public static final String EXPAND_ALL_IMAGE = "expand_all.gif";
-  public static final String COLLAPSE_ALL_IMAGE = "collapse_all.gif";
-  public static final String ADD_NODE_CURSOR_IMAGE = "add_cursor.gif";
+  public static final String BEGIN_ITEM_IMAGE = "operations/begin_end.gif";
+  public static final String EXPAND_ALL_IMAGE = "treeView/expand_all.gif";
+  public static final String COLLAPSE_ALL_IMAGE = "treeView/collapse_all.gif";
+  public static final String ADD_NODE_CURSOR_IMAGE = "treeView/add_cursor.gif";
 
   private Composite parent;
   private ViewForm treeViewForm;
@@ -88,7 +86,7 @@ public class MethodStructureTree implements IOperationListener {
     treeViewForm.setTopRight(treeViewFormToolBar);
 
     ToolItem expandTreeItem = new ToolItem(treeViewFormToolBar, SWT.NONE);
-    expandTreeItem.setImage(CodeBuilder.getImage(EXPAND_ALL_IMAGE));
+    expandTreeItem.setImage(BundleResourceProvider.getImage(EXPAND_ALL_IMAGE));
     expandTreeItem.setToolTipText(StructureViewMessages.MethodTree_ExpandAllToolTip);
     expandTreeItem.addSelectionListener(new SelectionAdapter() {
       @Override
@@ -98,7 +96,7 @@ public class MethodStructureTree implements IOperationListener {
     });
 
     ToolItem collapseTreeItem = new ToolItem(treeViewFormToolBar, SWT.NONE);
-    collapseTreeItem.setImage(CodeBuilder.getImage(COLLAPSE_ALL_IMAGE));
+    collapseTreeItem.setImage(BundleResourceProvider.getImage(COLLAPSE_ALL_IMAGE));
     collapseTreeItem.setToolTipText(StructureViewMessages.MethodTree_CollapseAllToolTip);
     collapseTreeItem.addSelectionListener(new SelectionAdapter() {
       @Override
@@ -119,7 +117,7 @@ public class MethodStructureTree implements IOperationListener {
     TreeItemNodeView beginItem = new TreeItemNodeView(method.getBeginNode());
     TreeItem beginTreeItem = new TreeItem(tree, SWT.NONE);
     beginTreeItem.setText(method.getName());
-    beginTreeItem.setImage(CodeBuilder.getImage(BEGIN_ITEM_IMAGE));
+    beginTreeItem.setImage(BundleResourceProvider.getImage(BEGIN_ITEM_IMAGE));
     beginItem.addNodeTreeItem(beginTreeItem);
     List<TreeItemNodeView> treeNodes = new LinkedList<>();
     treeNodes.add(beginItem);
@@ -277,7 +275,7 @@ public class MethodStructureTree implements IOperationListener {
 
   private void createCursors() {
     addNodeCursor = new Cursor(Display.getDefault(),
-        CodeBuilder.getImage(ADD_NODE_CURSOR_IMAGE).getImageData(), 0, 0);
+        BundleResourceProvider.getImage(ADD_NODE_CURSOR_IMAGE).getImageData(), 0, 0);
 
     arrowCursor = parent.getCursor();
     treeViewForm.addDisposeListener(new DisposeListener() {

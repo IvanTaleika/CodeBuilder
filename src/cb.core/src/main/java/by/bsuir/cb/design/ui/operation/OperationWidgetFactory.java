@@ -1,10 +1,9 @@
 package by.bsuir.cb.design.ui.operation;
 
+import by.bsuir.cb.BundleResourceProvider;
 import by.bsuir.cb.design.CbResourceException;
 import by.bsuir.cb.design.code.node.NodeFactory;
-import by.bsuir.cb.design.ui.BundleResourceProvider;
 import by.bsuir.cb.utils.XMLParseUtils;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
@@ -18,7 +17,7 @@ public class OperationWidgetFactory {
   private static final String operationImageAttribute = "image";
 
 
-  public static IOperationWidget create(Composite parent, Element widgetData)
+  public static IOperation create(Composite parent, Element widgetData)
       throws CbResourceException {
     // TODO add different Widgets
     OperationButton operationButton = new OperationButton();
@@ -31,7 +30,7 @@ public class OperationWidgetFactory {
       throw new CbResourceException(e.getMessage() + " exeption in operation " + text, e);
     }
 
-    Button button = operationButton.buildUi(parent, SWT.FLAT | SWT.TOGGLE);
+    Button button = operationButton.buildUi(parent);
 
     button.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
     String toolTip = widgetData.getAttribute(operationToolTipAttribute);

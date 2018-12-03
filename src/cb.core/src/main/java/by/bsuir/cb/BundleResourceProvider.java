@@ -1,4 +1,4 @@
-package by.bsuir.cb.design.ui;
+package by.bsuir.cb;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,39 +13,41 @@ import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
-import org.osgi.framework.BundleListener;
 
-import by.bsuir.cb.CodeBuilder;
-
-// TODO make BundleResourceProvider (return resourceProvider for each bundle (plugin)) - non static
-// TODO look how this clsss is made in windowbuilder 
+/**
+ * Provider for plugin's bundle resources.
+ */
 public final class BundleResourceProvider {
+  public static final String ICONS_FOLDER = "icons/";
   private static final Bundle bundle = CodeBuilder.getDefault().getBundle();
   private static final Map<URL, Image> cashedImages = new HashMap<>();
   private static final Map<URL, ImageDescriptor> cashedImageDescriptors = new HashMap<>();
 
-
-
-  // FIXME never get event UNINSTALLED
+  /**
+   * Creates cleanup hook to dispose all images when plugin is uninstalled (e.g. deleted or Eclipse
+   * closed).
+   * 
+   * @param context plugin's bundle context
+   */
   public static void configureCleanUp(BundleContext context) {
-    context.addBundleListener(new BundleListener() {
-      public void bundleChanged(BundleEvent event) {
-        if (event.getType() == BundleEvent.UNINSTALLED) {
-          if (!cashedImages.isEmpty()) {
-            Display.getDefault().asyncExec(new Runnable() {
-              public void run() {
-                disposeImages();
-              }
-            });
-          }
+    context.addBundleListener(event -> {
+      if (event.getType() == BundleEvent.UNINSTALLED) {
+        if (!cashedImages.isEmpty()) {
+          Display.getDefault().asyncExec(BundleResourceProvider::disposeImages);
         }
       }
     });
   }
 
-  public static Image getImage(String imageClasspath) {
-    // TODO check if path is a full path
-    Path path = new Path(imageClasspath);
+  /**
+   * Returns {@link Image} for given path. Every image's instance are cashed and will be disposed
+   * when {@link BundleEvent#UNINSTALLED} event fires.
+   * 
+   * @param imagePath image's path
+   * @return the Image.
+   */
+  public static Image getImage(String imagePath) {
+    Path path = new Path(ICONS_FOLDER + imagePath);
     final URL url = FileLocator.find(bundle, path, null);
     if (url == null) {
       return null;
@@ -59,7 +61,6 @@ public final class BundleResourceProvider {
       image = imageDescriptor.createImage();
     } else {
       imageDescriptor = ImageDescriptor.createFromURL(url);
-      // TODO check if it imageDescriptor is valid
       cashedImageDescriptors.put(url, imageDescriptor);
       image = imageDescriptor.createImage();
     }
@@ -67,24 +68,20 @@ public final class BundleResourceProvider {
     return image;
   }
 
-
-  public static ImageDescriptor getImageDescriptor(String imageClasspath) {
-    // TODO check if path is a full path
-    Path path = new Path(imageClasspath);
+  /**
+   * Returns {@link ImageDescriptor} for the given path. Caches all descriptors.
+   * 
+   * @param imagePath image's path
+   * @return the ImageDescriptor for image at the imagePath
+   */
+  public static ImageDescriptor getImageDescriptor(String imagePath) {
+    Path path = new Path(ICONS_FOLDER + imagePath);
     final URL url = FileLocator.find(bundle, path, null);
-    ImageDescriptor imageDescriptor = cashedImageDescriptors.get(url);
-    if (imageDescriptor == null) {
-      imageDescriptor = ImageDescriptor.createFromURL(url);
-      // TODO check if it imageDescriptor is valid
-      cashedImageDescriptors.put(url, imageDescriptor);
-    }
+    ImageDescriptor imageDescriptor =
+        cashedImageDescriptors.computeIfAbsent(url, ImageDescriptor::createFromURL);
     return imageDescriptor;
   }
 
-  public static Bundle getBundle() {
-    return bundle;
-  }
-  
   public static File getFile(String classpath) throws IOException {
     URL url = getUrl(classpath);
     return new File(FileLocator.toFileURL(url).getFile());
@@ -106,7 +103,6 @@ public final class BundleResourceProvider {
 
   }
 
- 
 
 
 }
