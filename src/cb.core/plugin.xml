@@ -27,5 +27,17 @@
          </contentTypeBinding>
       </editor>
    </extension>
+   <extension
+         id="CodeBuilderView"
+         name="CodeBuilderView"
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="by.bsuir.cb.design.DesignEditor"
+            class="by.bsuir.cb.design.ui.outline.DesignEditorOutlineAdapterFactory">
+         <adapter
+               type="org.eclipse.ui.views.contentoutline.IContentOutlinePage">
+         </adapter>
+      </factory>
+   </extension>
 
 </plugin>
