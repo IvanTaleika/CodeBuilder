@@ -18,7 +18,7 @@
             <tooltip>Method end point. Additing any operation after
                 `End` will cause an error
             </tooltip>
-            <imagePath>images/operations/icons/begin_end.gif</imagePath>
+            <iconPath>operations/begin_end.gif</iconPath>
         </operation>
 
         <operation>
@@ -32,7 +32,7 @@
                 </template>
             </node>
             <tooltip>Initialize value with another value</tooltip>
-            <imagePath>images/operations/icons/function.gif</imagePath>
+            <iconPath>operations/function.gif</iconPath>
         </operation>
     </category>
     <category>
@@ -48,7 +48,7 @@
                 </template>
             </node>
             <tooltip>Input values section</tooltip>
-            <imagePath>images/operations/icons/condition.gif</imagePath>
+            <iconPath>operations/condition.gif</iconPath>
         </operation>
     </category>
     <category>
@@ -79,7 +79,7 @@ try {
                 </template>
             </node>
             <tooltip>Input value from console</tooltip>
-            <imagePath>images/operations/icons/input_output.gif</imagePath>
+            <iconPath>operations/input_output.gif</iconPath>
         </operation>
         <operation>
             <name>Console output</name>
@@ -92,7 +92,7 @@ try {
                 </template>
             </node>
             <tooltip>Output value on console</tooltip>
-            <imagePath>images/operations/icons/function.gif</imagePath>
+            <iconPath>operations/function.gif</iconPath>
         </operation>
     </category>
     <category>
@@ -119,7 +119,7 @@ if(!${collection}.isEmpty()) {
                 </template>
             </node>
             <tooltip>Find minimal string</tooltip>
-            <imagePath>images/operations/icons/function.gif</imagePath>
+            <iconPath>operations/function.gif</iconPath>
         </operation>
         <operation>
             <name>maxString</name>
@@ -143,7 +143,7 @@ if(!${collection}.isEmpty()) {
                 </template>
             </node>
             <tooltip>Find maximal string</tooltip>
-            <imagePath>images/operations/icons/function.gif</imagePath>
+            <iconPath>operations/function.gif</iconPath>
         </operation>
     </category>
     <category>
@@ -170,7 +170,7 @@ for (int i = 0; i < n; i++) {
                 </template>
             </node>
             <tooltip>Use bubble sort algorithm</tooltip>
-            <imagePath>images/operations/icons/function.gif</imagePath>
+            <iconPath>operations/function.gif</iconPath>
         </operation>
         <operation>
             <name>QuickSort</name>
@@ -220,7 +220,7 @@ do {
                 </template>
             </node>
             <tooltip>Use quicksort algorithm</tooltip>
-            <imagePath>images/operations/icons/function.gif</imagePath>
+            <iconPath>operations/function.gif</iconPath>
         </operation>
     </category>
 </operationPicker>
