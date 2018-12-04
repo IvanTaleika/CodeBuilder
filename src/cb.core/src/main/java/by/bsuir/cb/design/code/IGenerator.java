@@ -1,7 +1,7 @@
 package by.bsuir.cb.design.code;
 
-import by.bsuir.cb.design.code.method.IMethod;
+import by.bsuir.cb.design.code.method.IMethodTemp;
 
 public interface IGenerator {
-  String generateCode(IMethod method) throws CbGenerationException;
+  String generateCode(IMethodTemp method) throws CbGenerationException;
 }

@@ -1,6 +1,6 @@
 package by.bsuir.cb.design.code;
 
-import by.bsuir.cb.design.code.method.IMethod;
+import by.bsuir.cb.design.code.method.IMethodTemp;
 import by.bsuir.cb.design.code.node.ConditionNode;
 import by.bsuir.cb.design.code.node.FunctionNode;
 import by.bsuir.cb.design.code.node.MethodNode;
@@ -20,7 +20,7 @@ public class Generator implements IGenerator {
   }
 
   @Override
-  public String generateCode(IMethod method) throws CbGenerationException {
+  public String generateCode(IMethodTemp method) throws CbGenerationException {
     visitedNodes = new LinkedList<>();
     StringBuffer methodCode =
         recursiveCodeGeneration(method.getBeginNode(), new StringBuffer());

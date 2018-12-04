@@ -29,7 +29,7 @@
         <xs:sequence>
             <xs:element name="name" type="xs:token" />
             <xs:element name="node" type="nodeType" />
-            <xs:element name="tooltip" type="xs:token"
+            <xs:element name="description" type="xs:token"
                 minOccurs="0" />
             <xs:element name="iconPath" type="xs:token"
                 minOccurs="0" />

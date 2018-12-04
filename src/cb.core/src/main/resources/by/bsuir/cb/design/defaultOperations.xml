@@ -15,9 +15,9 @@
                 <template><![CDATA[return ${return_value};]]>
                 </template>
             </node>
-            <tooltip>Method end point. Additing any operation after
+            <description>Method end point. Additing any operation after
                 `End` will cause an error
-            </tooltip>
+            </description>
             <iconPath>operations/begin_end.gif</iconPath>
         </operation>
 
@@ -31,7 +31,7 @@
                 <template><![CDATA[${destination} = ${initialization};]]>
                 </template>
             </node>
-            <tooltip>Initialize value with another value</tooltip>
+            <description>Initialize value with another value</description>
             <iconPath>operations/function.gif</iconPath>
         </operation>
     </category>
@@ -47,7 +47,7 @@
                 <template><![CDATA[]]>
                 </template>
             </node>
-            <tooltip>Input values section</tooltip>
+            <description>Input values section</description>
             <iconPath>operations/condition.gif</iconPath>
         </operation>
     </category>
@@ -78,7 +78,7 @@ try {
 }]]>
                 </template>
             </node>
-            <tooltip>Input value from console</tooltip>
+            <description>Input value from console</description>
             <iconPath>operations/input_output.gif</iconPath>
         </operation>
         <operation>
@@ -91,7 +91,7 @@ try {
                 <template><![CDATA[System.out.println(${value});]]>
                 </template>
             </node>
-            <tooltip>Output value on console</tooltip>
+            <description>Output value on console</description>
             <iconPath>operations/function.gif</iconPath>
         </operation>
     </category>
@@ -118,7 +118,7 @@ if(!${collection}.isEmpty()) {
 }]]>
                 </template>
             </node>
-            <tooltip>Find minimal string</tooltip>
+            <description>Find minimal string</description>
             <iconPath>operations/function.gif</iconPath>
         </operation>
         <operation>
@@ -142,7 +142,7 @@ if(!${collection}.isEmpty()) {
 }]]>
                 </template>
             </node>
-            <tooltip>Find maximal string</tooltip>
+            <description>Find maximal string</description>
             <iconPath>operations/function.gif</iconPath>
         </operation>
     </category>
@@ -169,7 +169,7 @@ for (int i = 0; i < n; i++) {
 }]]>
                 </template>
             </node>
-            <tooltip>Use bubble sort algorithm</tooltip>
+            <description>Use bubble sort algorithm</description>
             <iconPath>operations/function.gif</iconPath>
         </operation>
         <operation>
@@ -219,7 +219,7 @@ do {
 } while (sub${array} > -1);]]>
                 </template>
             </node>
-            <tooltip>Use quicksort algorithm</tooltip>
+            <description>Use quicksort algorithm</description>
             <iconPath>operations/function.gif</iconPath>
         </operation>
     </category>
