@@ -1,55 +1,36 @@
 package by.bsuir.cb.design.code.node;
 
-import java.util.HashMap;
+import by.bsuir.cb.design.code.IGenerative;
+import by.bsuir.cb.design.code.IScopable;
 import java.util.LinkedList;
 import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-public class ConditionNode extends MethodNode {
-  private List<MethodNode> nextNodes;
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class ConditionNode extends TemplateNode implements IScopable {
+  private List<IGenerative> children = new LinkedList<>();
 
-
-  public ConditionNode(String codeTemplate, HashMap<String, String> keywordValueMap) {
-    super(codeTemplate, keywordValueMap, MethodNode.CONDITION);
-    nextNodes = new LinkedList<>();
+  public ConditionNode(IGenerative parent) {
+    super(parent);
   }
 
-  public List<MethodNode> getNextNodes() {
-    return nextNodes;
+  @Override
+  public void addChild(int index, IGenerative child) {
+    children.add(index, child);
   }
 
-  public void addBranch(MethodNode methodNode) {
-    nextNodes.add(methodNode);
-    methodNode.addPrevious(this);
-  }
-  
-  // TODO check algorithm
-  public List<MethodNode> addNext(MethodNode methodNode) {
-    List<MethodNode> lastNodes = new LinkedList<>();
-    for (MethodNode childNode : nextNodes) {
-      lastNodes.addAll(addToLastNode(childNode, methodNode));
-    }
-    return lastNodes;
+  @Override
+  public void appendChild(IGenerative child) {
+    children.add(child);
   }
 
-  private List<MethodNode> addToLastNode(MethodNode destinationNode, MethodNode inputNode) {
-    switch (destinationNode.getType()) {
-      case MethodNode.CONDITION:
-        return ((ConditionNode) destinationNode).addNext(inputNode);
-      case MethodNode.FUNCTION:
-        MethodNode functionNextNode = ((FunctionNode) destinationNode).getNext();
-        if (functionNextNode == null) {
-          List<MethodNode> lastNodes = new LinkedList<>();
-          lastNodes.add(destinationNode);
-          ((FunctionNode) destinationNode).addNext(inputNode);
-          return lastNodes;
-        } else {
-          return addToLastNode(functionNextNode, inputNode);
-        }
-      case MethodNode.RETURN:
-        return new LinkedList<>();
-    }
-    return null;
+  @Override
+  public void removeChild(IGenerative child) {
+    children.remove(child);
   }
-
 
 }
