@@ -17,7 +17,7 @@ public enum OperationXml {
   KEYWORDS("keywords"),
   KEYWORD("keyword"),
   TEMPLATE("template"),
-  TOOLTIP("tooltip"),
+  DESCRIPTION("description"),
   IMAGE_PATH("iconPath");
 
   /**

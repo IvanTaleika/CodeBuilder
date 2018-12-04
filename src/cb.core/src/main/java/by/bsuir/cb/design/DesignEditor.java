@@ -2,32 +2,23 @@ package by.bsuir.cb.design;
 
 import by.bsuir.cb.BundleResourceProvider;
 import by.bsuir.cb.CodeBuilder;
-import by.bsuir.cb.design.code.CbGenerationException;
-import by.bsuir.cb.design.code.Formatter;
-import by.bsuir.cb.design.code.Generator;
-import by.bsuir.cb.design.code.IParser;
-import by.bsuir.cb.design.code.Parser;
-import by.bsuir.cb.design.code.method.IMethod;
-import by.bsuir.cb.design.code.method.IMethodListener;
-import by.bsuir.cb.design.code.method.Method;
+import by.bsuir.cb.design.code.IGenerative;
+import by.bsuir.cb.design.code.IMethodListener;
+import by.bsuir.cb.design.ui.method.MethodTreeViewer;
 import by.bsuir.cb.design.ui.operation.OperationPicker;
 import by.bsuir.cb.design.ui.operation.xml.XmlParsingException;
-import by.bsuir.cb.design.ui.structure.MethodStructureTree;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IInputChangedListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ViewForm;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -48,17 +39,17 @@ public class DesignEditor extends EditorPart implements IMethodListener {
   private static final String GENERATE_IMAGE = "generate.png";
   private static final int[] SASH_FORM_WEIGHT = {120, 150, 250};
 
-  private List<IMethod> methods;
-  private IMethod currentMethod;
+  // private List<IMethodTemp> methods;
+  private Set<IGenerative> generationSet = new HashSet<>();
   private IContentOutlinePage outlineAdapter;
+  private MethodTreeViewer methodTreeViewer;
   // TODO add interface for all method views
-  private MethodStructureTree methodTree;
 
   @Override
   public void init(IEditorSite site, IEditorInput input) throws PartInitException {
     setInput(input);
     setSite(site);
-    methods = new LinkedList<>();
+    // methods = new LinkedList<>();
     listeners = new LinkedList<>();
   }
 
@@ -74,7 +65,7 @@ public class DesignEditor extends EditorPart implements IMethodListener {
 
   @Override
   public boolean isDirty() {
-    return false;
+    return generationSet.stream().anyMatch(IGenerative::isDirty);
   }
 
   @Override
@@ -93,14 +84,14 @@ public class DesignEditor extends EditorPart implements IMethodListener {
     ToolItem addItem = new ToolItem(mainViewFormToolBar, SWT.NONE);
     addItem.setImage(BundleResourceProvider.getImage(GENERATE_IMAGE));
     addItem.setToolTipText(DesignEditorMessages.GenerateButton_ToolTip);
-    addItem.addSelectionListener(new SelectionAdapter() {
-      @Override
-      public void widgetSelected(SelectionEvent e) {
-        if (currentMethod != null) {
-          addMethod();
-        }
-      }
-    });
+    // addItem.addSelectionListener(new SelectionAdapter() {
+    // @Override
+    // public void widgetSelected(SelectionEvent e) {
+    // if (currentMethod != null) {
+    // addMethod();
+    // }
+    // }
+    // });
   }
 
   @Override
@@ -134,8 +125,8 @@ public class DesignEditor extends EditorPart implements IMethodListener {
     outlineAdapter.createControl(structureSashForm);
     outlineAdapter.setFocus();
 
-    OperationPicker operationPicker = new OperationPicker();
-    operationPicker.buildUi(shellSashForm);
+
+    OperationPicker operationPicker = new OperationPicker(shellSashForm);
     var operationsXml = getClass().getResourceAsStream(OPERATIONS_PATH);
     try {
       operationPicker.loadOperations(operationsXml);
@@ -146,57 +137,53 @@ public class DesignEditor extends EditorPart implements IMethodListener {
           new Status(Status.WARNING, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
     }
 
-    methodTree = new MethodStructureTree(shellSashForm);
-    methodTree.buildGui();
-    operationPicker.getOperations().forEach(o -> o.addListener(methodTree));
+    methodTreeViewer = new MethodTreeViewer();
+    methodTreeViewer.createControl(shellSashForm);
+    operationPicker.addOperationListener(methodTreeViewer);
+
     shellSashForm.setWeights(SASH_FORM_WEIGHT);
   }
 
-  private void addMethod() {
-    try {
-      ICompilationUnit compilationUnit =
-          JavaUI.getWorkingCopyManager().getWorkingCopy(getEditorInput());
-      String code = new Generator().generateCode(currentMethod);
-      code = new Formatter().formateCode(code);
-      IParser parser = new Parser(compilationUnit);
-      parser.insertCode(parser.getInsertPosition(), code);
-    } catch (CbGenerationException exception) {
-      // TODO open error for all exceptions
-      MessageDialog.openWarning(getSite().getShell(), "CodeBuilder error",
-          "Error while generated data: \n" + exception.getMessage());
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+  // private void addMethod() {
+  // try {
+  // ICompilationUnit compilationUnit =
+  // JavaUI.getWorkingCopyManager().getWorkingCopy(getEditorInput());
+  // String code = new Generator().generateCode(currentMethod);
+  // code = new Formatter().formateCode(code);
+  // IParser parser = new Parser(compilationUnit);
+  // parser.insertCode(parser.getInsertPosition(), code);
+  // } catch (CbGenerationException exception) {
+  // // TODO open error for all exceptions
+  // MessageDialog.openWarning(getSite().getShell(), "CodeBuilder error",
+  // "Error while generated data: \n" + exception.getMessage());
+  // } catch (Exception e) {
+  // e.printStackTrace();
+  // }
+  // }
 
-  @Override
-  public void methodCreated(String access, String returnType, String name,
-      HashMap<String, String> passedVariables) {
-    currentMethod = new Method(access, returnType, name, passedVariables);
-    methods.add(currentMethod);
-    methodTree.addMethod(currentMethod);
-  }
+  // @Override
+  // public void methodCreated(String access, String returnType, String name,
+  // HashMap<String, String> passedVariables) {
+  // currentMethod = new Method(access, returnType, name, passedVariables);
+  // methods.add(currentMethod);
+  // methodTree.addMethod(currentMethod);
+  // }
+  //
+  // @Override
+  // public void methodDeleted(int methodIndex) {
+  // methodTree.deleteMethod(methods.remove(methodIndex));
+  // }
 
-  @Override
-  public void methodDeleted(int methodIndex) {
-    methodTree.deleteMethod(methods.remove(methodIndex));
-  }
+  // @Override
+  // public void valueCreated(int methodIndex, String name, String type) {
+  // currentMethod.addVariable(name, type);
+  // }
+  //
+  // @Override
+  // public void valueDeleted(int methodIndex, String name, String type) {
+  // currentMethod.deleteVariable(name, type);
+  // }
 
-  @Override
-  public void valueCreated(int methodIndex, String name, String type) {
-    currentMethod.addVariable(name, type);
-  }
-
-  @Override
-  public void valueDeleted(int methodIndex, String name, String type) {
-    currentMethod.deleteVariable(name, type);
-  }
-
-  @Override
-  public void methodSwitched(int methodIndex) {
-    currentMethod = methods.get(methodIndex);
-    methodTree.switchMethod(methodIndex);
-  }
 
 
   public void inputChanged(IEditorInput input) {
@@ -212,5 +199,16 @@ public class DesignEditor extends EditorPart implements IMethodListener {
 
   public void removeInputChangedListener(IInputChangedListener listener) {
     listeners.remove(listener);
+  }
+
+  @Override
+  public void methodSelected(IMethod method) {
+    methodTreeViewer.methodChanged(method).ifPresent(g -> generationSet.add(g));
+
+  }
+
+  @Override
+  public void methodDeleted(IMethod method) {
+    methodTreeViewer.methodDeleted(method).ifPresent(g -> generationSet.remove(g));
   }
 }

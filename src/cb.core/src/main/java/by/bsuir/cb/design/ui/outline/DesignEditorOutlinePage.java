@@ -51,6 +51,16 @@ public class DesignEditorOutlinePage extends ContentOutlinePage implements IInpu
     viewer.setContentProvider(new DesignEditorOutlineContentProvider());
     viewer.setLabelProvider(new DesignEditorOutlineLabelProvider());
     viewer.setInput(JavaUI.getWorkingCopyManager().getWorkingCopy(editor.getEditorInput()));
+    viewer.addDoubleClickListener(
+        event -> {
+          if (!event.getSelection().isEmpty()) {
+            var source = ((IStructuredSelection) event.getSelection())
+                .getFirstElement();
+            if (source instanceof IMethod) {
+              editor.methodSelected((IMethod) source);
+            }
+          }
+        });
     createContextMenu(viewer);
     editor.addInputChangedListener(this);
   }
@@ -110,6 +120,9 @@ public class DesignEditorOutlinePage extends ContentOutlinePage implements IInpu
         } catch (JavaModelException e) {
           LOGGER.log(new Status(e.getStatus().getSeverity(), CodeBuilder.PLUGIN_ID,
               e.getMessage(), e));
+        }
+        if (selection instanceof IMethod) {
+          editor.methodDeleted((IMethod) selection);
         }
       }
     }

@@ -22,15 +22,10 @@ public class DesignEditorOutlineLabelProvider implements ILabelProvider {
   public static final String FIELD_ICON_PATH = "outline/field_public_obj.gif";
 
   @Override
-  public void addListener(ILabelProviderListener listener) {
-    // TODO Auto-generated method stub
-
-  }
+  public void addListener(ILabelProviderListener listener) {}
 
   @Override
-  public void dispose() {
-    // TODO Auto-generated method stub
-  }
+  public void dispose() {}
 
   @Override
   public boolean isLabelProperty(Object element, String property) {
@@ -38,10 +33,7 @@ public class DesignEditorOutlineLabelProvider implements ILabelProvider {
   }
 
   @Override
-  public void removeListener(ILabelProviderListener listener) {
-    // TODO Auto-generated method stub
-
-  }
+  public void removeListener(ILabelProviderListener listener) {}
 
   @Override
   public Image getImage(Object element) {
