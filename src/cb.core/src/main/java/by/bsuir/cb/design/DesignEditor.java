@@ -1,6 +1,5 @@
 package by.bsuir.cb.design;
 
-import by.bsuir.cb.BundleResourceProvider;
 import by.bsuir.cb.CodeBuilder;
 import by.bsuir.cb.design.code.Formatter;
 import by.bsuir.cb.design.code.IGenerative;
@@ -25,8 +24,6 @@ import org.eclipse.swt.custom.ViewForm;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -37,7 +34,6 @@ public class DesignEditor extends EditorPart implements IMethodListener {
 
   private List<IInputChangedListener> listeners;
   private static final String OPERATIONS_PATH = "defaultOperations.xml";
-  private static final String GENERATE_IMAGE = "generate.png";
   private static final int[] SASH_FORM_WEIGHT = {120, 150, 250};
 
   private Set<IGenerative> generationSet = new HashSet<>();
@@ -60,6 +56,7 @@ public class DesignEditor extends EditorPart implements IMethodListener {
         var code = g.toCodeString();
         code = formatter.formateCode(code);
         type.createMethod(code, null, true, null);
+        g.setDirty(false);
       }
     } catch (JavaModelException e) {
       ErrorDialog.openError(getSite().getShell(), "Generation error", e.getMessage(),
@@ -87,19 +84,12 @@ public class DesignEditor extends EditorPart implements IMethodListener {
     outlineAdapter.setFocus();
   }
 
-  private void createToolbar(ViewForm parent) {
-    ToolBar mainViewFormToolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
-    parent.setTopLeft(mainViewFormToolBar);
-    ToolItem addItem = new ToolItem(mainViewFormToolBar, SWT.NONE);
-    addItem.setImage(BundleResourceProvider.getImage(GENERATE_IMAGE));
-    addItem.setToolTipText(DesignEditorMessages.GenerateButton_ToolTip);
-  }
+
 
   @Override
   public void createPartControl(Composite parent) {
     parent.setLayout(new FillLayout());
     ViewForm mainViewForm = new ViewForm(parent, SWT.NONE);
-    createToolbar(mainViewForm);
 
     SashForm shellSashForm = new SashForm(mainViewForm, SWT.BORDER | SWT.SMOOTH);
     mainViewForm.setContent(shellSashForm);
@@ -128,7 +118,7 @@ public class DesignEditor extends EditorPart implements IMethodListener {
           new Status(Status.WARNING, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
     }
 
-    methodTreeViewer = new MethodTreeViewer();
+    methodTreeViewer = new MethodTreeViewer(this);
     methodTreeViewer.createControl(shellSashForm);
     operationPicker.addOperationListener(methodTreeViewer);
 

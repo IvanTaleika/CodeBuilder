@@ -171,7 +171,7 @@ public class DesignEditorOutlinePage extends ContentOutlinePage implements IInpu
 
     private String createFieldContent() {
       return addClassVariableDialog.getAccess().toString().toLowerCase() + ' '
-          + addClassVariableDialog.getType().getElementName() + ' '
+          + addClassVariableDialog.getType().getFullyQualifiedName() + ' '
           + addClassVariableDialog.getName()
           + (addClassVariableDialog.getDefaultValue().isEmpty() ? ""
               : " = " + addClassVariableDialog.getDefaultValue())
