@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
@@ -29,6 +30,7 @@ public class DesignEditorOutlinePage extends ContentOutlinePage implements IInpu
   private DesignEditor editor;
   private AddMethodDialog addMethodDialog;
   private AddClassVariableDialog addClassVariableDialog;
+  private DesignEditorOutlineLabelProvider labelProvider;
 
   public DesignEditorOutlinePage(DesignEditor editor) {
     this.editor = editor;
@@ -36,6 +38,8 @@ public class DesignEditorOutlinePage extends ContentOutlinePage implements IInpu
 
   @Override
   public void inputChanged(Object newInput) {
+    labelProvider.setTargetProject(
+        JavaUI.getWorkingCopyManager().getWorkingCopy(editor.getEditorInput()).getJavaProject());
     getTreeViewer().refresh(false);
   }
 
@@ -45,12 +49,19 @@ public class DesignEditorOutlinePage extends ContentOutlinePage implements IInpu
   }
 
   @Override
+  protected int getTreeStyle() {
+    return SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL;
+  }
+
+  @Override
   public void createControl(Composite parent) {
     super.createControl(parent);
     TreeViewer viewer = getTreeViewer();
+    var targetUnit = JavaUI.getWorkingCopyManager().getWorkingCopy(editor.getEditorInput());
     viewer.setContentProvider(new DesignEditorOutlineContentProvider());
-    viewer.setLabelProvider(new DesignEditorOutlineLabelProvider());
-    viewer.setInput(JavaUI.getWorkingCopyManager().getWorkingCopy(editor.getEditorInput()));
+    labelProvider = new DesignEditorOutlineLabelProvider(targetUnit.getJavaProject());
+    viewer.setLabelProvider(labelProvider);
+    viewer.setInput(targetUnit);
     viewer.addDoubleClickListener(
         event -> {
           if (!event.getSelection().isEmpty()) {

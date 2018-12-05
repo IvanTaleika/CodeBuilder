@@ -6,20 +6,38 @@ import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 
 public class DesignEditorOutlineLabelProvider implements ILabelProvider {
   private static final ILog LOGGER = CodeBuilder.getDefault().getLog();
-
+  private ASTParser parser;
+  private IJavaProject target;
   public static final String TYPE_ICON_PATH = "outline/class_obj.gif";
-  public static final String METHOD_ICON_PATH = "outline/methpub_obj.gif";
-  public static final String FIELD_ICON_PATH = "outline/field_public_obj.gif";
+  public static final String METHOD_PRIVATE_PATH = "outline/methpri_obj.gif";
+  public static final String METHOD_PROTECTED_PATH = "outline/methpro_obj.gif";
+  public static final String METHOD_PUBLIC_PATH = "outline/methpub_obj.gif";
+  public static final String FIELD_PRIVATE_PATH = "outline/field_private_obj.gif";
+  public static final String FIELD_PROTECTED_PATH = "outline/field_protected_obj.gif";
+  public static final String FIELD_PUBLIC_PATH = "outline/field_public_obj.gif";
+
+  public DesignEditorOutlineLabelProvider(IJavaProject target) {
+    parser = ASTParser.newParser(AST.JLS10);
+    this.target = target;
+  }
+
+  public void setTargetProject(IJavaProject target) {
+    this.target = target;
+  }
 
   @Override
   public void addListener(ILabelProviderListener listener) {}
@@ -40,9 +58,9 @@ public class DesignEditorOutlineLabelProvider implements ILabelProvider {
     if (element instanceof IType) {
       return BundleResourceProvider.getImage(TYPE_ICON_PATH);
     } else if (element instanceof IMethod) {
-      return BundleResourceProvider.getImage(METHOD_ICON_PATH);
+      return BundleResourceProvider.getImage(getMethodImagePath((IMethod) element));
     } else if (element instanceof IField) {
-      return BundleResourceProvider.getImage(FIELD_ICON_PATH);
+      return BundleResourceProvider.getImage(getFieldImagePath((IField) element));
     }
     return null;
   }
@@ -88,4 +106,35 @@ public class DesignEditorOutlineLabelProvider implements ILabelProvider {
     return null;
   }
 
+  private String getFieldImagePath(IField field) {
+    parser.setProject(target);
+    var binding = parser.createBindings(new IField[] {field}, null)[0];
+    if (binding != null) {
+      int modifiers = binding.getModifiers();
+      if (Modifier.isPrivate(modifiers)) {
+        return FIELD_PRIVATE_PATH;
+      } else if (Modifier.isPublic(modifiers)) {
+        return FIELD_PUBLIC_PATH;
+      }
+      return FIELD_PROTECTED_PATH;
+    } else {
+      return null;
+    }
+  }
+
+  private String getMethodImagePath(IMethod method) {
+    parser.setProject(target);
+    var binding = parser.createBindings(new IMethod[] {method}, null)[0];
+    if (binding != null) {
+      int modifiers = binding.getModifiers();
+      if (Modifier.isPrivate(modifiers)) {
+        return METHOD_PRIVATE_PATH;
+      } else if (Modifier.isPublic(modifiers)) {
+        return METHOD_PUBLIC_PATH;
+      }
+      return METHOD_PROTECTED_PATH;
+    } else {
+      return null;
+    }
+  }
 }
