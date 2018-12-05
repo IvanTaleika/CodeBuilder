@@ -28,4 +28,13 @@ public class TreeViewDecorator implements IGenerative {
     return source.isDirty();
   }
 
+  @Override
+  public void setParent(IGenerative parent) {
+    source.setParent(parent);
+  }
+
+  @Override
+  public void setDirty(boolean dirty) {
+    source.setDirty(dirty);
+  }
 }

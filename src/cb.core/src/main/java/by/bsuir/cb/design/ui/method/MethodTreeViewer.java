@@ -1,17 +1,25 @@
 package by.bsuir.cb.design.ui.method;
 
 import by.bsuir.cb.BundleResourceProvider;
+import by.bsuir.cb.CodeBuilder;
+import by.bsuir.cb.design.DesignEditor;
 import by.bsuir.cb.design.code.CodeBuilderMethod;
 import by.bsuir.cb.design.code.IGenerative;
 import by.bsuir.cb.design.code.IScopable;
 import by.bsuir.cb.design.code.node.BeginNode;
 import by.bsuir.cb.design.code.node.EndNode;
+import by.bsuir.cb.design.code.node.TemplateNode;
 import by.bsuir.cb.design.ui.operation.IOperationListener;
 import by.bsuir.cb.design.ui.operation.Operation;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -25,6 +33,7 @@ import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 public class MethodTreeViewer extends ContentOutlinePage
     implements IOperationListener {
+  private static final ILog LOGGER = CodeBuilder.getDefault().getLog();
   public static final String METHOD_ICON_PATH = "outline/methpub_obj.gif";
   public static final String BEGIN_END_ICON_PATH = "operations/begin_end.gif";
   public static final String ADD_NODE_CURSOR_IMAGE = "treeView/add_cursor.gif";
@@ -33,6 +42,11 @@ public class MethodTreeViewer extends ContentOutlinePage
   private Cursor arrowCursor;
   private Map<IMethod, TreeViewDecorator> managedMethods = new HashMap<>();
   private Operation selectedOperation;
+  private DesignEditor editor;
+
+  public MethodTreeViewer(DesignEditor editor) {
+    this.editor = editor;
+  }
 
   public Optional<IGenerative> methodChanged(IMethod selection) {
     if (selection == null) {
@@ -88,7 +102,7 @@ public class MethodTreeViewer extends ContentOutlinePage
           (TreeViewDecorator) ((IStructuredSelection) event.getSelection()).getFirstElement();
       var source = decorator.getSource();
       var child = new TreeViewDecorator(selectedOperation.getMethodNode(),
-          selectedOperation.getIconPath(), selectedOperation.getDescription());
+          selectedOperation.getIconPath(), selectedOperation.getName());
 
       if (source instanceof CodeBuilderMethod) {
         ((CodeBuilderMethod) source).appendChild(child);
@@ -97,6 +111,7 @@ public class MethodTreeViewer extends ContentOutlinePage
       } else {
         var parent = (IScopable) source.getParent();
         parent.addChild(parent.getChildren().indexOf(decorator) + 1, child);
+        child.setParent((IGenerative) parent);
       }
       ((CodeBuilderMethod) currentMethod.getSource()).setDirty(true);
       getTreeViewer().refresh(false);
@@ -122,8 +137,6 @@ public class MethodTreeViewer extends ContentOutlinePage
     TreeViewer viewer = getTreeViewer();
     viewer.setContentProvider(new MethodTreeViewerContentProvider());
     viewer.setLabelProvider(new MethodTreeViewerLabelProvider());
-
-
     viewer.getTree().addMouseTrackListener(new MouseTrackAdapter() {
       @Override
       public void mouseEnter(MouseEvent e) {
@@ -136,6 +149,27 @@ public class MethodTreeViewer extends ContentOutlinePage
       public void mouseExit(MouseEvent e) {
         if (selectedOperation != null) {
           viewer.getTree().setCursor(arrowCursor);
+        }
+      }
+    });
+    viewer.addDoubleClickListener(event -> {
+      if (!event.getSelection().isEmpty()) {
+        var target =
+            (TreeViewDecorator) ((IStructuredSelection) event.getSelection()).getFirstElement();
+        if (target.getSource() instanceof TemplateNode) {
+          var dialog = new CustomizeNodeDialog(editor.getSite().getShell());
+          try {
+            dialog.setVariables(Arrays.asList(
+                JavaUI.getWorkingCopyManager().getWorkingCopy(editor.getEditorInput())
+                    .getTypes()[0].getFields()));
+            var map = ((TemplateNode) target.getSource()).getKeywordMap();
+            dialog.setKeywordsMap(map);
+            dialog.open();
+          } catch (JavaModelException e) {
+            LOGGER.log(
+                new Status(e.getStatus().getSeverity(), CodeBuilder.PLUGIN_ID, e.getMessage(), e));
+          }
+
         }
       }
     });
