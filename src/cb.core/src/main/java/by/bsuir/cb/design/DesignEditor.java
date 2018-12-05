@@ -2,6 +2,7 @@ package by.bsuir.cb.design;
 
 import by.bsuir.cb.BundleResourceProvider;
 import by.bsuir.cb.CodeBuilder;
+import by.bsuir.cb.design.code.Formatter;
 import by.bsuir.cb.design.code.IGenerative;
 import by.bsuir.cb.design.code.IMethodListener;
 import by.bsuir.cb.design.ui.method.MethodTreeViewer;
@@ -14,6 +15,8 @@ import java.util.Set;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.text.IInputChangedListener;
 import org.eclipse.swt.SWT;
@@ -30,8 +33,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-// TODO add save possibility
-// This class should use JavaCodeGenerator and write result into the file
 public class DesignEditor extends EditorPart implements IMethodListener {
 
   private List<IInputChangedListener> listeners;
@@ -39,23 +40,31 @@ public class DesignEditor extends EditorPart implements IMethodListener {
   private static final String GENERATE_IMAGE = "generate.png";
   private static final int[] SASH_FORM_WEIGHT = {120, 150, 250};
 
-  // private List<IMethodTemp> methods;
   private Set<IGenerative> generationSet = new HashSet<>();
   private IContentOutlinePage outlineAdapter;
   private MethodTreeViewer methodTreeViewer;
-  // TODO add interface for all method views
 
   @Override
   public void init(IEditorSite site, IEditorInput input) throws PartInitException {
     setInput(input);
     setSite(site);
-    // methods = new LinkedList<>();
     listeners = new LinkedList<>();
   }
 
   @Override
   public void doSave(IProgressMonitor monitor) {
-    // TODO implement
+    try {
+      var type = JavaUI.getWorkingCopyManager().getWorkingCopy(getEditorInput()).getTypes()[0];
+      Formatter formatter = new Formatter();
+      for (IGenerative g : generationSet) {
+        var code = g.toCodeString();
+        code = formatter.formateCode(code);
+        type.createMethod(code, null, true, null);
+      }
+    } catch (JavaModelException e) {
+      ErrorDialog.openError(getSite().getShell(), "Generation error", e.getMessage(),
+          new Status(e.getStatus().getSeverity(), CodeBuilder.PLUGIN_ID, e.getMessage(), e));
+    }
   }
 
   @Override
@@ -84,14 +93,6 @@ public class DesignEditor extends EditorPart implements IMethodListener {
     ToolItem addItem = new ToolItem(mainViewFormToolBar, SWT.NONE);
     addItem.setImage(BundleResourceProvider.getImage(GENERATE_IMAGE));
     addItem.setToolTipText(DesignEditorMessages.GenerateButton_ToolTip);
-    // addItem.addSelectionListener(new SelectionAdapter() {
-    // @Override
-    // public void widgetSelected(SelectionEvent e) {
-    // if (currentMethod != null) {
-    // addMethod();
-    // }
-    // }
-    // });
   }
 
   @Override
@@ -110,16 +111,6 @@ public class DesignEditor extends EditorPart implements IMethodListener {
 
 
     SashForm structureSashForm = new SashForm(structureGroup, SWT.BORDER | SWT.VERTICAL);
-
-    // ClassSummary classSummary = new ClassSummary(structureSashForm);
-    // classSummary.buildGui();
-    // try {
-    // classSummary.updateMethods(getEditorInput());
-    // } catch (JavaModelException e1) {
-    // // FIXME display error if it occurs
-    // e1.printStackTrace();
-    // }
-    // classSummary.addMethodListener(this);
 
     outlineAdapter = getAdapter(IContentOutlinePage.class);
     outlineAdapter.createControl(structureSashForm);
@@ -144,48 +135,12 @@ public class DesignEditor extends EditorPart implements IMethodListener {
     shellSashForm.setWeights(SASH_FORM_WEIGHT);
   }
 
-  // private void addMethod() {
-  // try {
-  // ICompilationUnit compilationUnit =
-  // JavaUI.getWorkingCopyManager().getWorkingCopy(getEditorInput());
-  // String code = new Generator().generateCode(currentMethod);
-  // code = new Formatter().formateCode(code);
-  // IParser parser = new Parser(compilationUnit);
-  // parser.insertCode(parser.getInsertPosition(), code);
-  // } catch (CbGenerationException exception) {
-  // // TODO open error for all exceptions
-  // MessageDialog.openWarning(getSite().getShell(), "CodeBuilder error",
-  // "Error while generated data: \n" + exception.getMessage());
-  // } catch (Exception e) {
-  // e.printStackTrace();
-  // }
-  // }
 
-  // @Override
-  // public void methodCreated(String access, String returnType, String name,
-  // HashMap<String, String> passedVariables) {
-  // currentMethod = new Method(access, returnType, name, passedVariables);
-  // methods.add(currentMethod);
-  // methodTree.addMethod(currentMethod);
-  // }
-  //
-  // @Override
-  // public void methodDeleted(int methodIndex) {
-  // methodTree.deleteMethod(methods.remove(methodIndex));
-  // }
-
-  // @Override
-  // public void valueCreated(int methodIndex, String name, String type) {
-  // currentMethod.addVariable(name, type);
-  // }
-  //
-  // @Override
-  // public void valueDeleted(int methodIndex, String name, String type) {
-  // currentMethod.deleteVariable(name, type);
-  // }
-
-
-
+  /**
+   * Calls when source file is modified by source editor.
+   * 
+   * @param input new editor input
+   */
   public void inputChanged(IEditorInput input) {
     setInput(input);
     for (IInputChangedListener listener : listeners) {

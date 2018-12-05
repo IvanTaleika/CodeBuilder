@@ -4,6 +4,7 @@ import by.bsuir.cb.design.DesignEditor;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -13,16 +14,12 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 
 
 // TODO ADD MultiPageEditorActionBarContributor
-// TODO dispose Images
 // build.properties
-// package org.eclipse.wb.internal.core.editor.multi;
 public class CodeBuilderMultipage extends MultiPageEditorPart {
   private IEditorPart sourceEditor;
   private int sourceIndex;
   private DesignEditor designEditor;
   private int designIndex;
-
-  public CodeBuilderMultipage() {}
 
   @Override
   public void init(IEditorSite site, IEditorInput input) throws PartInitException {
@@ -64,33 +61,39 @@ public class CodeBuilderMultipage extends MultiPageEditorPart {
 
   @Override
   public void doSave(IProgressMonitor monitor) {
+    if (designEditor.isDirty()) {
+      saveDesignEditor();
+    }
     if (sourceEditor.isDirty()) {
       sourceEditor.doSave(monitor);
     }
-    // TODO Auto-generated method stub
-
   }
 
   @Override
   public void doSaveAs() {
-    // TODO Auto-generated method stub
-
+    // Save as is not allowed
   }
 
   @Override
   public boolean isSaveAsAllowed() {
-    // TODO Auto-generated method stub
-    return true;
+    return false;
   }
 
   @Override
   protected void pageChange(int newPageIndex) {
-    if (newPageIndex == sourceIndex) {
-      // TODO generate code
+    if (newPageIndex == sourceIndex && designEditor.isDirty()) {
+      saveDesignEditor();
     } else {
       designEditor.inputChanged(sourceEditor.getEditorInput());
     }
     super.pageChange(newPageIndex);
+  }
+
+  private void saveDesignEditor() {
+    if (MessageDialog.openQuestion(getSite().getShell(), MultipageMessages.SaveTitle,
+        MultipageMessages.SaveMessage)) {
+      designEditor.doSave(null);
+    }
   }
 
 }

@@ -8,6 +8,8 @@ public class MultipageMessages extends NLS {
   public static String SecondPage;
   public static String CreationError;
   public static String InputError;
+  public static String SaveTitle;
+  public static String SaveMessage;
 
   static {
     NLS.initializeMessages(BASE_NAME, MultipageMessages.class);
