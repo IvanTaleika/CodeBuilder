@@ -16,10 +16,15 @@ public interface IGenerative {
    */
   IGenerative getParent();
 
+
+  void setParent(IGenerative parent);
+
   /**
    * Indicates if object was modified.
    * 
    * @return {@code true} if object is modified, {@code false} otherwise.
    */
   boolean isDirty();
+
+  void setDirty(boolean dirty);
 }

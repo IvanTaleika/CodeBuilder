@@ -12,6 +12,7 @@ import org.eclipse.jdt.core.Signature;
 
 @Data
 public class CodeBuilderMethod implements IGenerative, IScopable {
+  private IGenerative parent;
   private static final ILog LOGGER = CodeBuilder.getDefault().getLog();
   private boolean dirty;
   private IMethod javaMethod;
@@ -19,14 +20,16 @@ public class CodeBuilderMethod implements IGenerative, IScopable {
 
   @Override
   public String toCodeString() {
-    StringBuilder builder = new StringBuilder("{");
+    StringBuilder builder = new StringBuilder();
     try {
-      builder.append(Signature.toString(javaMethod.getSignature()));
+      builder.append(Signature.toString(javaMethod.getSignature(), javaMethod.getElementName(),
+          javaMethod.getParameterNames(), false, true));
+      builder.append("{\n");
     } catch (IllegalArgumentException | JavaModelException e) {
       LOGGER.log(new Status(Status.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
     }
     children.forEach(c -> builder.append(c.toCodeString()));
-    return builder.append('}').toString();
+    return builder.append("\n}").toString();
   }
 
   @Override
