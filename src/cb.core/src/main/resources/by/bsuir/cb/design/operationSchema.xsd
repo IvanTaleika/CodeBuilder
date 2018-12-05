@@ -46,8 +46,15 @@
 
     <xs:complexType name="keywordsType">
         <xs:sequence>
-            <xs:element name="keyword" type="xs:token"
+            <xs:element name="keyword" type="keywordType"
                 minOccurs="0" maxOccurs="unbounded"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="keywordType">
+        <xs:sequence>
+            <xs:element name="keywordName" type="xs:token"></xs:element>
+            <xs:element name="keywordType" type="xs:token"></xs:element>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>

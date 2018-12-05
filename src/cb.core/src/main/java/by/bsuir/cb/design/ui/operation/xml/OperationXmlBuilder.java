@@ -1,17 +1,28 @@
 package by.bsuir.cb.design.ui.operation.xml;
 
 import by.bsuir.cb.design.code.IGenerative;
+import by.bsuir.cb.design.code.Keyword;
+import by.bsuir.cb.design.code.node.BeginNode;
+import by.bsuir.cb.design.code.node.ConditionNode;
+import by.bsuir.cb.design.code.node.EndNode;
+import by.bsuir.cb.design.code.node.NodeType;
+import by.bsuir.cb.design.code.node.TemplateNode;
+import by.bsuir.cb.design.ui.method.TreeViewDecorator;
 import by.bsuir.cb.design.ui.operation.Category;
 import by.bsuir.cb.design.ui.operation.Operation;
 import java.io.InputStream;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 public class OperationXmlBuilder implements CategoryBuilder {
+  private static final String XML_FORM_EXCEPTION = "XML file is not well formed";
   private final XMLInputFactory factory;
   private List<Category> categories;
 
@@ -41,7 +52,6 @@ public class OperationXmlBuilder implements CategoryBuilder {
               break;
             default:
               break;
-            // throw new XmlParsingException("XML file is invalid against operation's XSD");
           }
         }
       }
@@ -52,7 +62,7 @@ public class OperationXmlBuilder implements CategoryBuilder {
         try {
           reader.close();
         } catch (final XMLStreamException e) {
-          throw new RuntimeException("Impossible to close StAX input stream: " + e.getMessage(), e);
+          throw new RuntimeException(e.getMessage(), e);
         }
       }
     }
@@ -74,7 +84,6 @@ public class OperationXmlBuilder implements CategoryBuilder {
               break;
             default:
               break;
-            // throw new XmlParsingException("XML file is invalid against operation's XSD");
           }
           break;
         case XMLStreamConstants.END_ELEMENT:
@@ -87,7 +96,7 @@ public class OperationXmlBuilder implements CategoryBuilder {
           break;
       }
     }
-    throw new XmlParsingException("XML file is not well formed");
+    throw new XmlParsingException(XML_FORM_EXCEPTION);
   }
 
   private Operation buildOperation(XMLStreamReader reader)
@@ -111,7 +120,6 @@ public class OperationXmlBuilder implements CategoryBuilder {
               break;
             default:
               break;
-            // throw new XmlParsingException("XML file is invalid against operation's XSD");
           }
           break;
         case XMLStreamConstants.END_ELEMENT:
@@ -123,40 +131,106 @@ public class OperationXmlBuilder implements CategoryBuilder {
           break;
       }
     }
-    throw new XmlParsingException("XML file is not well formed");
+    throw new XmlParsingException(XML_FORM_EXCEPTION);
   }
 
-
-  // FIXME
   private IGenerative buildMethodNode(XMLStreamReader reader)
       throws XMLStreamException, XmlParsingException {
+    TemplateNode node = null;
     while (reader.hasNext()) {
       switch (reader.next()) {
         case XMLStreamConstants.START_ELEMENT:
           switch (OperationXml.getEnumValue(reader.getLocalName())) {
             case TYPE:
+              switch (NodeType.getEnumValue(getTextData(reader))) {
+                case CONDITION:
+                  node = new ConditionNode(null);
+                  break;
+                case END:
+                  node = new EndNode(null);
+                  break;
+                case TEMPLATE:
+                  node = new TemplateNode(null);
+                  break;
+                default:
+                  break;
+              }
               break;
             case KEYWORDS:
-              break;
-            case KEYWORD:
+              node.setKeywordMap(buildKeywords(reader));
               break;
             case TEMPLATE:
+              node.setTemplate(getTextData(reader));
               break;
             default:
               break;
-            // throw new XmlParsingException("XML file is invalid against operation's XSD");
           }
           break;
         case XMLStreamConstants.END_ELEMENT:
           if (OperationXml.getEnumValue(reader.getLocalName()) == OperationXml.NODE) {
-            return null;
+            if (node instanceof ConditionNode) {
+              int index = 1;
+              for (Entry<String, IGenerative> entry : ((ConditionNode) node).getKeywordMap()
+                  .entrySet()) {
+                if (((Keyword) entry.getValue()).getType().equals("conditionResult")) {
+                  var decorator = new TreeViewDecorator();
+                  decorator.setIconPath("operations/begin_end.gif");
+                  decorator.setName("Begin" + index);
+                  index++;
+                  var beginNode = new BeginNode(node);
+                  decorator.setSource(beginNode);
+                  ((ConditionNode) node).appendChild(decorator);
+                  entry.setValue(beginNode);
+                }
+              }
+            }
+            return node;
           }
           break;
         default:
           break;
       }
     }
-    throw new XmlParsingException("XML file is not well formed");
+    throw new XmlParsingException(XML_FORM_EXCEPTION);
+  }
+
+  private Map<String, IGenerative> buildKeywords(XMLStreamReader reader)
+      throws XMLStreamException, XmlParsingException {
+    var keyword = new Keyword();
+    Map<String, IGenerative> keywords = new LinkedHashMap<>();
+    while (reader.hasNext()) {
+      switch (reader.next()) {
+        case XMLStreamConstants.START_ELEMENT:
+          switch (OperationXml.getEnumValue(reader.getLocalName())) {
+            case KEYWORD:
+              keyword = new Keyword();
+              break;
+            case KEYWORD_NAME:
+              keyword.setName(getTextData(reader));
+              break;
+            case KEYWORD_TYPE:
+              keyword.setType(getTextData(reader));
+              break;
+            default:
+              break;
+          }
+          break;
+        case XMLStreamConstants.END_ELEMENT:
+          switch (OperationXml.getEnumValue(reader.getLocalName())) {
+            case KEYWORDS:
+              return keywords;
+            case KEYWORD:
+              keywords.put(keyword.getName(), keyword);
+              break;
+            default:
+              break;
+          }
+          break;
+        default:
+          break;
+      }
+    }
+    throw new XmlParsingException(XML_FORM_EXCEPTION);
   }
 
   /**

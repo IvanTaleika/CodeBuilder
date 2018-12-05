@@ -16,6 +16,8 @@ public enum OperationXml {
   TYPE("type"),
   KEYWORDS("keywords"),
   KEYWORD("keyword"),
+  KEYWORD_NAME("keywordName"),
+  KEYWORD_TYPE("keywordType"),
   TEMPLATE("template"),
   DESCRIPTION("description"),
   IMAGE_PATH("iconPath");

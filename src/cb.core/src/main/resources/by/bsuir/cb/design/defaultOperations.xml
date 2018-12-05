@@ -8,11 +8,14 @@
         <operation>
             <name>End</name>
             <node>
-                <type>return</type>
+                <type>end</type>
                 <keywords>
-                    <keyword>return_value</keyword>
+                    <keyword>
+                        <keywordName>returnValue</keywordName>
+                        <keywordType>.*</keywordType>
+                    </keyword>
                 </keywords>
-                <template><![CDATA[return ${return_value};]]>
+                <template><![CDATA[return ${returnValue};]]>
                 </template>
             </node>
             <description>Method end point. Additing any operation after
@@ -24,9 +27,16 @@
         <operation>
             <name>Initialization</name>
             <node>
-                <type>function</type>
+                <type>template</type>
                 <keywords>
-                    <keyword>initialization</keyword>
+                    <keyword>
+                        <keywordName>destination</keywordName>
+                        <keywordType>.*</keywordType>
+                    </keyword>
+                    <keyword>
+                        <keywordName>initialization</keywordName>
+                        <keywordType>.*</keywordType>
+                    </keyword>
                 </keywords>
                 <template><![CDATA[${destination} = ${initialization};]]>
                 </template>
@@ -42,9 +52,20 @@
             <node>
                 <type>condition</type>
                 <keywords>
-                    <keyword>initialization</keyword>
+                    <keyword>
+                        <keywordName>condition</keywordName>
+                        <keywordType>java.lang.Boolean</keywordType>
+                    </keyword>
+                    <keyword>
+                        <keywordName>true</keywordName>
+                        <keywordType>conditionResult</keywordType>
+                    </keyword>
+                    <keyword>
+                        <keywordName>false</keywordName>
+                        <keywordType>conditionResult</keywordType>
+                    </keyword>
                 </keywords>
-                <template><![CDATA[]]>
+                <template><![CDATA[if(${condition}) {${true}} else {${false}}]]>
                 </template>
             </node>
             <description>Input values section</description>
@@ -56,9 +77,12 @@
         <operation>
             <name>Console input</name>
             <node>
-                <type>function</type>
+                <type>template</type>
                 <keywords>
-                    <keyword>string</keyword>
+                    <keyword>
+                        <keywordName>value</keywordName>
+                        <keywordType>java.lang.String</keywordType>
+                    </keyword>
                 </keywords>
                 <template><![CDATA[
 BufferedReader br = null;
@@ -84,9 +108,12 @@ try {
         <operation>
             <name>Console output</name>
             <node>
-                <type>function</type>
+                <type>template</type>
                 <keywords>
-                    <keyword>string</keyword>
+                    <keyword>
+                        <keywordName>value</keywordName>
+                        <keywordType>java.lang.String</keywordType>
+                    </keyword>
                 </keywords>
                 <template><![CDATA[System.out.println(${value});]]>
                 </template>
@@ -100,10 +127,16 @@ try {
         <operation>
             <name>minString</name>
             <node>
-                <type>function</type>
+                <type>template</type>
                 <keywords>
-                    <keyword>collection</keyword>
-                    <keyword>destination</keyword>
+                    <keyword>
+                        <keywordName>collection</keywordName>
+                        <keywordType>java.util.List</keywordType>
+                    </keyword>
+                    <keyword>
+                        <keywordName>destination</keywordName>
+                        <keywordType>java.lang.String</keywordType>
+                    </keyword>
                 </keywords>
                 <template><![CDATA[
 if(!${collection}.isEmpty()) {
@@ -124,10 +157,16 @@ if(!${collection}.isEmpty()) {
         <operation>
             <name>maxString</name>
             <node>
-                <type>function</type>
+                <type>template</type>
                 <keywords>
-                    <keyword>collection</keyword>
-                    <keyword>destination</keyword>
+                    <keyword>
+                        <keywordName>collection</keywordName>
+                        <keywordType>java.util.List</keywordType>
+                    </keyword>
+                    <keyword>
+                        <keywordName>destination</keywordName>
+                        <keywordType>java.lang.String</keywordType>
+                    </keyword>
                 </keywords>
                 <template><![CDATA[
 if(!${collection}.isEmpty()) {
@@ -151,9 +190,12 @@ if(!${collection}.isEmpty()) {
         <operation>
             <name>BubbleSort</name>
             <node>
-                <type>function</type>
+                <type>template</type>
                 <keywords>
-                    <keyword>array</keyword>
+                    <keyword>
+                        <keywordName>array</keywordName>
+                        <keywordType>Object[]</keywordType>
+                    </keyword>
                 </keywords>
                 <template><![CDATA[
 int n = ${array}.length;
@@ -175,9 +217,12 @@ for (int i = 0; i < n; i++) {
         <operation>
             <name>QuickSort</name>
             <node>
-                <type>function</type>
+                <type>template</type>
                 <keywords>
-                    <keyword>array</keyword>
+                    <keyword>
+                        <keywordName>array</keywordName>
+                        <keywordType>Object[]</keywordType>
+                    </keyword>
                 </keywords>
                 <template><![CDATA[
 int sub${array} = 0;
