@@ -24,10 +24,9 @@ Bundle-ActivationPolicy: lazy
 Export-Package: by.bsuir.cb,
  by.bsuir.cb.design,
  by.bsuir.cb.design.code,
- by.bsuir.cb.design.code.method,
  by.bsuir.cb.design.code.node,
+ by.bsuir.cb.design.ui.method,
  by.bsuir.cb.design.ui.operation,
- by.bsuir.cb.design.ui.structure,
- by.bsuir.cb.design.ui.structure.dialogs,
- by.bsuir.cb.utils
-
+ by.bsuir.cb.design.ui.operation.xml,
+ by.bsuir.cb.design.ui.outline,
+ by.bsuir.cb.design.ui.utils

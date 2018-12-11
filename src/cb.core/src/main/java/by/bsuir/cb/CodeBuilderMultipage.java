@@ -1,6 +1,5 @@
 package by.bsuir.cb;
 
-import by.bsuir.cb.design.DesignEditor;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -11,10 +10,9 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.ResourceUtil;
 import org.eclipse.ui.part.MultiPageEditorPart;
+import by.bsuir.cb.design.DesignEditor;
 
-
-// TODO ADD MultiPageEditorActionBarContributor
-// build.properties
+@SuppressWarnings("restriction")
 public class CodeBuilderMultipage extends MultiPageEditorPart {
   private IEditorPart sourceEditor;
   private int sourceIndex;

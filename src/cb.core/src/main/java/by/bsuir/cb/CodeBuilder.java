@@ -3,8 +3,6 @@ package by.bsuir.cb;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-// FIXME check if XML node template is empty
-// TODO: add tooltip to XSD?
 /**
  * The activator class controls the plug-in life cycle.
  */
