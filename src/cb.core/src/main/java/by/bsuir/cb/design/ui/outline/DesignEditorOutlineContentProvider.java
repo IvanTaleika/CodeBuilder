@@ -2,6 +2,7 @@ package by.bsuir.cb.design.ui.outline;
 
 import by.bsuir.cb.CodeBuilder;
 import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -24,7 +25,7 @@ public class DesignEditorOutlineContentProvider implements ITreeContentProvider 
       try {
         return compilationUnit.getTypes();
       } catch (JavaModelException e) {
-        LOGGER.log(new Status(Status.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
+        LOGGER.log(new Status(IStatus.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
       }
     } else if (parentElement instanceof IType) {
       var type = (IType) parentElement;
@@ -32,7 +33,7 @@ public class DesignEditorOutlineContentProvider implements ITreeContentProvider 
       try {
         return type.getChildren();
       } catch (JavaModelException e) {
-        LOGGER.log(new Status(Status.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
+        LOGGER.log(new Status(IStatus.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
       }
     }
     return new Object[] {};

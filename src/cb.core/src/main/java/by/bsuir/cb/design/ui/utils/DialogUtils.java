@@ -2,6 +2,7 @@ package by.bsuir.cb.design.ui.utils;
 
 import by.bsuir.cb.CodeBuilder;
 import java.util.Optional;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
@@ -36,7 +37,7 @@ public final class DialogUtils {
       }
     } catch (JavaModelException e) {
       CodeBuilder.getDefault().getLog()
-          .log(new Status(Status.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
+          .log(new Status(IStatus.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
     }
     return Optional.empty();
 

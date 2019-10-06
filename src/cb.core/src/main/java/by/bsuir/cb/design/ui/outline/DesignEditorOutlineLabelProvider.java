@@ -3,6 +3,7 @@ package by.bsuir.cb.design.ui.outline;
 import by.bsuir.cb.BundleResourceProvider;
 import by.bsuir.cb.CodeBuilder;
 import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
@@ -91,7 +92,7 @@ public class DesignEditorOutlineLabelProvider implements ILabelProvider {
       builder.append(Signature.getSignatureSimpleName(method.getReturnType()));
       return builder.toString();
     } catch (IllegalArgumentException | JavaModelException e) {
-      LOGGER.log(new Status(Status.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
+      LOGGER.log(new Status(IStatus.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
     }
     return null;
   }
@@ -101,7 +102,7 @@ public class DesignEditorOutlineLabelProvider implements ILabelProvider {
       return field.getElementName() + " : "
           + Signature.getSignatureSimpleName((field).getTypeSignature());
     } catch (JavaModelException e) {
-      LOGGER.log(new Status(Status.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
+      LOGGER.log(new Status(IStatus.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
     }
     return null;
   }

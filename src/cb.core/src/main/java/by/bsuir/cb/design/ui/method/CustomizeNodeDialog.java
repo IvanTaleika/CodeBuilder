@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import lombok.Getter;
 import lombok.Setter;
 import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.JavaModelException;
@@ -125,7 +126,7 @@ public class CustomizeNodeDialog extends TitleAreaDialog {
             .put(v.getElementName(), Signature.getSignatureQualifier(v.getTypeSignature()) + '.'
                 + Signature.getSignatureSimpleName(v.getTypeSignature()));
       } catch (JavaModelException e) {
-        LOGGER.log(new Status(Status.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
+        LOGGER.log(new Status(IStatus.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
       }
     });
   }

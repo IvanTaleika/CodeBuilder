@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
@@ -115,7 +116,7 @@ public class DesignEditor extends EditorPart implements IMethodListener {
       ErrorDialog.openError(getSite().getShell(),
           DesignEditorMessages.XmlOperationsErrorDialog_Title,
           DesignEditorMessages.XmlOperationsErrorDialog_Message,
-          new Status(Status.WARNING, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
+          new Status(IStatus.WARNING, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
     }
 
     methodTreeViewer = new MethodTreeViewer(this);

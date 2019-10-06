@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
 import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
@@ -26,7 +27,7 @@ public class CodeBuilderMethod implements IGenerative, IScopable {
           javaMethod.getParameterNames(), false, true));
       builder.append("{\n");
     } catch (IllegalArgumentException | JavaModelException e) {
-      LOGGER.log(new Status(Status.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
+      LOGGER.log(new Status(IStatus.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
     }
     children.forEach(c -> builder.append(c.toCodeString()));
     return builder.append("\n}").toString();

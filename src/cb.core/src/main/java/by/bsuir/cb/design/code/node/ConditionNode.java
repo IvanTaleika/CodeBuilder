@@ -1,12 +1,12 @@
 package by.bsuir.cb.design.code.node;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map.Entry;
 import by.bsuir.cb.design.code.IGenerative;
 import by.bsuir.cb.design.code.IScopable;
 import by.bsuir.cb.design.code.Keyword;
 import by.bsuir.cb.design.ui.method.TreeViewDecorator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map.Entry;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

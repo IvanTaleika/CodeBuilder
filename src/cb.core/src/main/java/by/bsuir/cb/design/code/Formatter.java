@@ -3,6 +3,7 @@ package by.bsuir.cb.design.code;
 import by.bsuir.cb.CodeBuilder;
 import java.util.Map;
 import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
@@ -37,7 +38,7 @@ public class Formatter implements IFormatter {
     try {
       edit.apply(document);
     } catch (MalformedTreeException | BadLocationException e) {
-      LOGGER.log(new Status(Status.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
+      LOGGER.log(new Status(IStatus.ERROR, CodeBuilder.PLUGIN_ID, e.getMessage(), e));
     }
     return document.get();
   }

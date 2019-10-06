@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="cb.feature"
-      label="Feature"
+      label="CodeBuilder"
       version="1.0.0.qualifier"
       provider-name="Ivan Taleika"
       plugin="cb.core">
